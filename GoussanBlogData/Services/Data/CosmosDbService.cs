@@ -1,31 +1,38 @@
 ﻿
 using GoussanBlogData.Models;
+using Goussanjarga.Models;
 using Microsoft.Azure.Cosmos;
 
 namespace GoussanBlogData.Services;
 public class CosmosDbService : ICosmosDbService
 {
-    private readonly Container _container;
-    public CosmosDbService(CosmosClient cosmosDbClient, string databaseName, string containerName)
+    private readonly Container MediaContainer;
+    private readonly Container UserContainer;
+    private readonly CosmosClient cosmosClient;
+    private readonly Database dbService;
+    public CosmosDbService(CosmosClient cosmosClient, string databaseName)
     {
-        _container = cosmosDbClient.GetContainer(databaseName, containerName);
+        this.cosmosClient = cosmosClient;
+        dbService = cosmosClient.GetDatabase(databaseName);
+        MediaContainer = dbService.GetContainer(Config.CosmosMedia);
+        MediaContainer = dbService.GetContainer(Config.CosmosUser);
     }
 
-    public async Task AddAsync(Video video)
+    public async Task AddVideo(Video video)
     {
-        await _container.CreateItemAsync(video, new PartitionKey(video.id));
+        await MediaContainer.CreateItemAsync(video, new PartitionKey(video.id));
     }
 
-    public async Task DeleteAsync(string id)
+    public async Task DeleteVideoAsync(string id)
     {
-        await _container.DeleteItemAsync<Video>(id, new PartitionKey(id));
+        await MediaContainer.DeleteItemAsync<Video>(id, new PartitionKey(id));
     }
 
-    public async Task<Video> GetAsync(string id)
+    public async Task<Video> GetVideoAsync(string id)
     {
         try
         {
-            var response = await _container.ReadItemAsync<Video>(id, new PartitionKey(id));
+            var response = await MediaContainer.ReadItemAsync<Video>(id, new PartitionKey(id));
             return response.Resource;
         }
         catch (CosmosException)
@@ -34,11 +41,11 @@ public class CosmosDbService : ICosmosDbService
         }
     }
 
-    public async Task<IEnumerable<Video>> GetMultipleAsync(string queryString)
+    public async Task<IEnumerable<Video>> GetMultipleVideosAsync(string queryString)
     {
         try
         {
-            FeedIterator<Video> query = _container.GetItemQueryIterator<Video>(new QueryDefinition(queryString));
+            FeedIterator<Video> query = MediaContainer.GetItemQueryIterator<Video>(new QueryDefinition(queryString));
             List<Video> results = new();
             while (query.HasMoreResults)
             {
@@ -53,8 +60,8 @@ public class CosmosDbService : ICosmosDbService
         }
     }
 
-    public async Task UpdateAsync(string id, Video video)
+    public async Task UpdateVideoAsync(string id, Video video)
     {
-        await _container.UpsertItemAsync(video, new PartitionKey(id));
+        await MediaContainer.UpsertItemAsync(video, new PartitionKey(id));
     }
 }

@@ -5,7 +5,12 @@ VisualStudioVersion = 17.0.31612.314
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "GoussanBlog", "GoussanBlog\GoussanBlog.esproj", "{2BFC5EA4-5C85-4FE6-B8FD-452CA74E20C2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoussanBlogData", "GoussanBlogData\GoussanBlogData.csproj", "{43337A64-1CD7-451E-9443-85058DC1B018}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GoussanBlogData", "GoussanBlogData\GoussanBlogData.csproj", "{43337A64-1CD7-451E-9443-85058DC1B018}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{43A075B3-2112-4A79-AEFF-C1832D524B6E}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

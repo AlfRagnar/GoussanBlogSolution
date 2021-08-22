@@ -4,9 +4,9 @@ using GoussanBlogData.Models;
 namespace GoussanBlogData.Services;
 public interface ICosmosDbService
 {
-    Task AddAsync(Video video);
-    Task UpdateAsync(string id, Video video);
-    Task DeleteAsync(string id);
-    Task<Video> GetAsync(string id);
-    Task<IEnumerable<Video>> GetMultipleAsync(string queryString);
+    Task AddVideo(Video video);
+    Task DeleteVideoAsync(string id);
+    Task<IEnumerable<Video>> GetMultipleVideosAsync(string queryString);
+    Task<Video> GetVideoAsync(string id);
+    Task UpdateVideoAsync(string id, Video video);
 }

@@ -21,14 +21,14 @@ public class VideosController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> List()
     {
-        return Ok(await cosmosDb.GetMultipleAsync("SELECT * FROM c"));
+        return Ok(await cosmosDb.GetMultipleVideosAsync("SELECT * FROM c"));
     }
 
     // GET /videos/{ID}
     [HttpGet("{id}")]
     public async Task<IActionResult> Get(string id)
     {
-        return Ok(await cosmosDb.GetAsync(id));
+        return Ok(await cosmosDb.GetVideoAsync(id));
     }
 
     // POST /videos
@@ -36,16 +36,23 @@ public class VideosController : ControllerBase
     public async Task<IActionResult> Create([FromBody] Video video)
     {
         video.id = Regex.Replace(Convert.ToBase64String(Guid.NewGuid().ToByteArray()), "[/+=]", "");
-        await cosmosDb.AddAsync(video);
-        return CreatedAtAction(nameof(Get), new { id = video.id }, video);
+        await cosmosDb.AddVideo(video);
+        return CreatedAtAction(nameof(Get), new { video.id }, video);
     }
 
     // PUT /videos/{ID}
     [HttpPut("{id}")]
     public async Task<IActionResult> Edit([FromBody] Video video)
     {
-        await cosmosDb.UpdateAsync(video.id, video);
-        return NoContent();
+        try
+        {
+            await cosmosDb.UpdateVideoAsync(video.id!, video);
+            return NoContent();
+        }
+        catch (Exception)
+        {
+            return NotFound();
+        }
     }
 
     // DELETE /videos/{id}
@@ -54,7 +61,7 @@ public class VideosController : ControllerBase
     {
         try
         {
-            await cosmosDb.DeleteAsync(id);
+            await cosmosDb.DeleteVideoAsync(id);
             return NoContent();
         }
         catch (Exception)

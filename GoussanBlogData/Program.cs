@@ -12,27 +12,28 @@ builder.Configuration.AddAzureKeyVault(keyVaultEndpoint, new DefaultAzureCredent
 
 // Populate Configuration File at RunTime with Data from Key Vault
 var Configuration = builder.Configuration;
-Config.AzureStorageConnectionString = Configuration["GoussanStorage"];
-Config.AzureCosmosConnectionString = Configuration["GoussanCosmos"];
-Config.CosmosDBName = Configuration["CosmosDb:DatabaseName"];
-Config.AzureStorageBlob = Configuration["GoussanStorage:blob"];
-Config.AzureStorageQueue = Configuration["GoussanStorage:queue"];
-Config.AzureAppInsight = Configuration["AppInsightConString"];
-Config.CosmosVideos = Configuration["CosmosDb:Containers:Videos:containerName"];
-Config.AadClientId = Configuration["AadClientId"];
-Config.AadSecret = Configuration["AadSecret"];
-Config.AadTenantDomain = Configuration["AzureAd:AadTenantDomain"];
-Config.AadTenantId = Configuration["AadTenantId"];
-Config.AccountName = Configuration["AADAccountName"];
-Config.ResourceGroup = Configuration["AADResourceGroup"];
-Config.SubscriptionId = Configuration["AADSubscriptionId"];
-Config.ArmAadAudience = Configuration["AzureAd:ArmAadAudience"];
-Config.ArmEndpoint = Configuration["AzureAd:ArmEndpoint"];
 Config.AppName = "GoussanMedia";
 Config.AppRegion = Regions.WestEurope;
+Config.AzureCosmosConnectionString = Configuration["GoussanCosmos"];
+Config.CosmosDBName = Configuration["CosmosDb:DatabaseName"];
+Config.CosmosUser = Configuration["CosmosDb:Containers:User:containerName"];
+Config.CosmosMedia = Configuration["CosmosDb:Containers:Media:containerName"];
+//Config.AadClientId = Configuration["AadClientId"];
+//Config.AadSecret = Configuration["AadSecret"];
+//Config.AadTenantDomain = Configuration["AzureAd:AadTenantDomain"];
+//Config.AadTenantId = Configuration["AadTenantId"];
+//Config.AccountName = Configuration["AADAccountName"];
+//Config.ResourceGroup = Configuration["AADResourceGroup"];
+//Config.SubscriptionId = Configuration["AADSubscriptionId"];
+//Config.ArmAadAudience = Configuration["AzureAd:ArmAadAudience"];
+//Config.ArmEndpoint = Configuration["AzureAd:ArmEndpoint"];
+//Config.AzureStorageConnectionString = Configuration["GoussanStorage"];
+//Config.AzureStorageBlob = Configuration["GoussanStorage:blob"];
+//Config.AzureStorageQueue = Configuration["GoussanStorage:queue"];
+//Config.AzureAppInsight = Configuration["AppInsightConString"];
 
 // Add services to the container.
-builder.Services.AddSingleton<ICosmosDbService>(InitializeCosmosClientInstanceAsync());
+builder.Services.AddSingleton<ICosmosDbService>(InitializeCosmosClientInstanceAsync().GetAwaiter().GetResult());
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -58,7 +59,7 @@ app.MapControllers();
 app.Run();
 
 
-CosmosDbService InitializeCosmosClientInstanceAsync()
+async Task<CosmosDbService> InitializeCosmosClientInstanceAsync()
 {
     // Define Azure Cosmos Db Client options like preferred operation region and Application Name
     CosmosClientOptions options = new()
@@ -70,9 +71,29 @@ CosmosDbService InitializeCosmosClientInstanceAsync()
     CosmosClient cosmosClient = new(Config.AzureCosmosConnectionString, options);
     // Get the predefined Database name from Config
     string databaseName = Config.CosmosDBName;
-    string containerName = Configuration.GetSection("CosmosDb")["Container"];
+    // Check if database exists
+    await cosmosClient.CreateDatabaseIfNotExistsAsync(databaseName);
     // Initialize the client
-    CosmosDbService cosmosDbService = new(cosmosClient, databaseName,containerName);
+    CosmosDbService cosmosDbService = new(cosmosClient, databaseName);
+    // Get DB client
+    var databaseClient = cosmosClient.GetDatabase(databaseName);
+    // Create necessary containers to store META data in
+    IEnumerable<IConfiguration> containerList = Configuration.GetSection("CosmosDb").GetSection("Containers").GetChildren();
+    foreach (var item in containerList)
+    {
+        try
+        {
+            string containerName = item.GetSection("containerName").Value;
+            string paritionKeyPath = item.GetSection("paritionKeyPath").Value;
+            await databaseClient.CreateContainerIfNotExistsAsync(containerName, paritionKeyPath, throughput: 400);
+        }
+        catch (CosmosException)
+        {
+
+            throw;
+        }
+    }
+   
     
     return cosmosDbService;
 }

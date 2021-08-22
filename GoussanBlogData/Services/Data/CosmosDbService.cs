@@ -30,7 +30,7 @@ public class CosmosDbService : ICosmosDbService
         }
         catch (CosmosException)
         {
-            return null;
+            return null!;
         }
     }
 
@@ -49,7 +49,7 @@ public class CosmosDbService : ICosmosDbService
         }
         catch (CosmosException)
         {
-            return null;
+            return null!;
         }
     }
 

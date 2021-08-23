@@ -9,6 +9,7 @@
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
+    "aos": "^2.3.4",
     "http-proxy-middleware": "^2.0.1",
     "jest-editor-support": "^29.0.0",
     "react": "^17.0.2",
@@ -41,5 +42,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/aos": "^3.0.4"
   }
 }

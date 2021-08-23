@@ -18,6 +18,7 @@ namespace GoussanBlogData.Utils
             var userId = jwtUtils.ValidateToken(token);
             if(userId != null)
             {
+                var userObject = await userService.GetUserAsync(userId);
                 context.Items["User"] = await userService.GetUserAsync(userId);
             }
 

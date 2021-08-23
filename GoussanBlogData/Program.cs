@@ -1,7 +1,7 @@
 using Azure.Identity;
+using GoussanBlogData.Models;
 using GoussanBlogData.Services;
 using GoussanBlogData.Utils;
-using Goussanjarga.Models;
 using Microsoft.Azure.Cosmos;
 
 var builder = WebApplication.CreateBuilder(args);

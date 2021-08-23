@@ -1,4 +1,4 @@
-﻿namespace Goussanjarga.Models
+﻿namespace GoussanBlogData.Models
 {
     public class Config
     {

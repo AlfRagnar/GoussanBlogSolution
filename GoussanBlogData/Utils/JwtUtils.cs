@@ -1,6 +1,6 @@
 ﻿
+using GoussanBlogData.Models;
 using GoussanBlogData.Models.UserModels;
-using Goussanjarga.Models;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -11,7 +11,7 @@ namespace GoussanBlogData.Utils
     public interface IJwtUtils
     {
         public string GenerateToken(User user);
-        public string? ValidateToken(string  token);
+        public string? ValidateToken(string token);
     }
 
     public class JwtUtils : IJwtUtils

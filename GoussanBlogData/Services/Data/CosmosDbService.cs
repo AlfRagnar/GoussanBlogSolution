@@ -1,5 +1,5 @@
-﻿using GoussanBlogData.Models.MediaModels;
-using Goussanjarga.Models;
+﻿using GoussanBlogData.Models;
+using GoussanBlogData.Models.MediaModels;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Cosmos.Linq;
 
@@ -22,7 +22,7 @@ public class CosmosDbService : ICosmosDbService
     {
         try
         {
-            FeedIterator<Models.UserModels.User> query = MediaContainer.GetItemQueryIterator<Models.UserModels.User>(new QueryDefinition(queryString));
+            FeedIterator<Models.UserModels.User> query = UserContainer.GetItemQueryIterator<Models.UserModels.User>(new QueryDefinition(queryString));
             List<Models.UserModels.User> results = new();
             while (query.HasMoreResults)
             {
@@ -45,7 +45,7 @@ public class CosmosDbService : ICosmosDbService
     {
         try
         {
-            var response = await MediaContainer.ReadItemAsync<Models.UserModels.User>(id, new PartitionKey(id));
+            var response = await UserContainer.ReadItemAsync<Models.UserModels.User>(id, new PartitionKey(id));
             return response.Resource;
         }
         catch (CosmosException)

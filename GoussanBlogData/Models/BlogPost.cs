@@ -1,18 +1,18 @@
-﻿using System.Text.Json.Serialization;
+﻿using Newtonsoft.Json;
 
 namespace GoussanBlogData.Models;
 public class BlogPost
 {
-    [JsonPropertyName("id")]
+    [JsonProperty("id")]
     public string Id { get; set; }
-    [JsonPropertyName("userid")]
+    [JsonProperty("userid")]
     public string UserId { get; set; }
-    [JsonPropertyName("title")]
+    [JsonProperty("title")]
     public string Title { get; set; }
-    [JsonPropertyName("content")]
+    [JsonProperty("content")]
     public string Content { get; set; }
-    [JsonPropertyName("videos")]
+    [JsonProperty("videos")]
     public List<Video> Videos { get; set; }
-    [JsonPropertyName("images")]
+    [JsonProperty("images")]
     public List<Video> Images { get; set; }
 }

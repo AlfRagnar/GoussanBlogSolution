@@ -2,10 +2,11 @@
 using GoussanBlogData.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.RegularExpressions;
+using System.Web.Helpers;
 
 namespace GoussanBlogData.Controllers;
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class VideosController : ControllerBase
 {
     private readonly ILogger<VideosController> _logger;
@@ -33,11 +34,22 @@ public class VideosController : ControllerBase
 
     // POST /videos
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] Video video)
+    public async Task<IActionResult> Create([FromBody] VideoCreateModel video)
     {
-        video.id = Regex.Replace(Convert.ToBase64String(Guid.NewGuid().ToByteArray()), "[/+=]", "");
-        await cosmosDb.AddVideo(video);
-        return CreatedAtAction(nameof(Get), new { video.id }, video);
+        Video newVideo = new()
+        {
+            Id = Regex.Replace(Convert.ToBase64String(Guid.NewGuid().ToByteArray()), "[/+=]", ""),
+            Filename = video.Filename,
+            Created = $"{DateTime.UtcNow.ToShortDateString()} UTC",
+            Updated = $"{DateTime.UtcNow.ToUniversalTime()} UTC",
+            State = "Not Set",
+            UserId = video.UserId,
+            BlogId = video.BlogId,
+            Description = video.Description,
+            Title = video.Title
+        };
+        await cosmosDb.AddVideo(newVideo);
+        return CreatedAtAction(nameof(Get), new {Id = newVideo.Id }, newVideo);
     }
 
     // PUT /videos/{ID}
@@ -46,7 +58,7 @@ public class VideosController : ControllerBase
     {
         try
         {
-            await cosmosDb.UpdateVideoAsync(video.id!, video);
+            await cosmosDb.UpdateVideoAsync(video.Id, video);
             return NoContent();
         }
         catch (Exception)

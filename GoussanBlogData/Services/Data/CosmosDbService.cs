@@ -20,7 +20,7 @@ public class CosmosDbService : ICosmosDbService
 
     public async Task AddVideo(Video video)
     {
-        await MediaContainer.CreateItemAsync(video, new PartitionKey(video.id));
+        await MediaContainer.CreateItemAsync(video, new PartitionKey(video.Id));
     }
 
     public async Task DeleteVideoAsync(string id)

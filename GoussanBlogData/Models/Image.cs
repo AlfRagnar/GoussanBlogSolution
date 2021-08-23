@@ -1,28 +1,28 @@
 ﻿
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace GoussanBlogData.Models;
 public class Image
 {
-    [JsonPropertyName("id")]
+    [JsonProperty("id")]
     public string Id { get; set; }
 
-    [JsonPropertyName("filename")]
+    [JsonProperty("filename")]
     public string FileName { get; set; }
-    [JsonPropertyName("created")]
+    [JsonProperty("created")]
     public string Created { get; set; }
-    [JsonPropertyName("modified")]
+    [JsonProperty("modified")]
     public string Modified { get; set; }
-    [JsonPropertyName("userid")]
+    [JsonProperty("userid")]
     public string UserId { get; set; }
-    [JsonPropertyName("blogid")]
+    [JsonProperty("blogid")]
     public string BlogId { get; set; }
-    [JsonPropertyName("storagepath")]
+    [JsonProperty("storagepath")]
     public string StoragePath { get; set; }
-    [JsonPropertyName("title")]
+    [JsonProperty("title")]
     public string? Title { get; set; }
 
-    [JsonPropertyName("description")]
+    [JsonProperty("description")]
     public string? Description { get; set; }
 
 }

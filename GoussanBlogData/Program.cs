@@ -1,8 +1,8 @@
 using Azure.Identity;
 using GoussanBlogData.Services;
+using GoussanBlogData.Utils;
 using Goussanjarga.Models;
 using Microsoft.Azure.Cosmos;
-using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +14,7 @@ builder.Configuration.AddAzureKeyVault(keyVaultEndpoint, new DefaultAzureCredent
 var Configuration = builder.Configuration;
 Config.AppName = "GoussanMedia";
 Config.AppRegion = Regions.WestEurope;
+Config.Secret = Configuration["GoussanBlogSecret"];
 Config.AzureCosmosConnectionString = Configuration["GoussanCosmos"];
 Config.CosmosDBName = Configuration["CosmosDb:DatabaseName"];
 Config.CosmosUser = Configuration["CosmosDb:Containers:User:containerName"];
@@ -34,7 +35,9 @@ Config.CosmosMedia = Configuration["CosmosDb:Containers:Media:containerName"];
 
 // Add services to the container.
 builder.Services.AddSingleton<ICosmosDbService>(InitializeCosmosClientInstanceAsync().GetAwaiter().GetResult());
+builder.Services.AddScoped<IJwtUtils, JwtUtils>();
 builder.Services.AddControllers();
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new() { Title = "GoussanBlogData", Version = "v1" });
@@ -53,7 +56,7 @@ if (builder.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
-
+app.UseMiddleware<JwtMiddleware>();
 app.MapControllers();
 
 app.Run();
@@ -93,7 +96,7 @@ async Task<CosmosDbService> InitializeCosmosClientInstanceAsync()
             throw;
         }
     }
-   
-    
+
+
     return cosmosDbService;
 }

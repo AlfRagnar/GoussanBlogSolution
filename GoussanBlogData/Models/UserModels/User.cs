@@ -5,7 +5,7 @@ namespace GoussanBlogData.Models.UserModels;
 public class User
 {
     [JsonProperty("id")]
-    public string? Id { get; set; }
+    public string Id { get; set; }
     [JsonProperty("created")]
     public string? Created { get; set; }
     [JsonProperty("username")]

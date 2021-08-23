@@ -22,5 +22,6 @@
         public static string ArmEndpoint { get; set; }
         public static string AadClientId { get; set; }
         public static string AadSecret { get; set; }
+        public static string Secret { get; set; }
     }
 }

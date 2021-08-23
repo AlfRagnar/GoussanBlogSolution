@@ -1,8 +1,7 @@
-﻿using GoussanBlogData.Models;
+﻿using GoussanBlogData.Models.MediaModels;
 using GoussanBlogData.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.RegularExpressions;
-using System.Web.Helpers;
 
 namespace GoussanBlogData.Controllers;
 [ApiController]
@@ -49,7 +48,7 @@ public class VideosController : ControllerBase
             Title = video.Title
         };
         await cosmosDb.AddVideo(newVideo);
-        return CreatedAtAction(nameof(Get), new {Id = newVideo.Id }, newVideo);
+        return CreatedAtAction(nameof(Get), new { Id = newVideo.Id }, newVideo);
     }
 
     // PUT /videos/{ID}

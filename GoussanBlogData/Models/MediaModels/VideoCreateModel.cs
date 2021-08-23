@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace GoussanBlogData.Models;
+namespace GoussanBlogData.Models.MediaModels;
 public class VideoCreateModel
 {
     // REQUIRED

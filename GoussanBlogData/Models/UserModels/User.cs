@@ -1,7 +1,7 @@
-﻿
+﻿using GoussanBlogData.Models.MediaModels;
 using Newtonsoft.Json;
 
-namespace GoussanBlogData.Models;
+namespace GoussanBlogData.Models.UserModels;
 public class User
 {
     [JsonProperty("id")]

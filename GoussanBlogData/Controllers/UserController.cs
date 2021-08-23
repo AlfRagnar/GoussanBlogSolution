@@ -1,5 +1,4 @@
-﻿
-using GoussanBlogData.Models;
+﻿using GoussanBlogData.Models.UserModels;
 using GoussanBlogData.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.RegularExpressions;
@@ -37,6 +36,11 @@ public class UserController : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] User user)
     {
+        var checkUser = await cosmosDb.CheckUser(user.UserName, user.Email);
+        if(checkUser == null || checkUser.Any())
+        {
+            return BadRequest("Username or Email already in Use");
+        }
         var Id = Regex.Replace(Convert.ToBase64String(Guid.NewGuid().ToByteArray()), "[/+=]", "");
         User newUser = new()
         {
@@ -61,7 +65,7 @@ public class UserController : ControllerBase
     public async Task<IActionResult> Authenticate([FromBody] AuthRequestModel authRequest)
     {
         var userList = await cosmosDb.GetUserByName(authRequest.Username);
-        if(userList == null)
+        if (userList == null || !userList.Any())
         {
             return NotFound();
         }

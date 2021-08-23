@@ -1,7 +1,7 @@
 ﻿
 using Newtonsoft.Json;
 
-namespace GoussanBlogData.Models;
+namespace GoussanBlogData.Models.MediaModels;
 public class Image
 {
     [JsonProperty("id")]

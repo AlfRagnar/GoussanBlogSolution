@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
 
-namespace GoussanBlogData.Models;
+namespace GoussanBlogData.Models.UserModels;
 public class AuthRequestModel
 {
     [Required]

@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 
-namespace GoussanBlogData.Models;
-public class VideoReqModel
+namespace GoussanBlogData.Models.MediaModels;
+public class Video
 {
     // REQUIRED
     [JsonProperty("id")]
@@ -17,11 +17,11 @@ public class VideoReqModel
     public string State { get; set; }
     [JsonProperty("userid")]
     public string UserId { get; set; }
-    [JsonProperty("blogid")]
-    public string BlogId { get; set; }
-    [JsonProperty("storagepath")]
-    public string StoragePath { get; set; }
     // OPTIONAL
+    [JsonProperty("storagepath")]
+    public string? StoragePath { get; set; }
+    [JsonProperty("blogid")]
+    public string? BlogId { get; set; }
 
     [JsonProperty("title")]
     public string? Title { get; set; }

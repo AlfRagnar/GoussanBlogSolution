@@ -1,32 +1,23 @@
-import React, { Suspense, Fragment, lazy } from "react";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
-import { MuiThemeProvider, CssBaseline } from "@material-ui/core";
-import theme from "./theme";
-import GlobalStyles from "./GlobalStyles";
-import Pace from "./shared/components/Pace";
-
-const LoggedInComponent = lazy(() => import("./logged_in/components/Main"));
-const LoggedOutComponent = lazy(() => import("./logged_out/components/Main"));
+import logo from "./logo.svg";
+import "./App.css";
 
 function App() {
   return (
-    <BrowserRouter>
-      <MuiThemeProvider theme={theme}>
-        <CssBaseline />
-        <GlobalStyles />
-        <Pace color={theme.palette.primary.light} />
-        <Suspense fallback={<Fragment />}>
-          <Switch>
-            <Route path="/c">
-              <LoggedInComponent />
-            </Route>
-            <Route>
-              <LoggedOutComponent />
-            </Route>
-          </Switch>
-        </Suspense>
-      </MuiThemeProvider>
-    </BrowserRouter>
+    <div className="App">
+      <header className="App-header">
+        <img src={logo} className="App-logo" alt="logo" />
+        <p>
+          Edit <code>src/App.js</code> and save to reload.
+        </p>
+        <a
+          className="App-link"
+          href="https://reactjs.org"
+          target="_blank"
+          rel="noopener noreferrer">
+          Learn React
+        </a>
+      </header>
+    </div>
   );
 }
 

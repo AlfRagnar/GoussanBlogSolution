@@ -1,0 +1,20 @@
+{
+  "dependencies": {
+    "apis1": {
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.ApiManagement/service/GoussanAPI/apis/GoussanBlogData",
+      "type": "apis.azure"
+    },
+    "secrets1": {
+      "secretStore": "AzureAppSettings",
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.KeyVault/vaults/goussanmedia-dev",
+      "type": "secrets.keyVault",
+      "connectionId": "VaultUri"
+    },
+    "cosmosdb1": {
+      "secretStore": "AzureKeyVault",
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.DocumentDB/databaseAccounts/goussan-cosmos",
+      "type": "cosmosdb.azure",
+      "connectionId": "CosmosCon"
+    }
+  }
+}

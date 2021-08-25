@@ -65,7 +65,7 @@ public class UserController : ControllerBase
         return CreatedAtAction(nameof(Get), new { Id = newUser.Id }, newUser);
     }
 
-    // GET /api/user/authenticate
+    // POST /api/user/authenticate
     [AllowAnonymous]
     [HttpPost("authenticate")]
 

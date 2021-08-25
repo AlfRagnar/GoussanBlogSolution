@@ -11,14 +11,15 @@ var keyVaultEndpoint = new Uri(Environment.GetEnvironmentVariable("VaultUri")!);
 builder.Configuration.AddAzureKeyVault(keyVaultEndpoint, new DefaultAzureCredential());
 
 // Populate Configuration File at RunTime with Data from Key Vault
+
 var Configuration = builder.Configuration;
 Config.AppName = "GoussanMedia";
 Config.AppRegion = Regions.WestEurope;
-Config.Secret = Configuration["GoussanBlogSecret"];
-Config.AzureCosmosConnectionString = Configuration["GoussanCosmos"];
-Config.CosmosDBName = Configuration["CosmosDb:DatabaseName"];
-Config.CosmosUser = Configuration["CosmosDb:Containers:User:containerName"];
-Config.CosmosMedia = Configuration["CosmosDb:Containers:Media:containerName"];
+Config.Secret = Configuration["GoussanBlogSecret"]; // JWT Master Key Secret
+Config.AzureCosmosConnectionString = Configuration["GoussanCosmos"]; // Cosmos DB Connection String
+Config.CosmosDBName = Configuration["CosmosDb:DatabaseName"]; // Cosmos DB database name
+Config.CosmosUser = Configuration["CosmosDb:Containers:User:containerName"]; // Cosmos DB container name
+Config.CosmosMedia = Configuration["CosmosDb:Containers:Media:containerName"]; // Cosmos DB container name
 //Config.AadClientId = Configuration["AadClientId"];
 //Config.AadSecret = Configuration["AadSecret"];
 //Config.AadTenantDomain = Configuration["AzureAd:AadTenantDomain"];
@@ -37,6 +38,7 @@ Config.CosmosMedia = Configuration["CosmosDb:Containers:Media:containerName"];
 builder.Services.AddSingleton<ICosmosDbService>(InitializeCosmosClientInstanceAsync().GetAwaiter().GetResult());
 builder.Services.AddScoped<IJwtUtils, JwtUtils>();
 builder.Services.AddControllers();
+builder.Services.AddCors();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddSwaggerGen(c =>
 {
@@ -52,12 +54,15 @@ if (builder.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "GoussanBlogData v1"));
 }
-
+app.UseCors(builder =>
+{
+    builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+});
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
 app.UseMiddleware<JwtMiddleware>();
 app.MapControllers();
+
 
 app.Run();
 

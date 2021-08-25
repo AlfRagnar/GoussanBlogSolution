@@ -70,7 +70,7 @@ public class CosmosDbService : ICosmosDbService
             }
             return result;
         }
-        catch (CosmosException ex)
+        catch (CosmosException)
         {
             return null!;
         }

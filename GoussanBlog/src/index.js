@@ -1,13 +1,20 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
+import "bootstrap/dist/css/bootstrap.min.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+import { BrowserRouter as Router } from "react-router-dom";
+import axios from "axios";
+import config from "./config";
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Router>
+      <App />
+    </Router>
   </React.StrictMode>,
+  (axios.defaults.baseURL = config.defaultEndpoint),
   document.getElementById("root")
 );
 

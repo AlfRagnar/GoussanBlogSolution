@@ -8,13 +8,14 @@ import { BrowserRouter as Router } from "react-router-dom";
 import axios from "axios";
 import config from "./config";
 
+axios.defaults.baseURL = config.defaultEndpoint;
+
 ReactDOM.render(
   <React.StrictMode>
     <Router>
       <App />
     </Router>
   </React.StrictMode>,
-  (axios.defaults.baseURL = config.defaultEndpoint),
   document.getElementById("root")
 );
 

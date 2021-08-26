@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoussanFunction", "GoussanFunction\GoussanFunction.csproj", "{D9AF5D85-3CA4-4219-8106-88FA3F30765A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -28,6 +30,10 @@ Global
 		{43337A64-1CD7-451E-9443-85058DC1B018}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{43337A64-1CD7-451E-9443-85058DC1B018}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{43337A64-1CD7-451E-9443-85058DC1B018}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D9AF5D85-3CA4-4219-8106-88FA3F30765A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9AF5D85-3CA4-4219-8106-88FA3F30765A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9AF5D85-3CA4-4219-8106-88FA3F30765A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9AF5D85-3CA4-4219-8106-88FA3F30765A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

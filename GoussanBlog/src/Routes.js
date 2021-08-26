@@ -1,8 +1,10 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
-import Home from "./containers/Home";
+import Home from "./components/Home";
 import Login from "./containers/Login";
 import NotFound from "./containers/NotFound";
+import Register from "./containers/Register";
+import ConfirmPage from "./containers/ConfirmPage";
 
 export default function Routes() {
   return (
@@ -12,6 +14,12 @@ export default function Routes() {
       </Route>
       <Route exact path="/login">
         <Login />
+      </Route>
+      <Route exact path="/register">
+        <Register />
+      </Route>
+      <Route path="/confirm/:token">
+        <ConfirmPage />
       </Route>
       <Route>
         <NotFound />

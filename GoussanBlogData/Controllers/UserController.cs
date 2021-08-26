@@ -44,7 +44,7 @@ public class UserController : ControllerBase
     public async Task<IActionResult> Register([FromBody] Createuser user)
     {
         var checkUser = await cosmosDb.CheckUser(user.Username, user.Email);
-        if(checkUser == null || checkUser.Any())
+        if (checkUser == null || checkUser.Any())
         {
             return BadRequest("Username or Email already in Use");
         }
@@ -82,6 +82,7 @@ public class UserController : ControllerBase
         {
             var response = _mapper.Map<AuthResponse>(User);
             response.JwtToken = _jwtUtils.GenerateToken(User);
+
             return Ok(response);
         }
         return BadRequest();

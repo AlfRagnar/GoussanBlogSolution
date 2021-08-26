@@ -1,31 +1,26 @@
-import { Nav, Navbar } from "react-bootstrap";
+import React, { useState } from "react";
 import "./App.css";
 import Routes from "./Routes";
-import { LinkContainer } from "react-router-bootstrap";
+import { AppContext } from "./contexts/contextLib";
+import ThemeContextProvider from "./contexts/ThemeContext";
+import MyNavbar from "./components/MyNavbar";
+import { Container } from "@material-ui/core";
 
 function App() {
+  const [isAuthenticated, userHasAuthenticated] = useState({
+    auth: false,
+    token: "",
+  });
+
   return (
-    <div className="App container py-3">
-      <Navbar collapseOnSelect bg="light" expand="md" className="mb-3">
-        <LinkContainer to="/">
-          <Navbar.Brand className="font-weight-bold text-muted">
-            Goussanjarga Media Website
-          </Navbar.Brand>
-        </LinkContainer>
-        <Navbar.Toggle />
-        <Navbar.Collapse className="justify-content-end">
-          <Nav activeKey={window.location.pathname}>
-            <LinkContainer to="/signup">
-              <Nav.Link>Signup</Nav.Link>
-            </LinkContainer>
-            <LinkContainer to="/login">
-              <Nav.Link>Login</Nav.Link>
-            </LinkContainer>
-          </Nav>
-        </Navbar.Collapse>
-      </Navbar>
-      <Routes />
-    </div>
+    <Container className="App">
+      <ThemeContextProvider>
+        <MyNavbar />
+        <AppContext.Provider value={{ isAuthenticated, userHasAuthenticated }}>
+          <Routes />
+        </AppContext.Provider>
+      </ThemeContextProvider>
+    </Container>
   );
 }
 

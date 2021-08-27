@@ -1,9 +1,15 @@
-﻿using GoussanBlogData.Models.MediaModels;
+﻿using GoussanBlogData.Models.DatabaseModels;
+using GoussanBlogData.Models.MediaModels;
 using GoussanBlogData.Services;
+using GoussanBlogData.Utils;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace GoussanBlogData.Controllers;
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class VideosController : ControllerBase
@@ -83,7 +89,7 @@ public class VideosController : ControllerBase
 
     // PUT /api/videos/{ID}
     [HttpPut("{id}")]
-    public async Task<IActionResult> Edit([FromBody] UploadVideo video)
+    public async Task<IActionResult> Edit([FromBody] VideoCreateModel video)
     {
         try
         {

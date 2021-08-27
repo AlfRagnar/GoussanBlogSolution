@@ -1,5 +1,8 @@
-﻿using GoussanBlogData.Models.MediaModels;
+﻿using GoussanBlogData.Models.DatabaseModels;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.Management.Media.Models;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace GoussanBlogData.Services
 {

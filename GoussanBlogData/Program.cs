@@ -1,12 +1,21 @@
+using Azure;
 using Azure.Identity;
+using Azure.Storage.Blobs;
 using GoussanBlogData.Models;
 using GoussanBlogData.Services;
 using GoussanBlogData.Services.Data;
 using GoussanBlogData.Utils;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Management.Media;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Identity.Client;
 using Microsoft.Rest;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,9 +51,11 @@ Config.AzureStorageQueue = Configuration["GoussanStorage:queue"];
 // Azure Application Insight for diagnostics, metrics and logs of the application
 Config.AzureAppInsight = Configuration["AppInsightConString"];
 
-// Add services to the container.
+// Add Singleton Services of the Azure Service Client instances since they are Thread-safe and this is recommended usage
 builder.Services.AddSingleton<ICosmosDbService>(InitializeCosmosClientInstanceAsync().GetAwaiter().GetResult());
 builder.Services.AddSingleton<IGoussanMediaService>(InitializeMediaService().GetAwaiter().GetResult());
+builder.Services.AddSingleton<IBlobStorageService>(InitializeStorageClientInstance());
+// Add Misc services for App to functions and for utilities to be initialized properly
 builder.Services.AddScoped<IJwtUtils, JwtUtils>();
 builder.Services.AddControllers();
 builder.Services.AddCors();
@@ -63,6 +74,8 @@ if (builder.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "GoussanBlogData v1"));
 }
+// Configure Cors, most of Endpoint interaction with the outside will be handled through Azure API Management,
+// but otherwise it is handled by JWT token verification
 app.UseCors(builder =>
 {
     builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
@@ -145,4 +158,26 @@ static async Task<ServiceClientCredentials> GetCredentialsAsync()
 
     var token = new TokenCredentials(authResult.AccessToken, TokenType);
     return token;
+}
+
+
+BlobStorageService InitializeStorageClientInstance()
+{
+    // Create the new Blob Service Client
+    BlobServiceClient blobService = new(Config.AzureStorageConnectionString);
+    // Get the predefined Container name from Config
+    string container = Config.CosmosMedia;
+    try
+    {
+        // Try to create blob container, will fail if container already exist
+        blobService.GetBlobContainerClient(container);
+    }
+    catch (RequestFailedException)
+    {
+        // Throw error
+        throw;
+    }
+    // Initialize the client
+    BlobStorageService storageService = new(blobService, container);
+    return storageService;
 }

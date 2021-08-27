@@ -1,9 +1,11 @@
 ﻿
+using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 
 namespace GoussanBlogData.Models.MediaModels;
-public class Image
+public class ImageCreateModel
 {
+    // Required
     [JsonProperty("id")]
     public string Id { get; set; }
     [JsonProperty("type")]
@@ -17,10 +19,13 @@ public class Image
     public string Modified { get; set; }
     [JsonProperty("userid")]
     public string UserId { get; set; }
-    [JsonProperty("blogid")]
-    public string BlogId { get; set; }
     [JsonProperty("storagepath")]
     public string StoragePath { get; set; }
+    [JsonProperty("imagefile")]
+    public IFormFile File { get; set; }
+    // Optional
+    [JsonProperty("blogid")]
+    public string? BlogId { get; set; }
     [JsonProperty("title")]
     public string? Title { get; set; }
 

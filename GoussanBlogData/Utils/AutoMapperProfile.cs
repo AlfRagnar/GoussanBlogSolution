@@ -1,5 +1,6 @@
 ﻿
 using AutoMapper;
+using GoussanBlogData.Models.DatabaseModels;
 using GoussanBlogData.Models.UserModels;
 
 namespace GoussanBlogData.Utils

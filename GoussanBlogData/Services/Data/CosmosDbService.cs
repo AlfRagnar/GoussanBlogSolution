@@ -1,7 +1,11 @@
 ﻿using GoussanBlogData.Models;
+using GoussanBlogData.Models.DatabaseModels;
 using GoussanBlogData.Models.MediaModels;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Cosmos.Linq;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace GoussanBlogData.Services;
 public class CosmosDbService : ICosmosDbService
@@ -18,15 +22,17 @@ public class CosmosDbService : ICosmosDbService
         UserContainer = dbService.GetContainer(Config.CosmosUser);
     }
 
-    public async Task<IEnumerable<Models.UserModels.User>> GetUsersAsync(string queryString)
+
+    // USER API
+    public async Task<IEnumerable<Models.DatabaseModels.User>> GetUsersAsync(string queryString)
     {
         try
         {
-            FeedIterator<Models.UserModels.User> query = UserContainer.GetItemQueryIterator<Models.UserModels.User>(new QueryDefinition(queryString));
-            List<Models.UserModels.User> results = new();
+            FeedIterator<Models.DatabaseModels.User> query = UserContainer.GetItemQueryIterator<Models.DatabaseModels.User>(new QueryDefinition(queryString));
+            List<Models.DatabaseModels.User> results = new();
             while (query.HasMoreResults)
             {
-                FeedResponse<Models.UserModels.User> response = await query.ReadNextAsync();
+                FeedResponse<Models.DatabaseModels.User> response = await query.ReadNextAsync();
                 results.AddRange(response.ToList());
             }
             return results;
@@ -36,16 +42,16 @@ public class CosmosDbService : ICosmosDbService
             return null!;
         }
     }
-    public async Task<ItemResponse<Models.UserModels.User>> AddUser(Models.UserModels.User user)
+    public async Task<ItemResponse<Models.DatabaseModels.User>> AddUser(Models.DatabaseModels.User user)
     {
         var res = await UserContainer.CreateItemAsync(user, new PartitionKey(user.Id));
         return res;
     }
-    public async Task<Models.UserModels.User> GetUserAsync(string id)
+    public async Task<Models.DatabaseModels.User> GetUserAsync(string id)
     {
         try
         {
-            var response = await UserContainer.ReadItemAsync<Models.UserModels.User>(id, new PartitionKey(id));
+            var response = await UserContainer.ReadItemAsync<Models.DatabaseModels.User>(id, new PartitionKey(id));
             return response.Resource;
         }
         catch (CosmosException)
@@ -53,12 +59,12 @@ public class CosmosDbService : ICosmosDbService
             return null!;
         }
     }
-    public async Task<IEnumerable<Models.UserModels.User>> GetUserByName(string Username)
+    public async Task<IEnumerable<Models.DatabaseModels.User>> GetUserByName(string Username)
     {
         try
         {
-            List<Models.UserModels.User> result = new();
-            using (FeedIterator<Models.UserModels.User> setIterator = UserContainer.GetItemLinqQueryable<Models.UserModels.User>().Where(x => x.UserName == Username).ToFeedIterator())
+            List<Models.DatabaseModels.User> result = new();
+            using (FeedIterator<Models.DatabaseModels.User> setIterator = UserContainer.GetItemLinqQueryable<Models.DatabaseModels.User>().Where(x => x.UserName == Username).ToFeedIterator())
             {
                 while (setIterator.HasMoreResults)
                 {
@@ -75,12 +81,12 @@ public class CosmosDbService : ICosmosDbService
             return null!;
         }
     }
-    public async Task<IEnumerable<Models.UserModels.User>> GetUserByMail(string Email)
+    public async Task<IEnumerable<Models.DatabaseModels.User>> GetUserByMail(string Email)
     {
         try
         {
-            List<Models.UserModels.User> result = new();
-            using (FeedIterator<Models.UserModels.User> setIterator = UserContainer.GetItemLinqQueryable<Models.UserModels.User>().Where(x => x.Email == Email).ToFeedIterator())
+            List<Models.DatabaseModels.User> result = new();
+            using (FeedIterator<Models.DatabaseModels.User> setIterator = UserContainer.GetItemLinqQueryable<Models.DatabaseModels.User>().Where(x => x.Email == Email).ToFeedIterator())
             {
                 while (setIterator.HasMoreResults)
                 {
@@ -97,12 +103,12 @@ public class CosmosDbService : ICosmosDbService
             return null!;
         }
     }
-    public async Task<IEnumerable<Models.UserModels.User>> CheckUser(string Username, string Email)
+    public async Task<IEnumerable<Models.DatabaseModels.User>> CheckUser(string Username, string Email)
     {
         try
         {
-            List<Models.UserModels.User> result = new();
-            using (FeedIterator<Models.UserModels.User> setIterator = UserContainer.GetItemLinqQueryable<Models.UserModels.User>().Where(x => x.Email == Email || x.UserName == Username).ToFeedIterator())
+            List<Models.DatabaseModels.User> result = new();
+            using (FeedIterator<Models.DatabaseModels.User> setIterator = UserContainer.GetItemLinqQueryable<Models.DatabaseModels.User>().Where(x => x.Email == Email || x.UserName == Username).ToFeedIterator())
             {
                 while (setIterator.HasMoreResults)
                 {
@@ -120,6 +126,7 @@ public class CosmosDbService : ICosmosDbService
         }
     }
 
+    // VIDEO API
 
     public async Task AddVideo(UploadVideo video)
     {
@@ -185,8 +192,43 @@ public class CosmosDbService : ICosmosDbService
         }
     }
 
-    public async Task UpdateVideoAsync(string id, UploadVideo video)
+    public async Task UpdateVideoAsync(string id, VideoCreateModel video)
     {
         await MediaContainer.UpsertItemAsync(video, new PartitionKey(id));
     }
+
+    // IMAGE API
+    public async Task AddImage(Image image)
+    {
+        await MediaContainer.CreateItemAsync(image, new PartitionKey(image.Id));
+    }
+
+    public async Task<List<Image>> GetImageList()
+    {
+        try
+        {
+            List<Image> result = new();
+            using (FeedIterator<Image> setIterator = MediaContainer.GetItemLinqQueryable<Image>().Where(x => x.Type == "Image").ToFeedIterator())
+            {
+                while (setIterator.HasMoreResults)
+                {
+                    foreach (var item in await setIterator.ReadNextAsync())
+                    {
+                        result.Add(item);
+                    }
+                }
+            }
+            return result;
+        }
+        catch (CosmosException)
+        {
+            return null!;
+        }
+    }
+
+    public async Task UpdateImageAsync(string id, Image image)
+    {
+        await MediaContainer.UpsertItemAsync(image, new PartitionKey(id));
+    }
+
 }

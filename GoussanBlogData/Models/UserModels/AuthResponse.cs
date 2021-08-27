@@ -1,8 +1,4 @@
-﻿
-using Newtonsoft.Json;
-using System.ComponentModel.DataAnnotations;
-
-namespace GoussanBlogData.Models.UserModels;
+﻿namespace GoussanBlogData.Models.UserModels;
 public class AuthResponse
 {
     public string Id { get; set; }

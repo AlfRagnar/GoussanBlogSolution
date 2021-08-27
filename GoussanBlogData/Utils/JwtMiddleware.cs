@@ -1,5 +1,8 @@
 ﻿
 using GoussanBlogData.Services;
+using Microsoft.AspNetCore.Http;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace GoussanBlogData.Utils
 {
@@ -16,7 +19,7 @@ namespace GoussanBlogData.Utils
         {
             var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
             var userId = jwtUtils.ValidateToken(token);
-            if(userId != null)
+            if (userId != null)
             {
                 var userObject = await userService.GetUserAsync(userId);
                 context.Items["User"] = await userService.GetUserAsync(userId);

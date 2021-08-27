@@ -1,6 +1,5 @@
 ﻿using GoussanBlogData.Models.MediaModels;
 using GoussanBlogData.Services;
-using GoussanBlogData.Utils;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.RegularExpressions;
 
@@ -64,7 +63,8 @@ public class VideosController : ControllerBase
                 UserId = video.UserId,
                 BlogId = video.BlogId,
                 Description = video.Description,
-                Title = video.Title
+                Title = video.Title,
+                Type = "Video"
             };
             var res = await mediaService.CreateAsset(video.File, newVideo);
             if (res != null)
@@ -88,7 +88,7 @@ public class VideosController : ControllerBase
         try
         {
             await cosmosDb.UpdateVideoAsync(video.Id, video);
-            return AcceptedAtAction(nameof(Edit),video.Id);
+            return AcceptedAtAction(nameof(Edit), video.Id);
         }
         catch (Exception)
         {

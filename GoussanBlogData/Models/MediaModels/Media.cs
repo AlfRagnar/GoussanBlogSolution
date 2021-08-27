@@ -9,7 +9,7 @@ public class Media
     [JsonProperty("images")]
     public List<Image> Images { get; set; }
     [JsonProperty("videos")]
-    public List<Video> Video { get; set; }
+    public List<UploadVideo> Video { get; set; }
     [JsonProperty("blogposts")]
     public List<BlogPost> BlogPosts { get; set; }
 }

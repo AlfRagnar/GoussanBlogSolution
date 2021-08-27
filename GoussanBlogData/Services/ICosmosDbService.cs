@@ -13,10 +13,10 @@ public interface ICosmosDbService
     Task<IEnumerable<Models.UserModels.User>> CheckUser(string Username, string Email);
 
     // VIDEO API
-    Task AddVideo(Video video);
+    Task AddVideo(UploadVideo video);
     Task DeleteVideoAsync(string id);
-    Task<IEnumerable<Video>> GetMultipleVideosAsync(string queryString);
-    Task<Video> GetVideoAsync(string id);
-    Task UpdateVideoAsync(string id, Video video);
-    
+    Task<IEnumerable<UploadVideo>> GetMultipleVideosAsync(string queryString);
+    Task<UploadVideo> GetVideoAsync(string id);
+    Task UpdateVideoAsync(string id, UploadVideo video);
+    Task<IEnumerable<UploadVideo>> GetVideoList();
 }

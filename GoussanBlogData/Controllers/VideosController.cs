@@ -5,62 +5,90 @@ using Microsoft.AspNetCore.Mvc;
 using System.Text.RegularExpressions;
 
 namespace GoussanBlogData.Controllers;
-[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class VideosController : ControllerBase
 {
     private readonly ILogger<VideosController> _logger;
     private readonly ICosmosDbService cosmosDb;
+    private readonly IGoussanMediaService mediaService;
 
-    public VideosController(ICosmosDbService cosmosDb, ILogger<VideosController> logger)
+    public VideosController(ICosmosDbService cosmosDb, ILogger<VideosController> logger, IGoussanMediaService mediaService)
     {
         this.cosmosDb = cosmosDb;
+        this.mediaService = mediaService;
         _logger = logger;
     }
 
-    // GET /videos
+    // GET /api/videos
     [HttpGet]
     public async Task<IActionResult> List()
     {
-        return Ok(await cosmosDb.GetMultipleVideosAsync("SELECT * FROM c"));
+        try
+        {
+            return Ok(await cosmosDb.GetVideoList());
+        }
+        catch (Exception)
+        {
+            return BadRequest();
+        }
     }
 
-    // GET /videos/{ID}
+    // GET /api/videos/{ID}
     [HttpGet("{id}")]
     public async Task<IActionResult> Get(string id)
     {
-        return Ok(await cosmosDb.GetVideoAsync(id));
-    }
-
-    // POST /videos
-    [HttpPost]
-    public async Task<IActionResult> Create([FromBody] VideoCreateModel video)
-    {
-        Video newVideo = new()
+        try
         {
-            Id = Regex.Replace(Convert.ToBase64String(Guid.NewGuid().ToByteArray()), "[/+=]", ""),
-            Filename = video.Filename,
-            Created = $"{DateTime.UtcNow.ToShortDateString()} UTC",
-            Updated = $"{DateTime.UtcNow.ToUniversalTime()} UTC",
-            State = "Not Set",
-            UserId = video.UserId,
-            BlogId = video.BlogId,
-            Description = video.Description,
-            Title = video.Title
-        };
-        await cosmosDb.AddVideo(newVideo);
-        return CreatedAtAction(nameof(Get), new { Id = newVideo.Id }, newVideo);
+            return Ok(await cosmosDb.GetVideoAsync(id));
+        }
+        catch (Exception)
+        {
+            return BadRequest();
+        }
     }
 
-    // PUT /videos/{ID}
+    // POST /api/videos
+    [HttpPost]
+    public async Task<IActionResult> Create([FromForm] VideoCreateModel video)
+    {
+        try
+        {
+            UploadVideo newVideo = new()
+            {
+                Id = Regex.Replace(Convert.ToBase64String(Guid.NewGuid().ToByteArray()), "[/+=]", ""),
+                Filename = video.Filename,
+                Created = $"{DateTime.UtcNow.ToShortDateString()} UTC",
+                Updated = $"{DateTime.UtcNow.ToUniversalTime()} UTC",
+                State = "Not Set",
+                UserId = video.UserId,
+                BlogId = video.BlogId,
+                Description = video.Description,
+                Title = video.Title
+            };
+            var res = await mediaService.CreateAsset(video.File, newVideo);
+            if (res != null)
+            {
+                await cosmosDb.AddVideo(newVideo);
+                return CreatedAtAction(nameof(Create), new { Id = newVideo.Id }, newVideo);
+            }
+            return BadRequest();
+        }
+        catch (Exception)
+        {
+            return BadRequest();
+        }
+
+    }
+
+    // PUT /api/videos/{ID}
     [HttpPut("{id}")]
-    public async Task<IActionResult> Edit([FromBody] Video video)
+    public async Task<IActionResult> Edit([FromBody] UploadVideo video)
     {
         try
         {
             await cosmosDb.UpdateVideoAsync(video.Id, video);
-            return NoContent();
+            return AcceptedAtAction(nameof(Edit),video.Id);
         }
         catch (Exception)
         {
@@ -68,14 +96,14 @@ public class VideosController : ControllerBase
         }
     }
 
-    // DELETE /videos/{id}
+    // DELETE /api/videos/{id}
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(string id)
     {
         try
         {
             await cosmosDb.DeleteVideoAsync(id);
-            return NoContent();
+            return AcceptedAtAction(nameof(Delete), id);
         }
         catch (Exception)
         {

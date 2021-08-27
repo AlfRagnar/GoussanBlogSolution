@@ -92,7 +92,7 @@ public class CosmosDbService : ICosmosDbService
             }
             return result;
         }
-        catch (CosmosException ex)
+        catch (CosmosException)
         {
             return null!;
         }
@@ -114,28 +114,28 @@ public class CosmosDbService : ICosmosDbService
             }
             return result;
         }
-        catch (CosmosException ex)
+        catch (CosmosException)
         {
             return null!;
         }
     }
 
 
-    public async Task AddVideo(Video video)
+    public async Task AddVideo(UploadVideo video)
     {
         await MediaContainer.CreateItemAsync(video, new PartitionKey(video.Id));
     }
 
     public async Task DeleteVideoAsync(string id)
     {
-        await MediaContainer.DeleteItemAsync<Video>(id, new PartitionKey(id));
+        await MediaContainer.DeleteItemAsync<UploadVideo>(id, new PartitionKey(id));
     }
 
-    public async Task<Video> GetVideoAsync(string id)
+    public async Task<UploadVideo> GetVideoAsync(string id)
     {
         try
         {
-            var response = await MediaContainer.ReadItemAsync<Video>(id, new PartitionKey(id));
+            var response = await MediaContainer.ReadItemAsync<UploadVideo>(id, new PartitionKey(id));
             return response.Resource;
         }
         catch (CosmosException)
@@ -143,16 +143,38 @@ public class CosmosDbService : ICosmosDbService
             return null!;
         }
     }
-
-    public async Task<IEnumerable<Video>> GetMultipleVideosAsync(string queryString)
+    public async Task<IEnumerable<UploadVideo>> GetVideoList()
     {
         try
         {
-            FeedIterator<Video> query = MediaContainer.GetItemQueryIterator<Video>(new QueryDefinition(queryString));
-            List<Video> results = new();
+            List<UploadVideo> result = new();
+            using (FeedIterator<UploadVideo> setIterator = MediaContainer.GetItemLinqQueryable<UploadVideo>().Where(x => x.Type == "Video").ToFeedIterator())
+            {
+                while (setIterator.HasMoreResults)
+                {
+                    foreach (var item in await setIterator.ReadNextAsync())
+                    {
+                        result.Add(item);
+                    }
+                }
+            }
+            return result;
+        }
+        catch (CosmosException)
+        {
+            return null!;
+        }
+    }
+
+    public async Task<IEnumerable<UploadVideo>> GetMultipleVideosAsync(string queryString)
+    {
+        try
+        {
+            FeedIterator<UploadVideo> query = MediaContainer.GetItemQueryIterator<UploadVideo>(new QueryDefinition(queryString));
+            List<UploadVideo> results = new();
             while (query.HasMoreResults)
             {
-                FeedResponse<Video> response = await query.ReadNextAsync();
+                FeedResponse<UploadVideo> response = await query.ReadNextAsync();
                 results.AddRange(response.ToList());
             }
             return results;
@@ -163,7 +185,7 @@ public class CosmosDbService : ICosmosDbService
         }
     }
 
-    public async Task UpdateVideoAsync(string id, Video video)
+    public async Task UpdateVideoAsync(string id, UploadVideo video)
     {
         await MediaContainer.UpsertItemAsync(video, new PartitionKey(id));
     }

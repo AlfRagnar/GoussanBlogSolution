@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace GoussanBlogData.Models.MediaModels;
+namespace GoussanBlogData.Models.DatabaseModels;
 public class BlogPost
 {
     [JsonProperty("id")]

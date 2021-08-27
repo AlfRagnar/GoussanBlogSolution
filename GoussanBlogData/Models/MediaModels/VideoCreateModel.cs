@@ -12,6 +12,8 @@ public class VideoCreateModel
     public string Extension { get; set; }
     [JsonProperty("userid")]
     public string UserId { get; set; }
+    [JsonProperty("uploadfile")]
+    public IFormFile File { get; set; }
 
     // OPTIONAL
     [JsonProperty("id")]

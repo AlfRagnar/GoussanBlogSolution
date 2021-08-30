@@ -17,7 +17,7 @@ namespace GoussanFunction
             ConnectionStringSetting = "CosmosDbCon",
             LeaseCollectionName = "leases",
             CreateLeaseCollectionIfNotExists = true,
-            LeasesCollectionThroughput = 400, LeaseCollectionPrefix = "regEvent")]IReadOnlyList<Document> input, 
+            LeasesCollectionThroughput = 400, LeaseCollectionPrefix = "regEvent")]IReadOnlyList<Document> input,
             ILogger log,
             [SendGrid(ApiKey = "SendGridAPIKey")] IAsyncCollector<SendGridMessage> messageCollector)
         {
@@ -26,11 +26,11 @@ namespace GoussanFunction
                 log.LogInformation("Documents modified " + input.Count);
                 log.LogInformation("Deserializing documents");
 
-                foreach(var document in input)
+                foreach (var document in input)
                 {
                     IncDocument incomingDoc = JsonConvert.DeserializeObject<IncDocument>(document.ToString());
                     log.LogInformation(incomingDoc.email);
-                    
+
                     var message = new SendGridMessage();
                     message.AddTo(incomingDoc.email);
                     message.AddContent("text/html", "SENT FROM AZURE FUNCTIONS USING SENDGRID INTEGRATION");

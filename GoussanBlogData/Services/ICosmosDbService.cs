@@ -1,8 +1,6 @@
 ﻿using GoussanBlogData.Models.DatabaseModels;
 using GoussanBlogData.Models.MediaModels;
 using Microsoft.Azure.Cosmos;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace GoussanBlogData.Services;
 public interface ICosmosDbService
@@ -20,7 +18,8 @@ public interface ICosmosDbService
     Task DeleteVideoAsync(string id);
     Task<IEnumerable<UploadVideo>> GetMultipleVideosAsync(string queryString);
     Task<UploadVideo> GetVideoAsync(string id);
-    Task UpdateVideoAsync(string id, VideoCreateModel video);
+    Task UpdateVideoAsync(string id, VideoUpdateModel video);
+    Task UpdateVideoAsync(string id, UploadVideo video);
     Task<IEnumerable<UploadVideo>> GetVideoList();
     // IMAGE API
     Task AddImage(Image image);

@@ -3,14 +3,9 @@ using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using GoussanBlogData.Models;
 using GoussanBlogData.Models.DatabaseModels;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.Management.Media;
 using Microsoft.Azure.Management.Media.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace GoussanBlogData.Services.Data
 {
@@ -29,10 +24,13 @@ namespace GoussanBlogData.Services.Data
         {
             try
             {
-                // Create the Asset in Azure Media Service
+                // Create Asset Container in Azure Blob Storage for file storage
                 Asset asset = await InternalCreate(videos.Id);
 
                 // Get the Shared Access Signature for the Asset Container matching the Video ID
+                // This SAS has a limited availability to make sure the file retains integrity and can't be modified once it has been uploaded
+                // Without having access to the blob storage
+                // Expiry Time on SAS set to: 4 Hours UTC from time of creation
                 AssetContainerSas response = await ListContainers(asset.Name);
 
                 // Fetch the first available SAS Uri available
@@ -44,15 +42,18 @@ namespace GoussanBlogData.Services.Data
                 Asset outputAsset = await CreateOutputAsset(asset.Name);
 
                 _ = await SubmitJobAsync(asset.Name, outputAsset.Name);
-
+                // Create a Locator ID, Streaming Locator is fancy for URL to manifest file for HLS or DASH streaming manifest ref: https://stackoverflow.com/questions/63674468/what-does-a-streaming-locator-symbolize-in-azure-media-services
                 StreamingLocator locator = await CreateStreamingLocatorAsync(outputAsset.Name);
                 videos.Locator = locator.Name;
+                // Generation of Streaming URL is handled by Azure Cloud Function that populates the field upon the job finishing
+
                 videos.OutputAsset = outputAsset.Name;
+                // Return the populated video object ready to be pushed to Cosmos DB for storage
                 return videos;
             }
             catch (Exception)
             {
-                return null;
+                return null!;
             }
         }
 
@@ -75,7 +76,7 @@ namespace GoussanBlogData.Services.Data
             }
             catch (RequestFailedException)
             {
-                return null;
+                return null!;
             }
         }
 
@@ -188,36 +189,32 @@ namespace GoussanBlogData.Services.Data
             return locator;
         }
 
-        // Builds the streaming URLs available
+        // Builds the streaming URLs available, Returns null if no streaming paths available
         public async Task<IList<string>> GetStreamingURL(string locatorName)
         {
             try
             {
                 IList<string> streamingUrls = new List<string>();
-                StreamingEndpoint endpoint = await EnsureStreamingEndpoint();
-                if (endpoint != null)
+                ListPathsResponse paths = await _azMediaServices.StreamingLocators.ListPathsAsync(resourceGroupName, accountName, locatorName);
+
+                foreach (StreamingPath path in paths.StreamingPaths)
                 {
-                    ListPathsResponse paths = await _azMediaServices.StreamingLocators.ListPathsAsync(resourceGroupName, accountName, locatorName);
-
-                    foreach (StreamingPath path in paths.StreamingPaths)
+                    UriBuilder uriBuilder = new()
                     {
-                        UriBuilder uriBuilder = new()
-                        {
-                            Scheme = "https",
-                            Host = endpoint.HostName,
-                            Path = path.Paths[0]
-                        };
-                        streamingUrls.Add(uriBuilder.ToString());
-                    }
-
+                        Scheme = "https",
+                        Host = Config.StreamingEndpoint,
+                        Path = path.Paths[0]
+                    };
+                    streamingUrls.Add(uriBuilder.ToString());
                 }
+
                 return streamingUrls;
 
 
             }
             catch (Exception)
             {
-                return null;
+                return null!;
             }
         }
 

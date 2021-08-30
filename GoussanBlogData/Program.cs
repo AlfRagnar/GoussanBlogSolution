@@ -5,17 +5,10 @@ using GoussanBlogData.Models;
 using GoussanBlogData.Services;
 using GoussanBlogData.Services.Data;
 using GoussanBlogData.Utils;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Management.Media;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Identity.Client;
 using Microsoft.Rest;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -135,7 +128,8 @@ async Task<GoussanMediaService> InitializeMediaService()
     GoussanMediaService azMediaService = new(azureMediaServicesClient);
 
     // Ensure streaming endpoint is online ( Check if Endpoint is online or starts the endpoint if offline )
-    _ = await azMediaService.EnsureStreamingEndpoint();
+    var streamingEndpoint = await azMediaService.EnsureStreamingEndpoint();
+    Config.StreamingEndpoint = streamingEndpoint.HostName;
 
     // One time Task to ensure that I have the desired encoding available ( Checks if encoding task is setup or creates it if not )
     _ = await azMediaService.GetOrCreateTransformAsync();

@@ -155,7 +155,7 @@ public class CosmosDbService : ICosmosDbService
         try
         {
             List<UploadVideo> result = new();
-            using (FeedIterator<UploadVideo> setIterator = MediaContainer.GetItemLinqQueryable<UploadVideo>().Where(x => x.Type == "Video").ToFeedIterator())
+            using (FeedIterator<UploadVideo> setIterator = MediaContainer.GetItemLinqQueryable<UploadVideo>().Where(x => x.Type == "Video" && x.State == "Finished").ToFeedIterator())
             {
                 while (setIterator.HasMoreResults)
                 {
@@ -192,7 +192,22 @@ public class CosmosDbService : ICosmosDbService
         }
     }
 
-    public async Task UpdateVideoAsync(string id, VideoCreateModel video)
+    public async Task UpdateVideoAsync(string id, VideoUpdateModel video)
+    {
+        var documentResource = await MediaContainer.ReadItemAsync<UploadVideo>(id, new PartitionKey(id));
+        var document = documentResource.Resource;
+        if(video.Description != null)
+        {
+            document.Description = video.Description;
+        }
+        if(video.Title != null)
+        {
+            document.Title = video.Title;
+        }
+        document.Updated = DateTime.UtcNow.ToString();
+        await MediaContainer.UpsertItemAsync(document, new PartitionKey(id));
+    }
+    public async Task UpdateVideoAsync(string id, UploadVideo video)
     {
         await MediaContainer.UpsertItemAsync(video, new PartitionKey(id));
     }

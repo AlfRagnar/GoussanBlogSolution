@@ -23,5 +23,6 @@
         public static string AadClientId { get; set; }
         public static string AadSecret { get; set; }
         public static string Secret { get; set; }
+        public static string StreamingEndpoint { get; set; }
     }
 }

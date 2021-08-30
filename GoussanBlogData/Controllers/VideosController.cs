@@ -1,15 +1,10 @@
 ﻿using GoussanBlogData.Models.DatabaseModels;
 using GoussanBlogData.Models.MediaModels;
 using GoussanBlogData.Services;
-using GoussanBlogData.Utils;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace GoussanBlogData.Controllers;
-[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class VideosController : ControllerBase
@@ -31,7 +26,24 @@ public class VideosController : ControllerBase
     {
         try
         {
-            return Ok(await cosmosDb.GetVideoList());
+            var videoList = await cosmosDb.GetVideoList();
+            foreach (var video in videoList)
+            {
+                try
+                {
+                    if (video.StreamingPaths == null)
+                    {
+                        video.StreamingPaths = await mediaService.GetStreamingURL(video.Locator);
+                        await cosmosDb.UpdateVideoAsync(video.Id, video).ConfigureAwait(false);
+                    }
+                }
+                catch (Exception)
+                {
+                    video.StreamingPaths = null!;
+                }
+            }
+
+            return Ok(videoList);
         }
         catch (Exception)
         {
@@ -63,8 +75,10 @@ public class VideosController : ControllerBase
             {
                 Id = Regex.Replace(Convert.ToBase64String(Guid.NewGuid().ToByteArray()), "[/+=]", ""),
                 Filename = video.Filename,
-                Created = $"{DateTime.UtcNow.ToShortDateString()} UTC",
-                Updated = $"{DateTime.UtcNow.ToUniversalTime()} UTC",
+                Extension = video.File.ContentType,
+                Size = video.File.Length,
+                Created = DateTime.UtcNow.ToShortDateString(),
+                Updated = DateTime.UtcNow.ToString(),
                 State = "Not Set",
                 UserId = video.UserId,
                 BlogId = video.BlogId,
@@ -75,8 +89,8 @@ public class VideosController : ControllerBase
             var res = await mediaService.CreateAsset(video.File, newVideo);
             if (res != null)
             {
-                await cosmosDb.AddVideo(newVideo);
-                return CreatedAtAction(nameof(Create), new { Id = newVideo.Id }, newVideo);
+                await cosmosDb.AddVideo(res);
+                return CreatedAtAction(nameof(Create), new { res.Id }, res);
             }
             return BadRequest();
         }
@@ -89,7 +103,7 @@ public class VideosController : ControllerBase
 
     // PUT /api/videos/{ID}
     [HttpPut("{id}")]
-    public async Task<IActionResult> Edit([FromBody] VideoCreateModel video)
+    public async Task<IActionResult> Edit([FromBody] VideoUpdateModel video)
     {
         try
         {

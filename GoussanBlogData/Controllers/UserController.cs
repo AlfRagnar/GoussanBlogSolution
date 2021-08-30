@@ -19,8 +19,8 @@ public class UserController : ControllerBase
 {
     private readonly ILogger<UserController> _logger;
     private readonly ICosmosDbService cosmosDb;
-    private IJwtUtils _jwtUtils;
-    private IMapper _mapper;
+    private readonly IJwtUtils _jwtUtils;
+    private readonly IMapper _mapper;
 
     public UserController(ICosmosDbService cosmosDb, ILogger<UserController> logger, IJwtUtils jwtUtils, IMapper mapper)
     {
@@ -67,7 +67,7 @@ public class UserController : ControllerBase
         {
             return BadRequest();
         }
-        return CreatedAtAction(nameof(Get), new { Id = newUser.Id }, newUser);
+        return CreatedAtAction(nameof(Get), new { newUser.Id }, newUser);
     }
 
     // POST /api/user/authenticate
@@ -82,7 +82,7 @@ public class UserController : ControllerBase
             return NotFound();
         }
         var User = userList.FirstOrDefault();
-        var checkPassword = BCrypt.Net.BCrypt.Verify(authRequest.Password, User.PassWord);
+        bool checkPassword = BCrypt.Net.BCrypt.Verify(authRequest.Password, User.PassWord);
         if (checkPassword)
         {
             var response = _mapper.Map<AuthResponse>(User);

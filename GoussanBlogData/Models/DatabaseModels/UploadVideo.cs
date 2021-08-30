@@ -11,6 +11,10 @@ public class UploadVideo
 
     [JsonProperty("filename")]
     public string Filename { get; set; }
+    [JsonProperty("extension")]
+    public string Extension { get; set; }
+    [JsonProperty("size")]
+    public long Size { get; set; }
     [JsonProperty("created")]
     public string Created { get; set; }
     [JsonProperty("modified")]
@@ -24,8 +28,8 @@ public class UploadVideo
     [JsonProperty("outputasset")]
     public string OutputAsset { get; set; }
     // OPTIONAL
-    [JsonProperty("storagepath")]
-    public string? StoragePath { get; set; }
+    [JsonProperty("streamingpaths")]
+    public IList<string> StreamingPaths { get; set; }
     [JsonProperty("blogid")]
     public string? BlogId { get; set; }
 

@@ -1,10 +1,12 @@
 ﻿using GoussanBlogData.Models.DatabaseModels;
 using GoussanBlogData.Models.MediaModels;
 using GoussanBlogData.Services;
+using GoussanBlogData.Utils;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.RegularExpressions;
 
 namespace GoussanBlogData.Controllers;
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class VideosController : ControllerBase
@@ -21,6 +23,7 @@ public class VideosController : ControllerBase
     }
 
     // GET /api/videos
+    [AllowAnonymous]
     [HttpGet]
     public async Task<IActionResult> List()
     {

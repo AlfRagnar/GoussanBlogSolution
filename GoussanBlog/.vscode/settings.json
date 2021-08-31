@@ -1,0 +1,8 @@
+{
+  "appService.zipIgnorePattern": [
+    "node_modules{,/**}",
+    ".vscode{,/**}"
+  ],
+  "appService.defaultWebAppToDeploy": "/subscriptions/39ef4e8a-8579-402a-bcb0-fa3a4bbb8942/resourceGroups/GoussanMedia/providers/Microsoft.Web/sites/goussanfrontend",
+  "appService.deploySubpath": "."
+}

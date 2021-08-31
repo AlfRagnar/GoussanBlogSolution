@@ -27,8 +27,10 @@ export default function Login() {
           setUsername("");
           setPassword("");
           console.log("User Logged In");
+          sessionStorage.setItem('authToken', res.data.jwtToken);
         });
     } catch (e) {
+      localStorage.clear();
       console.log("Invalid Username/password");
       console.log(e.message);
     }

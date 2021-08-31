@@ -8,6 +8,7 @@ const AuthContextProvider = ({ children }) => {
 
   const changeAuthStatus = () => {
     setAuth(!auth);
+    sessionStorage.clear();
   };
 
   return (

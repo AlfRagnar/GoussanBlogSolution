@@ -4,7 +4,7 @@ const context = ["/videos", "/me", "/user"];
 
 module.exports = function (app) {
   const appProxy = createProxyMiddleware(context, {
-    target: "https://api.goussanmedia.com",
+    target: "https://goussanapi.azure-api.net",
     secure: false,
   });
 

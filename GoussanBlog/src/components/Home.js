@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { ThemeContext } from "../contexts/ThemeContext";
 import Paper from "@material-ui/core/Paper";
 import { ToggleButton, ToggleButtonGroup } from "react-bootstrap";
@@ -9,14 +9,21 @@ import {
   DialogContentText,
   Dialog,
   Typography,
+  Card,
+  CardHeader,
+  CardContent,
 } from "@material-ui/core";
+import axios from "axios";
+import { AzureMP } from "react-azure-mp";
 
 export default function Home() {
   const { isDarkTheme, darkTheme, lightTheme, setTheme } =
     useContext(ThemeContext);
   const theme = isDarkTheme ? darkTheme : lightTheme;
-  const { auth, token } = useContext(AuthContext);
+  const { auth, token, setAuth, setToken } = useContext(AuthContext);
   const [open, setOpen] = useState(false);
+  const [videos, setVideos] = useState([""]);
+  const [fetchedVideos, setFetchedVideos] = useState(false);
 
   const handleClose = () => {
     setOpen(false);
@@ -25,6 +32,24 @@ export default function Home() {
   const handleClickOpen = () => {
     setOpen(true);
   };
+
+  useEffect(() => {
+    var localToken = sessionStorage.getItem("authToken");
+    if (localToken !== null) {
+      setToken(localToken);
+      setAuth(true);
+    }
+
+    async function fetchVideos() {
+      await axios.get("/videos").then((res) => {
+        setVideos(res.data);
+        setFetchedVideos(true);
+      });
+    }
+    fetchVideos();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="container">
@@ -47,8 +72,10 @@ export default function Home() {
                 View My Token
               </Button>
               <Dialog onClose={handleClose} open={open}>
-                <DialogTitle id="dialog-title">View my JWT token</DialogTitle>
-                <DialogContentText>{token}</DialogContentText>
+                <DialogTitle id="dialog-title">Your JWT Token</DialogTitle>
+                <div className="container">
+                  <DialogContentText>{token}</DialogContentText>
+                </div>
               </Dialog>
             </>
           ) : (
@@ -57,6 +84,37 @@ export default function Home() {
             </>
           )}
         </div>
+
+        {fetchedVideos ? (
+          <>
+            {videos.map((video) => (
+              <Card className="container" key={video.id}>
+                <CardHeader>
+                  <Typography variant="h6">
+                    Video Title: {video.title}
+                  </Typography>
+                </CardHeader>
+                <CardContent>
+                  <Typography variant="body2">
+                    Video Description: <br />
+                    {video.description}
+                  </Typography>
+                  <AzureMP
+                    skin="amp-flush"
+                    src={[
+                      {
+                        src: video.streamingPaths[0],
+                        type: "application/vnd.ms-sstr+xml",
+                      },
+                    ]}
+                  />
+                </CardContent>
+              </Card>
+            ))}
+          </>
+        ) : (
+          <Typography>Getting Video Data from Database</Typography>
+        )}
       </Paper>
 
       <footer>

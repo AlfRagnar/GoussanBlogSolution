@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useContext } from "react";
 import { ThemeContext } from "../contexts/ThemeContext";
 import { TodolistContext } from "../contexts/TodolistContext";
-import AddnewTodo from "./AddnewTodo";
 
 export default function TodoList() {
   const { todos } = useContext(TodolistContext);
@@ -10,7 +9,8 @@ export default function TodoList() {
   const theme = isDarkTheme ? darkTheme : lightTheme;
 
   return (
-    <div className="container"
+    <div
+      className="container"
       style={{
         background: theme.background,
         color: theme.text,

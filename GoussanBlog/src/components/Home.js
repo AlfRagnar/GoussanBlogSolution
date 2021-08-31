@@ -41,10 +41,15 @@ export default function Home() {
     }
 
     async function fetchVideos() {
-      await axios.get("/videos").then((res) => {
-        setVideos(res.data);
-        setFetchedVideos(true);
-      });
+      try {
+        await axios.get("/videos").then((res) => {
+          setVideos(res.data);
+          setFetchedVideos(true);
+        });
+      } catch (err) {
+        setVideos("");
+        setFetchedVideos(false);
+      }
     }
     fetchVideos();
 

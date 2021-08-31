@@ -4,17 +4,13 @@ using GoussanBlogData.Models.UserModels;
 using GoussanBlogData.Services;
 using GoussanBlogData.Utils;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace GoussanBlogData.Controllers;
 
 [Authorize]
 [ApiController]
-[Route("api/[controller]")]
+[Route("[controller]")]
 public class UserController : ControllerBase
 {
     private readonly ILogger<UserController> _logger;
@@ -30,20 +26,20 @@ public class UserController : ControllerBase
         _mapper = mapper;
     }
 
-    // GET /api/user
+    // GET /user
     [HttpGet]
     public async Task<IActionResult> List()
     {
         return Ok(await cosmosDb.GetUsersAsync("SELECT * FROM c"));
     }
-    // GET /api/user/{ID}
+    // GET /user/{ID}
     [HttpGet("{id}")]
     public async Task<IActionResult> Get(string id)
     {
         return Ok(await cosmosDb.GetUserAsync(id));
     }
 
-    // POST /api/user/register
+    // POST /user/register
     [AllowAnonymous]
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] Createuser user)
@@ -70,7 +66,7 @@ public class UserController : ControllerBase
         return CreatedAtAction(nameof(Get), new { newUser.Id }, newUser);
     }
 
-    // POST /api/user/authenticate
+    // POST /user/authenticate
     [AllowAnonymous]
     [HttpPost("authenticate")]
 

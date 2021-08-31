@@ -1,42 +1,41 @@
 ﻿using GoussanBlogData.Utils;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace GoussanBlogData.Controllers;
 [Authorize]
-[Route("api/[controller]")]
+[Route("[controller]")]
 [ApiController]
 public class ImageController : ControllerBase
 {
-    // GET: api/<ImageController>
+    // GET: image/
     [HttpGet]
     public IEnumerable<string> Get()
     {
         return new string[] { "value1", "value2" };
     }
 
-    // GET api/<ImageController>/5
+    // GET image/{id}
     [HttpGet("{id}")]
     public string Get(int id)
     {
         return "value";
     }
 
-    // POST api/<ImageController>
+    // POST image/
     [HttpPost]
     public void Post([FromBody] string value)
     {
     }
 
-    // PUT api/<ImageController>/5
+    // PUT image/5
     [HttpPut("{id}")]
     public void Put(int id, [FromBody] string value)
     {
     }
 
-    // DELETE api/<ImageController>/5
+    // DELETE image/5
     [HttpDelete("{id}")]
     public void Delete(int id)
     {

@@ -1,6 +1,4 @@
-﻿
-using Microsoft.AspNetCore.Http;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace GoussanBlogData.Models.MediaModels;
 public class ImageCreateModel

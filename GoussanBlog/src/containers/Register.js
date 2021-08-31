@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import "./Register.css";
 import axios from "axios";
 
 export default function Register() {
@@ -31,7 +30,7 @@ export default function Register() {
   }
 
   return (
-    <div className="Register">
+    <div className="container">
       <Form onSubmit={handleSubmit}>
         <Form.Group size="lg" controlId="email">
           <Form.Label>Email</Form.Label>

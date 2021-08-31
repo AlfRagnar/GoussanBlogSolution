@@ -33,8 +33,8 @@ namespace GoussanFunction
 
                     var message = new SendGridMessage();
                     message.AddTo(incomingDoc.email);
-                    message.AddContent("text/html", "SENT FROM AZURE FUNCTIONS USING SENDGRID INTEGRATION");
-                    message.SetFrom(new EmailAddress("noreply@goussanjarga.com"));
+                    message.AddContent("text/html", $"Hello {incomingDoc.username} and welcome to Goussanjarga Media Services. Here you can Upload Videos, Images and create Blog Posts and it is all powered by Microsoft Azure and their backend services. To start using our services, you need to first activate your account by clicking this link: INSERT_LINK");
+                    message.SetFrom(new EmailAddress("support@goussanmedia.com"));
                     message.SetSubject("Activate Account");
                     await messageCollector.AddAsync(message);
                 }

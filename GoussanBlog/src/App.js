@@ -1,26 +1,19 @@
-import React, { useState } from "react";
-import "./App.css";
+import React from "react";
 import Routes from "./Routes";
-import { AppContext } from "./contexts/contextLib";
 import ThemeContextProvider from "./contexts/ThemeContext";
 import MyNavbar from "./components/MyNavbar";
-import { Container } from "@material-ui/core";
+import AuthContextProvider from "./contexts/AuthContext";
 
 function App() {
-  const [isAuthenticated, userHasAuthenticated] = useState({
-    auth: false,
-    token: "",
-  });
-
   return (
-    <Container className="App">
-      <ThemeContextProvider>
-        <MyNavbar />
-        <AppContext.Provider value={{ isAuthenticated, userHasAuthenticated }}>
+    <div>
+      <AuthContextProvider>
+        <ThemeContextProvider>
+          <MyNavbar />
           <Routes />
-        </AppContext.Provider>
-      </ThemeContextProvider>
-    </Container>
+        </ThemeContextProvider>
+      </AuthContextProvider>
+    </div>
   );
 }
 

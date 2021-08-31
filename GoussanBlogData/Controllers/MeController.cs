@@ -5,11 +5,11 @@ using Microsoft.AspNetCore.Mvc;
 namespace GoussanBlogData.Controllers;
 [Authorize]
 [ApiController]
-[Route("api/[controller]")]
+[Route("[controller]")]
 public class MeController : ControllerBase
 {
 
-    // GET /api/me
+    // GET /me
     [HttpGet]
     public IActionResult Get()
     {

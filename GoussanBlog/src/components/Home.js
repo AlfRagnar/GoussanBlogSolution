@@ -1,15 +1,33 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import { ThemeContext } from "../contexts/ThemeContext";
-import Button from "@material-ui/core/Button";
 import Paper from "@material-ui/core/Paper";
+import { ToggleButton, ToggleButtonGroup } from "react-bootstrap";
+import { AuthContext } from "../contexts/AuthContext";
+import {
+  Button,
+  DialogTitle,
+  DialogContentText,
+  Dialog,
+  Typography,
+} from "@material-ui/core";
 
-class Home extends React.Component {
-  static contextType = ThemeContext;
-  render() {
-    const { isDarkTheme, darkTheme, lightTheme, changeTheme } = this.context;
-    const theme = isDarkTheme ? darkTheme : lightTheme;
+export default function Home() {
+  const { isDarkTheme, darkTheme, lightTheme, setTheme } =
+    useContext(ThemeContext);
+  const theme = isDarkTheme ? darkTheme : lightTheme;
+  const { auth, token } = useContext(AuthContext);
+  const [open, setOpen] = useState(false);
 
-    return (
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  return (
+    <div className="container">
       <Paper
         variant="outlined"
         style={{
@@ -17,16 +35,54 @@ class Home extends React.Component {
           color: theme.text,
           textAlign: "center",
         }}>
-        <div className="lander">
+        <div className="lander container-fluid">
           <h1>Goussanjarga</h1>
           <p>A simple media sharing App</p>
+          {auth ? (
+            <>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleClickOpen}>
+                View My Token
+              </Button>
+              <Dialog onClose={handleClose} open={open}>
+                <DialogTitle id="dialog-title">View my JWT token</DialogTitle>
+                <DialogContentText>{token}</DialogContentText>
+              </Dialog>
+            </>
+          ) : (
+            <>
+              <Typography>You're not logged in</Typography>
+            </>
+          )}
         </div>
-        <Button variant="contained" color="primary" onClick={changeTheme}>
-          Change Theme
-        </Button>
       </Paper>
-    );
-  }
-}
 
-export default Home;
+      <footer>
+        <ToggleButtonGroup type="checkbox">
+          <ToggleButton
+            variant="outlined"
+            style={{
+              background: darkTheme.background,
+              color: darkTheme.text,
+            }}
+            id="tbg-btn-1"
+            onClick={() => setTheme(true)}>
+            Dark Theme
+          </ToggleButton>
+          <ToggleButton
+            variant="outlined"
+            style={{
+              background: lightTheme.background,
+              color: lightTheme.text,
+            }}
+            id="tbg-btn-2"
+            onClick={() => setTheme(false)}>
+            Light Theme
+          </ToggleButton>
+        </ToggleButtonGroup>
+      </footer>
+    </div>
+  );
+}

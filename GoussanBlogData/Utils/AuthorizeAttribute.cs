@@ -1,10 +1,7 @@
 ﻿
 using GoussanBlogData.Models.DatabaseModels;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using System;
-using System.Linq;
 
 namespace GoussanBlogData.Utils
 {

@@ -1,14 +1,13 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import "./Login.css";
 import axios from "axios";
-import { useAppContext } from "../contexts/contextLib";
+import { AuthContext } from "../contexts/AuthContext";
 
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const { userHasAuthenticated } = useAppContext();
+  const { setAuth, setToken } = useContext(AuthContext);
 
   function validateForm() {
     return username.length > 0 && password.length > 0;
@@ -23,9 +22,11 @@ export default function Login() {
           password: password,
         })
         .then((res) => {
-          userHasAuthenticated({ auth: true, token: res.data.jwtToken });
+          setAuth(true);
+          setToken(res.data.jwtToken);
           setUsername("");
           setPassword("");
+          console.log("User Logged In");
         });
     } catch (e) {
       console.log("Invalid Username/password");
@@ -34,7 +35,7 @@ export default function Login() {
   }
 
   return (
-    <div className="Login">
+    <div className="container">
       <Form onSubmit={handleSubmit}>
         <Form.Group size="lg" controlId="username">
           <Form.Label>Username</Form.Label>

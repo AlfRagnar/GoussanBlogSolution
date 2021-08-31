@@ -68,7 +68,7 @@ if (builder.Environment.IsDevelopment())
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "GoussanBlogData v1"));
 }
 // Configure Cors, most of Endpoint interaction with the outside will be handled through Azure API Management,
-// but otherwise it is handled by JWT token verification
+// but otherwise it is handled by JWT token verification by the application
 app.UseCors(builder =>
 {
     builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();

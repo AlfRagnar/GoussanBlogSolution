@@ -8,7 +8,7 @@ using System.Text.RegularExpressions;
 namespace GoussanBlogData.Controllers;
 [Authorize]
 [ApiController]
-[Route("api/[controller]")]
+[Route("[controller]")]
 public class VideosController : ControllerBase
 {
     private readonly ILogger<VideosController> _logger;
@@ -22,7 +22,7 @@ public class VideosController : ControllerBase
         _logger = logger;
     }
 
-    // GET /api/videos
+    // GET /videos
     [AllowAnonymous]
     [HttpGet]
     public async Task<IActionResult> List()
@@ -54,7 +54,7 @@ public class VideosController : ControllerBase
         }
     }
 
-    // GET /api/videos/{ID}
+    // GET /videos/{ID}
     [HttpGet("{id}")]
     public async Task<IActionResult> Get(string id)
     {
@@ -68,7 +68,7 @@ public class VideosController : ControllerBase
         }
     }
 
-    // POST /api/videos
+    // POST /videos
     [HttpPost]
     public async Task<IActionResult> Create([FromForm] VideoCreateModel video)
     {
@@ -104,7 +104,7 @@ public class VideosController : ControllerBase
 
     }
 
-    // PUT /api/videos/{ID}
+    // PUT /videos/{ID}
     [HttpPut("{id}")]
     public async Task<IActionResult> Edit([FromBody] VideoUpdateModel video)
     {
@@ -119,7 +119,7 @@ public class VideosController : ControllerBase
         }
     }
 
-    // DELETE /api/videos/{id}
+    // DELETE /videos/{id}
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(string id)
     {

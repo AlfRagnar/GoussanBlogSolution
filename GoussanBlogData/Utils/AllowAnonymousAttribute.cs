@@ -1,7 +1,4 @@
-﻿
-using System;
-
-namespace GoussanBlogData.Utils
+﻿namespace GoussanBlogData.Utils
 {
     [AttributeUsage(AttributeTargets.Method)]
     public class AllowAnonymousAttribute : Attribute

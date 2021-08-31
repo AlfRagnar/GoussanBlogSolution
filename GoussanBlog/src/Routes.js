@@ -1,10 +1,12 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
-import Home from "./components/Home";
 import Login from "./containers/Login";
 import NotFound from "./containers/NotFound";
 import Register from "./containers/Register";
 import ConfirmPage from "./containers/ConfirmPage";
+import TodoList from "./containers/TodoList";
+import Home from "./components/Home";
+import TodolistContextProvider from "./contexts/TodolistContext";
 
 export default function Routes() {
   return (
@@ -17,6 +19,11 @@ export default function Routes() {
       </Route>
       <Route exact path="/register">
         <Register />
+      </Route>
+      <Route exact path="/todolist">
+        <TodolistContextProvider>
+          <TodoList />
+        </TodolistContextProvider>
       </Route>
       <Route path="/confirm/:token">
         <ConfirmPage />

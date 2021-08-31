@@ -3,9 +3,6 @@ using GoussanBlogData.Models.DatabaseModels;
 using GoussanBlogData.Models.MediaModels;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Cosmos.Linq;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace GoussanBlogData.Services;
 public class CosmosDbService : ICosmosDbService
@@ -196,11 +193,11 @@ public class CosmosDbService : ICosmosDbService
     {
         var documentResource = await MediaContainer.ReadItemAsync<UploadVideo>(id, new PartitionKey(id));
         var document = documentResource.Resource;
-        if(video.Description != null)
+        if (video.Description != null)
         {
             document.Description = video.Description;
         }
-        if(video.Title != null)
+        if (video.Title != null)
         {
             document.Title = video.Title;
         }

@@ -57,11 +57,7 @@ jobs:
         yarn run build
       working-directory: ${{ env.working-directory }}
       
-    - name: Run Tests
-      run: |
-        # Run Tests if present
-        yarn run test --if-present
-      working-directory: ${{ env.working-directory }}
+  
       
     - name: 'Deploy to Azure WebApp'
       uses: azure/webapps-deploy@v2

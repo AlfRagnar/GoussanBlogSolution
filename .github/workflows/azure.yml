@@ -43,14 +43,27 @@ jobs:
       uses: actions/setup-node@v2
       with:
         node-version: ${{ env.NODE_VERSION }}
+        
     - name: Install Dependencies
       run: |
         # Build and test the project, then
         # deploy to Azure Web App.
         yarn
-        yarn run build
         yarn run test
       working-directory: ${{ env.working-directory }}
+      
+    - name: Build Project
+      run: |
+        # Build the project
+        yarn run build
+      working-directory: ${{ env.working-directory }}
+      
+    - name: Run Tests
+      run: |
+        # Run Tests if present
+        yarn run test --if-present
+      working-directory: ${{ env.working-directory }}
+      
     - name: 'Deploy to Azure WebApp'
       uses: azure/webapps-deploy@v2
       with:

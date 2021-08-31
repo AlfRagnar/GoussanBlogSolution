@@ -30,6 +30,7 @@ env:
   AZURE_WEBAPP_NAME: goussanfrontend    # set this to your application's name
   AZURE_WEBAPP_PACKAGE_PATH: 'GoussanBlog/build'      # set this to the path to your web app project, defaults to the repository root
   NODE_VERSION: '14.x'                # set this to the node version to use
+  working-directory: ./GoussanBlog
 
 jobs:
   build-and-deploy:
@@ -44,13 +45,12 @@ jobs:
         node-version: ${{ env.NODE_VERSION }}
     - name: Install Dependencies
       run: |
-        path: ~/GoussanBlog
-        
         # Build and test the project, then
         # deploy to Azure Web App.
         yarn
         yarn run build
         yarn run test
+      working-directory: ${{ env.working-directory }}
     - name: 'Deploy to Azure WebApp'
       uses: azure/webapps-deploy@v2
       with:

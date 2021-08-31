@@ -94,11 +94,7 @@ export default function Home() {
           <>
             {videos.map((video) => (
               <Card className="container" key={video.id}>
-                <CardHeader>
-                  <Typography variant="h6">
-                    Video Title: {video.title}
-                  </Typography>
-                </CardHeader>
+                <CardHeader title={video.title} />
                 <CardContent>
                   <Typography variant="body2">
                     Video Description: <br />

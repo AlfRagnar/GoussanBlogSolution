@@ -50,13 +50,16 @@ public class UserController : ControllerBase
             return BadRequest("Username or Email already in Use");
         }
         var Id = Regex.Replace(Convert.ToBase64String(Guid.NewGuid().ToByteArray()), "[/+=]", "");
+        var confirmationCode = Regex.Replace(Convert.ToBase64String(Guid.NewGuid().ToByteArray()), "[/+=]", "");
         User newUser = new()
         {
             Id = Id,
             Email = user.Email,
             UserName = user.Username,
             PassWord = BCrypt.Net.BCrypt.HashPassword(user.Password),
-            Created = DateTime.UtcNow.ToShortDateString(),
+            Created = DateTime.UtcNow,
+            Status = "Pending",
+            ConfirmationCode = confirmationCode
         };
         var res = await cosmosDb.AddUser(newUser);
         if (res == null)
@@ -72,20 +75,35 @@ public class UserController : ControllerBase
 
     public async Task<IActionResult> Authenticate([FromBody] AuthRequestModel authRequest)
     {
-        var userList = await cosmosDb.GetUserByName(authRequest.Username);
-        if (userList == null || !userList.Any())
+        try
         {
-            return NotFound();
-        }
-        var User = userList.FirstOrDefault();
-        bool checkPassword = BCrypt.Net.BCrypt.Verify(authRequest.Password, User.PassWord);
-        if (checkPassword)
-        {
-            var response = _mapper.Map<AuthResponse>(User);
-            response.JwtToken = _jwtUtils.GenerateToken(User);
+            IEnumerable<User> userList = await cosmosDb.GetUserByName(authRequest.Username);
+            if (userList == null || !userList.Any())
+            {
+                return NotFound();
+            }
+            User User = userList.First();
 
-            return Ok(response);
+            if (User.Status == null || User.Status != "Active")
+            {
+                return Unauthorized("Pending Account, Please Verify Your Email");
+            }
+
+
+            bool checkPassword = BCrypt.Net.BCrypt.Verify(authRequest.Password, User.PassWord);
+            if (checkPassword)
+            {
+                var response = _mapper.Map<AuthResponse>(User);
+                response.JwtToken = _jwtUtils.GenerateToken(User);
+
+                return Ok(response);
+            }
+            return BadRequest();
         }
-        return BadRequest();
+        catch (Exception)
+        {
+            return BadRequest();
+        }
+        
     }
 }

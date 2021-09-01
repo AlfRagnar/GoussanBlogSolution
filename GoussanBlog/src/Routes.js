@@ -21,9 +21,7 @@ export default function Routes() {
         <Route exact path="/register">
           <Register />
         </Route>
-        <Route path="/confirm/:token">
-          <ConfirmPage />
-        </Route>
+        <Route path="/confirm/:token" component={ConfirmPage} />
         <Route>
           <NotFound />
         </Route>

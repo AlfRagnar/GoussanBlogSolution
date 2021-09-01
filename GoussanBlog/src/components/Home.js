@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { ThemeContext } from "../contexts/ThemeContext";
 import Paper from "@material-ui/core/Paper";
-import { ToggleButton, ToggleButtonGroup } from "react-bootstrap";
 import { AuthContext } from "../contexts/AuthContext";
 import {
   Button,
@@ -17,8 +16,7 @@ import axios from "axios";
 import { AzureMP } from "react-azure-mp";
 
 export default function Home() {
-  const { isDarkTheme, darkTheme, lightTheme, setTheme } =
-    useContext(ThemeContext);
+  const { isDarkTheme, darkTheme, lightTheme } = useContext(ThemeContext);
   const theme = isDarkTheme ? darkTheme : lightTheme;
   const { auth, token, setAuth, setToken } = useContext(AuthContext);
   const [open, setOpen] = useState(false);
@@ -93,7 +91,14 @@ export default function Home() {
         {fetchedVideos ? (
           <>
             {videos.map((video) => (
-              <Card className="container" key={video.id}>
+              <Card
+                className="container"
+                style={{
+                  background: theme.background,
+                  color: theme.text,
+                  textAlign: "center",
+                }}
+                key={video.id}>
                 <CardHeader title={video.title} />
                 <CardContent>
                   <Typography variant="body2">
@@ -117,31 +122,6 @@ export default function Home() {
           <Typography>Getting Video Data from Database</Typography>
         )}
       </Paper>
-
-      <footer>
-        <ToggleButtonGroup type="checkbox">
-          <ToggleButton
-            variant="outlined"
-            style={{
-              background: darkTheme.background,
-              color: darkTheme.text,
-            }}
-            id="tbg-btn-1"
-            onClick={() => setTheme(true)}>
-            Dark Theme
-          </ToggleButton>
-          <ToggleButton
-            variant="outlined"
-            style={{
-              background: lightTheme.background,
-              color: lightTheme.text,
-            }}
-            id="tbg-btn-2"
-            onClick={() => setTheme(false)}>
-            Light Theme
-          </ToggleButton>
-        </ToggleButtonGroup>
-      </footer>
     </div>
   );
 }

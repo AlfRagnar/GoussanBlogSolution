@@ -3,11 +3,15 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import axios from "axios";
 import { AuthContext } from "../contexts/AuthContext";
+import { ThemeContext } from "../contexts/ThemeContext";
+import { Paper } from "@material-ui/core";
 
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const { setAuth, setToken } = useContext(AuthContext);
+  const { isDarkTheme, darkTheme, lightTheme } = useContext(ThemeContext);
+  const theme = isDarkTheme ? darkTheme : lightTheme;
 
   function validateForm() {
     return username.length > 0 && password.length > 0;
@@ -27,7 +31,7 @@ export default function Login() {
           setUsername("");
           setPassword("");
           console.log("User Logged In");
-          sessionStorage.setItem('authToken', res.data.jwtToken);
+          sessionStorage.setItem("authToken", res.data.jwtToken);
         });
     } catch (e) {
       localStorage.clear();
@@ -38,33 +42,45 @@ export default function Login() {
 
   return (
     <div className="container">
-      <Form onSubmit={handleSubmit}>
-        <Form.Group size="lg" controlId="username">
-          <Form.Label>Username</Form.Label>
-          <Form.Control
-            autoFocus
-            type="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-        </Form.Group>
-        <Form.Group size="lg" controlId="password">
-          <Form.Label>Password</Form.Label>
-          <Form.Control
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </Form.Group>
-        <Button
-          className="mb-2"
-          variant="primary"
-          size="lg"
-          type="submit"
-          disabled={!validateForm()}>
-          Login
-        </Button>
-      </Form>
+      <Paper
+        variant="outlined"
+        style={{
+          background: theme.background,
+          color: theme.text,
+          textAlign: "center",
+        }}>
+        <Form onSubmit={handleSubmit}>
+          <div className="container">
+            <Form.Group controlId="username">
+              <Form.Label>Username</Form.Label>
+              <Form.Control
+                autoFocus
+                type="username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+              />
+            </Form.Group>
+            <Form.Group size="lg" controlId="password">
+              <Form.Label>Password</Form.Label>
+              <Form.Control
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </Form.Group>
+          </div>
+          <div className="container">
+            <Button
+              className="mb-2"
+              variant="primary"
+              size="lg"
+              type="submit"
+              disabled={!validateForm()}>
+              Login
+            </Button>
+          </div>
+        </Form>
+      </Paper>
     </div>
   );
 }

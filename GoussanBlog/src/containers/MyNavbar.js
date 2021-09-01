@@ -21,8 +21,8 @@ import {
 import MenuIcon from "@material-ui/icons/Menu";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import Switch from "@material-ui/core/Switch";
-import Login from "../containers/Login";
-import Register from "../containers/Register";
+import Login from "../components/Login";
+import Register from "../components/Register";
 
 const useStyles = makeStyles((theme) => ({
   root: {

@@ -1,11 +1,11 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
-import Login from "./containers/Login";
-import NotFound from "./containers/NotFound";
-import Register from "./containers/Register";
-import ConfirmPage from "./containers/ConfirmPage";
+import Login from "./components/Login";
+import NotFound from "./components/NotFound";
+import Register from "./components/Register";
+import ConfirmPage from "./components/ConfirmPage";
 import Home from "./components/Home";
-import MyNavbar from "./components/MyNavbar";
+import MyNavbar from "./containers/MyNavbar";
 
 export default function Routes() {
   return (

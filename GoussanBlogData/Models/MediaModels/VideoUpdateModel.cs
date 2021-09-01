@@ -1,12 +1,14 @@
 ﻿using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
 
 namespace GoussanBlogData.Models.MediaModels;
 public class VideoUpdateModel
 {
     // REQUIRED
+    [Required]
     [JsonProperty("id")]
     public string Id { get; set; }
-
+    [Required]
     [JsonProperty("userid")]
     public string UserId { get; set; }
 

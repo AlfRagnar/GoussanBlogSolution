@@ -69,10 +69,28 @@ public class UserController : ControllerBase
         return CreatedAtAction(nameof(Get), new { newUser.Id }, newUser);
     }
 
+    /// <summary>
+    /// Authenticates a request and returns a JWT token upon successful authentication
+    /// </summary>
+    /// <remarks>
+    /// Sample request:
+    /// 
+    ///     POST /authenticate
+    ///     {
+    ///         "username":"something"
+    ///         "password":"something"
+    ///      }
+    /// </remarks>
+    /// <param name="authRequest"></param>
+    /// <returns>A JWT Token</returns>
+    /// <response code="200">Returns the newly created JWT Token</response>
+    /// <response code="401">If the User has not activated his account or wrong Password</response>
+    /// <response code="404">If the user is not found</response>
+    /// <response code="400">If the application encounters any errors</response>
+
     // POST /user/authenticate
     [AllowAnonymous]
     [HttpPost("authenticate")]
-
     public async Task<IActionResult> Authenticate([FromBody] AuthRequestModel authRequest)
     {
         try
@@ -97,6 +115,9 @@ public class UserController : ControllerBase
                 response.JwtToken = _jwtUtils.GenerateToken(User);
 
                 return Ok(response);
+            } else
+            {
+                return Unauthorized();
             }
             return BadRequest();
         }

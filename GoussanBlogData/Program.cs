@@ -8,7 +8,9 @@ using GoussanBlogData.Utils;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Management.Media;
 using Microsoft.Identity.Client;
+using Microsoft.OpenApi.Models;
 using Microsoft.Rest;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -55,7 +57,27 @@ builder.Services.AddCors();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new() { Title = "GoussanBlogData", Version = "v1" });
+    //c.SwaggerDoc("v1", new() { Title = "GoussanBlogData", Version = "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Version = "v1",
+        Title = "Goussanjarga Blog And Media API",
+        Description = "A simple API that is used to communicate with different Azure Services and provide data to Client",
+        TermsOfService = new Uri("https://example.com/terms"),
+        Contact = new OpenApiContact
+        {
+            Name = "Alf Ragnar",
+            Email = "alf@goussanjarga.com",
+        },
+        License = new OpenApiLicense
+        {
+            Name = "Use under LICX",
+            Url = new Uri("https://example.com/license"),
+        }
+    });
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    c.IncludeXmlComments(xmlPath);
 });
 
 var app = builder.Build();
@@ -64,9 +86,18 @@ var app = builder.Build();
 if (builder.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
-    app.UseSwagger();
-    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "GoussanBlogData v1"));
+
 }
+// Configure Swagger
+app.UseSwagger(c =>
+{
+    c.SerializeAsV2 = true;
+});
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "GoussanBlogData v1");
+    c.RoutePrefix = string.Empty;
+});
 // Configure Cors, most of Endpoint interaction with the outside will be handled through Azure API Management,
 // but otherwise it is handled by JWT token verification by the application
 app.UseCors(builder =>

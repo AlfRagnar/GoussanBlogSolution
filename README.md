@@ -5,10 +5,14 @@
  ## GoussanBlog
 
 React Frontend client app that makes call to backend API for actions that use Cloud functions
+<br />
+Doucmentation: [Link To Documentation](GoussanBlog/README.md)
 
 ## GoussanBlogData
 
 .NET 6.0 (Preview) Backend API that interacts with Azure services
+<br />
+Doucmentation: [Link To Documentation](GoussanBlogData/README.md)
 
 ## GoussanFunction
 

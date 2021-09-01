@@ -1,6 +1,8 @@
 # GoussanBlogData
 This is a project I'm currently working on. Feel free to use at your own risk.
 
+Link to API for preview: https://goussanblogdata.azurewebsites.net/
+
 
 ## Backend API in .NET 6.0 Preview
 

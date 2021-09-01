@@ -9,6 +9,7 @@ export default function ConfirmPage(props) {
       <div>
         This is where the Confirmation Logic will be ran. Will most likely just
         be an API POST request with the token
+        Checking if CI works now
       </div>
     </>
   );

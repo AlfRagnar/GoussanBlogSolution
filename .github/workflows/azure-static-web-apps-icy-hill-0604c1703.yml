@@ -2,6 +2,8 @@ name: Azure Static Web Apps CI/CD
 
 on:
   push:
+    paths: 
+      - "GoussanBlog"
     branches:
       - main
   pull_request:

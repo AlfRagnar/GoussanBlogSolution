@@ -13,7 +13,7 @@ namespace GoussanBlogData.Utils
             CreateMap<User, AuthResponse>();
 
             // CreateUser => User
-            CreateMap<Createuser, User>();
+            CreateMap<CreateUser, User>();
 
             // UpdateRequest => User
             CreateMap<UpdateRequest, User>().ForAllMembers(x => x.Condition((src, dest, prop) =>

@@ -8,7 +8,9 @@ public interface ICosmosDbService
     // USER API
     Task<ItemResponse<Models.DatabaseModels.User>> AddUser(Models.DatabaseModels.User user);
     Task<Models.DatabaseModels.User> GetUserAsync(string id);
-    Task<IEnumerable<Models.DatabaseModels.User>> GetUsersAsync(string queryString);
+    IQueryable<dynamic> GetUsersAsync();
+    Task<string> ConfirmUser(string token);
+
     Task<IEnumerable<Models.DatabaseModels.User>> GetUserByName(string Username);
     Task<IEnumerable<Models.DatabaseModels.User>> GetUserByMail(string Email);
     Task<IEnumerable<Models.DatabaseModels.User>> CheckUser(string Username, string Email);

@@ -1,19 +1,47 @@
-﻿namespace GoussanFunction.Models
+﻿using Newtonsoft.Json;
+
+namespace GoussanFunction.Models
 {
     internal class IncDocument
     {
 
-        public string id { get; set; }
-        public string created { get; set; }
-        public string username { get; set; }
-        public string password { get; set; }
-        public string email { get; set; }
-        public object medias { get; set; }
-        public string _rid { get; set; }
-        public string _self { get; set; }
-        public string _etag { get; set; }
-        public string _attachments { get; set; }
-        public int _ts { get; set; }
-        public int _lsn { get; set; }
+        [JsonProperty("id")]
+        public string Id { get; set; }
+
+        [JsonProperty("username")]
+        public string Username { get; set; }
+
+        [JsonProperty("password")]
+        public string Password { get; set; }
+
+        [JsonProperty("email")]
+        public string Email { get; set; }
+
+        [JsonProperty("medias")]
+        public object Medias { get; set; }
+
+        [JsonProperty("created")]
+        public string Created { get; set; }
+
+        [JsonProperty("status")]
+        public string Status { get; set; }
+
+        [JsonProperty("confirmationcode")]
+        public string Confirmationcode { get; set; }
+
+        [JsonProperty("_rid")]
+        public string Rid { get; set; }
+
+        [JsonProperty("_self")]
+        public string Self { get; set; }
+
+        [JsonProperty("_etag")]
+        public string Etag { get; set; }
+
+        [JsonProperty("_attachments")]
+        public string Attachments { get; set; }
+
+        [JsonProperty("_ts")]
+        public int Ts { get; set; }
     }
 }

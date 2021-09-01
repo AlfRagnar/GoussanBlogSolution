@@ -23,17 +23,23 @@ namespace GoussanFunction
         {
             if (input != null && input.Count > 0)
             {
-                log.LogInformation("Documents modified " + input.Count);
+                log.LogInformation("Documents to be modified: " + input.Count);
                 log.LogInformation("Deserializing documents");
 
                 foreach (var document in input)
                 {
                     IncDocument incomingDoc = JsonConvert.DeserializeObject<IncDocument>(document.ToString());
-                    log.LogInformation(incomingDoc.email);
+
+                    var confirmURI = new UriBuilder
+                    {
+                        Scheme = "https",
+                        Host = "goussanmedia.com",
+                        Path = $"confirm/{incomingDoc.Confirmationcode}"
+                    };
 
                     var message = new SendGridMessage();
-                    message.AddTo(incomingDoc.email);
-                    message.AddContent("text/html", $"Hello {incomingDoc.username} and welcome to Goussanjarga Media Services. Here you can Upload Videos, Images and create Blog Posts and it is all powered by Microsoft Azure and their backend services. To start using our services, you need to first activate your account by clicking this link: INSERT_LINK");
+                    message.AddTo(incomingDoc.Email);
+                    message.AddContent("text/html", $"Hello {incomingDoc.Username} and welcome to Goussanjarga Media Services. Here you can Upload Videos, Images and create Blog Posts and it is all powered by Microsoft Azure and their backend services. To start using our services, you need to first activate your account by clicking this link: {confirmURI}");
                     message.SetFrom(new EmailAddress("support@goussanmedia.com"));
                     message.SetSubject("Activate Account");
                     await messageCollector.AddAsync(message);

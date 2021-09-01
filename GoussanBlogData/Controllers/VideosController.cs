@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Text.RegularExpressions;
 
 namespace GoussanBlogData.Controllers;
+[Produces("application/json")]
 [Authorize]
 [ApiController]
 [Route("[controller]")]
@@ -21,6 +22,11 @@ public class VideosController : ControllerBase
         this.mediaService = mediaService;
         _logger = logger;
     }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
 
     // GET /videos
     [AllowAnonymous]

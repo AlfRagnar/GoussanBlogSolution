@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 namespace GoussanBlogData.Controllers;
 
 [Authorize]
+[Produces("application/json")]
 [ApiController]
 [Route("[controller]")]
 public class UserController : ControllerBase
@@ -26,12 +27,25 @@ public class UserController : ControllerBase
         _mapper = mapper;
     }
 
+    /// <summary>
+    /// Returns a List of currently registered Users
+    /// </summary>
+    /// <returns></returns>
+
     // GET /user
+    [AllowAnonymous]
     [HttpGet]
-    public async Task<IActionResult> List()
+    public IActionResult List()
     {
-        return Ok(await cosmosDb.GetUsersAsync("SELECT * FROM c"));
+        return Ok(cosmosDb.GetUsersAsync());
     }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+
     // GET /user/{ID}
     [HttpGet("{id}")]
     public async Task<IActionResult> Get(string id)
@@ -39,10 +53,18 @@ public class UserController : ControllerBase
         return Ok(await cosmosDb.GetUserAsync(id));
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="user"></param>
+    /// <returns>ID of newly Created User and the User object</returns>
+    /// <response code="201">Returns the newly created User</response>
+    /// <response code="400">If the Username or Email is already in use, or the API failed at creating the User</response>
+
     // POST /user/register
     [AllowAnonymous]
     [HttpPost("register")]
-    public async Task<IActionResult> Register([FromBody] Createuser user)
+    public async Task<IActionResult> Register([FromBody] CreateUser user)
     {
         var checkUser = await cosmosDb.CheckUser(user.Username, user.Email);
         if (checkUser == null || checkUser.Any())
@@ -55,11 +77,11 @@ public class UserController : ControllerBase
         {
             Id = Id,
             Email = user.Email,
-            UserName = user.Username,
-            PassWord = BCrypt.Net.BCrypt.HashPassword(user.Password),
-            Created = DateTime.UtcNow,
+            Username = user.Username,
+            Password = BCrypt.Net.BCrypt.HashPassword(user.Password),
+            Created = DateTime.UtcNow.ToShortDateString(),
             Status = "Pending",
-            ConfirmationCode = confirmationCode
+            Confirmationcode = confirmationCode
         };
         var res = await cosmosDb.AddUser(newUser);
         if (res == null)
@@ -100,31 +122,70 @@ public class UserController : ControllerBase
             {
                 return NotFound();
             }
-            User User = userList.First();
+            User? User = userList.FirstOrDefault();
 
-            if (User.Status == null || User.Status != "Active")
+            if (User.Status is null or not "Active")
             {
                 return Unauthorized("Pending Account, Please Verify Your Email");
             }
 
 
-            bool checkPassword = BCrypt.Net.BCrypt.Verify(authRequest.Password, User.PassWord);
+            bool checkPassword = BCrypt.Net.BCrypt.Verify(authRequest.Password, User.Password);
             if (checkPassword)
             {
                 var response = _mapper.Map<AuthResponse>(User);
                 response.JwtToken = _jwtUtils.GenerateToken(User);
-
                 return Ok(response);
-            } else
+            }
+            else
             {
                 return Unauthorized();
             }
-            return BadRequest();
         }
         catch (Exception)
         {
             return BadRequest();
         }
-        
+    }
+
+    /// <summary>
+    /// Try to Activate the User with Token provided
+    /// </summary>
+    /// <remarks>
+    /// Sample request:
+    /// 
+    ///     POST /activate
+    ///     {
+    ///         "token":"123kasdasdh128fh182hf1h"
+    ///     }
+    /// </remarks>
+    /// <param name="token"></param>
+    /// <returns>Success Response</returns>
+    /// <response code="200">If user is successfully activated</response>
+    /// <response code="400">If no token, token is invalid or no user is found</response>
+
+    // POST /user/activate
+    [AllowAnonymous]
+    [HttpPost("activate")]
+    public async Task<IActionResult> UserConfirmation(string token)
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(token))
+            {
+                return BadRequest("No Token found");
+            }
+            var response = await cosmosDb.ConfirmUser(token);
+            if (string.IsNullOrEmpty(response))
+            {
+                return BadRequest("User Not Found or invalid Token");
+            }
+            return Ok(response);
+        }
+        catch (Exception)
+        {
+            return BadRequest();
+            throw;
+        }
     }
 }

@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
 
 namespace GoussanBlogData.Models.UserModels;
-public class Createuser
+public class CreateUser
 {
     [Required]
     [JsonProperty("username")]

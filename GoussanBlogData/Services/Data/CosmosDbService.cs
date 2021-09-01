@@ -21,18 +21,16 @@ public class CosmosDbService : ICosmosDbService
 
 
     // USER API
-    public async Task<IEnumerable<Models.DatabaseModels.User>> GetUsersAsync(string queryString)
+    public IQueryable<dynamic> GetUsersAsync()
     {
         try
         {
-            FeedIterator<Models.DatabaseModels.User> query = UserContainer.GetItemQueryIterator<Models.DatabaseModels.User>(new QueryDefinition(queryString));
-            List<Models.DatabaseModels.User> results = new();
-            while (query.HasMoreResults)
+            dynamic Users = UserContainer.GetItemLinqQueryable<Models.DatabaseModels.User>(allowSynchronousQueryExecution: true).Select(x => new
             {
-                FeedResponse<Models.DatabaseModels.User> response = await query.ReadNextAsync();
-                results.AddRange(response.ToList());
-            }
-            return results;
+                username = x.Username,
+                created = x.Created
+            });
+            return Users;
         }
         catch (CosmosException)
         {
@@ -61,7 +59,7 @@ public class CosmosDbService : ICosmosDbService
         try
         {
             List<Models.DatabaseModels.User> result = new();
-            using (FeedIterator<Models.DatabaseModels.User> setIterator = UserContainer.GetItemLinqQueryable<Models.DatabaseModels.User>().Where(x => x.UserName == Username).ToFeedIterator())
+            using (FeedIterator<Models.DatabaseModels.User> setIterator = UserContainer.GetItemLinqQueryable<Models.DatabaseModels.User>().Where(x => x.Username == Username).ToFeedIterator())
             {
                 while (setIterator.HasMoreResults)
                 {
@@ -105,7 +103,10 @@ public class CosmosDbService : ICosmosDbService
         try
         {
             List<Models.DatabaseModels.User> result = new();
-            using (FeedIterator<Models.DatabaseModels.User> setIterator = UserContainer.GetItemLinqQueryable<Models.DatabaseModels.User>().Where(x => x.Email == Email || x.UserName == Username).ToFeedIterator())
+            using (FeedIterator<Models.DatabaseModels.User> setIterator = UserContainer
+                .GetItemLinqQueryable<Models.DatabaseModels.User>()
+                .Where(x => x.Email == Email || x.Username == Username)
+                .ToFeedIterator())
             {
                 while (setIterator.HasMoreResults)
                 {
@@ -121,6 +122,50 @@ public class CosmosDbService : ICosmosDbService
         {
             return null!;
         }
+    }
+
+    // Try to Activate User
+    public async Task<string> ConfirmUser(string Token)
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(Token))
+            {
+                return null!;
+            }
+            string response = null!;
+            List<Models.DatabaseModels.User> result = new();
+            using (FeedIterator<Models.DatabaseModels.User> setIterator = UserContainer
+                .GetItemLinqQueryable<Models.DatabaseModels.User>()
+                .Where(x => x.Confirmationcode == Token)
+                .ToFeedIterator())
+            {
+                while (setIterator.HasMoreResults)
+                {
+                    foreach (var item in await setIterator.ReadNextAsync())
+                    {
+                        result.Add(item);
+                    }
+                }
+            }
+            if (result.Any())
+            {
+                var user = result.First();
+                if (user.Status != "Activated")
+                {
+                    user.Status = "Activated";
+                    user.Confirmationcode = null!;
+                    await UserContainer.UpsertItemAsync(user, new PartitionKey(user.Id));
+                    response = "User Activated";
+                }
+            }
+            return response!;
+        }
+        catch (Exception)
+        {
+            return null!;
+        }
+
     }
 
     // VIDEO API

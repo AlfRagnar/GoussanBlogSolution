@@ -2,14 +2,16 @@ name: Azure Static Web Apps CI/CD
 
 on:
   push:
-    paths: 
-      - "GoussanBlog"
     branches:
       - main
+    paths: 
+      - "GoussanBlog"
   pull_request:
     types: [opened, synchronize, reopened, closed]
     branches:
       - main
+    paths: 
+      - "GoussanBlog"
 
 jobs:
   build_and_deploy_job:

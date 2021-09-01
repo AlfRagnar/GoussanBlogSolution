@@ -21,6 +21,8 @@ import {
 import MenuIcon from "@material-ui/icons/Menu";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import Switch from "@material-ui/core/Switch";
+import Login from "../containers/Login";
+import Register from "../containers/Register";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -34,6 +36,7 @@ const useStyles = makeStyles((theme) => ({
   title: {
     flexGrow: 1,
   },
+  offset: theme.mixins.toolbar,
 }));
 
 function ScrollTop(props) {
@@ -83,7 +86,11 @@ export default function MyNavbar(props) {
   const classes = useStyles();
   return (
     <>
-      <AppBar style={{ background: currentTheme.background }}>
+      <AppBar
+        style={{
+          color: currentTheme.text,
+          background: currentTheme.background,
+        }}>
         <Toolbar>
           {/* MENU BUTTON  */}
           <IconButton
@@ -126,14 +133,13 @@ export default function MyNavbar(props) {
             </MenuItem>
           </Menu>
           <Typography variant="h6" className={classes.title}>
-            <LinkContainer style={{ color: currentTheme.text }} to="/">
+            <LinkContainer to="/">
               <Button color="inherit" variant="text" size="large">
                 Goussanjarga Media Website
               </Button>
             </LinkContainer>
           </Typography>
           <Nav activeKey={window.location.pathname}>
-            {/* TERNIARY FUNCTION TO CHECK IF SHOULD RENDER LOGOUT BUTTON OR NOT */}
             {auth ? (
               <>
                 <Button onClick={changeAuthStatus} color="inherit">
@@ -142,14 +148,8 @@ export default function MyNavbar(props) {
               </>
             ) : (
               <div>
-                <LinkContainer
-                  style={{ color: currentTheme.text }}
-                  to="/register">
-                  <Button color="inherit">Register</Button>
-                </LinkContainer>
-                <LinkContainer style={{ color: currentTheme.text }} to="/login">
-                  <Button color="inherit">Login</Button>
-                </LinkContainer>
+                <Register />
+                <Login />
               </div>
             )}
           </Nav>
@@ -161,6 +161,7 @@ export default function MyNavbar(props) {
           <KeyboardArrowUpIcon />
         </Fab>
       </ScrollTop>
+      <div className={classes.offset} />
     </>
   );
 }

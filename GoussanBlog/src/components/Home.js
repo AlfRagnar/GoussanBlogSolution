@@ -64,8 +64,12 @@ export default function Home() {
           textAlign: "center",
         }}>
         <div className="lander container-fluid">
-          <h1>Goussanjarga</h1>
-          <p>A simple media sharing App</p>
+          <Typography style={{ color: theme.text }} variant="h2">
+            Goussanjarga
+          </Typography>
+          <Typography style={{ color: theme.text }} variant="body2">
+            A Simple Media Sharing Website
+          </Typography>
           {auth ? (
             <>
               <Button
@@ -105,12 +109,16 @@ export default function Home() {
                     Video Description: <br />
                     {video.description}
                   </Typography>
+
                   <AzureMP
                     skin="amp-flush"
+                    options={{
+                      fluid: true,
+                    }}
                     src={[
                       {
                         src: video.streamingPaths[0],
-                        type: "application/vnd.ms-sstr+xml",
+                        type: "application/x-mpegURL",
                       },
                     ]}
                   />

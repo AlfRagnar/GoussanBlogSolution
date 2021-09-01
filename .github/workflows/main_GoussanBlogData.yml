@@ -8,7 +8,7 @@ on:
     branches:
       - main
     paths: 
-    - 'GoussanBlogData/**'
+     - 'GoussanBlogData/**'
   workflow_dispatch:
 
 jobs:

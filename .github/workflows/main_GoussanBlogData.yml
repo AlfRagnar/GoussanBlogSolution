@@ -11,6 +11,9 @@ on:
      - 'GoussanBlogData/**'
   workflow_dispatch:
 
+env:
+  working-directory: ./GoussanBlogData
+
 jobs:
   build:
     runs-on: windows-latest
@@ -26,9 +29,12 @@ jobs:
 
     - name: Build with dotnet
       run: dotnet build --configuration Release
+      working-directory: ${{ env.working-directory }}
+      
 
     - name: dotnet publish
       run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+      working-directory: ${{ env.working-directory }}
 
     - name: Upload artifact for deployment job
       uses: actions/upload-artifact@v2
@@ -56,4 +62,4 @@ jobs:
         app-name: 'GoussanBlogData'
         slot-name: 'production'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_5bf2eec7ce314b0c808fc126e03c99f0 }}
-        package: .
+        package: ${{ env.working-directory }}

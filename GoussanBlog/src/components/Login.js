@@ -74,8 +74,6 @@ export default function Login() {
         });
     } catch (e) {
       localStorage.clear();
-      console.log("Invalid Username/password");
-      console.log(e.message);
     }
   }
 

@@ -30,19 +30,22 @@ namespace GoussanFunction
                 {
                     IncDocument incomingDoc = JsonConvert.DeserializeObject<IncDocument>(document.ToString());
 
-                    var confirmURI = new UriBuilder
+                    if (incomingDoc.Status == "Pending")
                     {
-                        Scheme = "https",
-                        Host = "goussanmedia.com",
-                        Path = $"confirm/{incomingDoc.Confirmationcode}"
-                    };
-
-                    var message = new SendGridMessage();
-                    message.AddTo(incomingDoc.Email);
-                    message.AddContent("text/html", $"Hello {incomingDoc.Username} and welcome to Goussanjarga Media Services. Here you can Upload Videos, Images and create Blog Posts and it is all powered by Microsoft Azure and their backend services. To start using our services, you need to first activate your account by clicking this link: {confirmURI}");
-                    message.SetFrom(new EmailAddress("support@goussanmedia.com"));
-                    message.SetSubject("Activate Account");
-                    await messageCollector.AddAsync(message);
+                        var confirmURI = new UriBuilder
+                        {
+                            Scheme = "https",
+                            Host = "goussanmedia.com",
+                            Path = $"confirm/{incomingDoc.Confirmationcode}"
+                        };
+                        log.LogInformation(incomingDoc.Email);
+                        var message = new SendGridMessage();
+                        message.AddTo(incomingDoc.Email);
+                        message.AddContent("text/html", $"Hello {incomingDoc.Username} and welcome to Goussanjarga Media Services. Here you can Upload Videos, Images and create Blog Posts and it is all powered by Microsoft Azure and their backend services. To start using our services, you need to first activate your account by clicking this link: {confirmURI}");
+                        message.SetFrom(new EmailAddress("support@goussanmedia.com"));
+                        message.SetSubject("Activate Account");
+                        await messageCollector.AddAsync(message);
+                    }
                 }
             }
         }

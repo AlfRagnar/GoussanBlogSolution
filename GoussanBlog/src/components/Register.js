@@ -62,6 +62,7 @@ export default function Register() {
           setUsername("");
           setEmail("");
           setPassword("");
+          setOpen(false);
         });
     } catch (e) {
       alert("Invalid Username/password");

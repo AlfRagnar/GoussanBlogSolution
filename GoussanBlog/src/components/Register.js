@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Form from "react-bootstrap/Form";
 import axios from "axios";
 import {
@@ -9,6 +9,7 @@ import {
   Modal,
   TextField,
 } from "@material-ui/core";
+import { ThemeContext } from "../contexts/ThemeContext";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -40,6 +41,10 @@ export default function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [open, setOpen] = React.useState(false);
+
+  const { isDarkTheme, darkTheme, lightTheme } = useContext(ThemeContext);
+
+  const theme = isDarkTheme ? darkTheme : lightTheme;
 
   function validateForm() {
     return username.length > 0 && password.length > 0;
@@ -121,7 +126,8 @@ export default function Register() {
             <div className="container">
               <Button
                 className="mb-2"
-                variant="primary"
+                style={{ color: theme.text, background: theme.background }}
+                variant="outlined"
                 size="lg"
                 type="submit"
                 disabled={!validateForm()}>

@@ -10,6 +10,7 @@ import {
   Modal,
   TextField,
 } from "@material-ui/core";
+import { ThemeContext } from "../contexts/ThemeContext";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -42,6 +43,9 @@ export default function Login() {
   const [password, setPassword] = useState("");
 
   const { setAuth, setToken } = useContext(AuthContext);
+  const { isDarkTheme, darkTheme, lightTheme } = useContext(ThemeContext);
+
+  const theme = isDarkTheme ? darkTheme : lightTheme;
 
   function validateForm() {
     return username.length > 0 && password.length > 0;
@@ -78,7 +82,7 @@ export default function Login() {
   }
 
   return (
-    <div>
+    <>
       <Button color="inherit" onClick={handleOpen}>
         Login
       </Button>
@@ -115,19 +119,17 @@ export default function Login() {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </Form.Group>
-            <div className="container">
-              <Button
-                className="mb-2"
-                variant="primary"
-                size="lg"
-                type="submit"
-                disabled={!validateForm()}>
-                Login
-              </Button>
-            </div>
+            <Button
+              className="mb-2"
+              style={{ color: theme.text, background: theme.background }}
+              variant="outlined"
+              size="lg"
+              disabled={!validateForm()}>
+              Login
+            </Button>
           </Form>
         </Fade>
       </Modal>
-    </div>
+    </>
   );
 }

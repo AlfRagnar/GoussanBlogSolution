@@ -21,7 +21,7 @@ export default function Routes() {
         <Route exact path="/register">
           <Register />
         </Route>
-        <Route path="/confirm/:token">
+        <Route path="/confirm">
           <ConfirmPage />
         </Route>
         <Route>

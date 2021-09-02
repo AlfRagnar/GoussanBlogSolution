@@ -11,13 +11,20 @@ export default function ConfirmPage(props) {
   useEffect(() => {
     async function activateUser() {
       try {
-        await axios.post("/user/activate", { token }).then((res) => {
-          if (res.status(400)) {
-            setActivateStatus(false);
-          } else {
-            setActivateStatus(true);
-          }
-        });
+        await axios
+          .post("/user/activate", null, {
+            params: {
+              token,
+            },
+          })
+          .then((res) => {
+            console.log(res);
+            if (res.status(400)) {
+              setActivateStatus(false);
+            } else {
+              setActivateStatus(true);
+            }
+          });
       } catch (err) {}
     }
 

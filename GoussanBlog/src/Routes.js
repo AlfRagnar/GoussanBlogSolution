@@ -13,7 +13,7 @@ export default function Routes() {
         <Route exact path="/">
           <Home />
         </Route>
-        <Route path="/confirm" component={ConfirmPage} />
+        <Route path="/confirm/:token" component={ConfirmPage} />
         <Route>
           <NotFound />
         </Route>

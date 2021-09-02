@@ -1,15 +1,60 @@
-import React from "react";
+import { Typography } from "@material-ui/core";
+import { Skeleton } from "@material-ui/lab";
+import axios from "axios";
+import React, { useState, useEffect } from "react";
 
 export default function ConfirmPage(props) {
   var token = props.match.params.token;
+  const [loading, isLoading] = useState(true);
+  const [activateStatus, setActivateStatus] = useState(false);
+
+  useEffect(() => {
+    async function activateUser() {
+      try {
+        await axios.post("/user/activate", { token }).then((res) => {
+          if (res.status(400)) {
+            setActivateStatus(false);
+          } else {
+            setActivateStatus(true);
+          }
+        });
+      } catch (err) {}
+    }
+
+    activateUser();
+
+    setTimeout(() => {
+      isLoading(false);
+    }, 2000);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
-      <div>Your token is: {token}</div>
-      <div>
-        This is where the Confirmation Logic will be ran. Will most likely just
-        be an API POST request with the token Checking if CI works now
-      </div>
+      {loading ? (
+        <>
+          <Skeleton variant="text" />
+          <Skeleton variant="circle" width={40} height={40} />
+          <Skeleton variant="rect" width={210} height={118} />
+        </>
+      ) : (
+        <>
+          {activateStatus ? (
+            <>
+              <Typography variant="body1">
+                Your Account have been activated. You can now Login!
+              </Typography>
+            </>
+          ) : (
+            <>
+              <Typography variant="body1">
+                Failed to activate your account, check your token
+              </Typography>
+            </>
+          )}
+        </>
+      )}
     </>
   );
 }

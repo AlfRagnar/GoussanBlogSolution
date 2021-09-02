@@ -65,7 +65,11 @@ export default function Home() {
                 Goussanjarga
               </Typography>
               <Typography style={{ color: theme.text }} variant="body2">
-                A Simple Media Sharing Website
+                A Simple Media Sharing Website Website is currently under
+                development so any content made or uploaded to this website are
+                up for change and any integrity or data protection is not
+                guaranteed. Chances are the website database and file storage
+                will be wiped multiple times a day.
               </Typography>
               {auth ? (
                 <ViewJWTButton />

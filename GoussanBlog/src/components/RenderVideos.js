@@ -39,7 +39,10 @@ export default function RenderVideos() {
               Video Description: <br />
               {video.description}
             </Typography>
-            <Replay source={video.streamingPaths[0]} options={replayOptions}>
+            <Replay
+              initialPlaybackProps={{ isPaused: true }}
+              source={video.streamingPaths[0]}
+              options={replayOptions}>
               <HlsjsVideoStreamer />
             </Replay>
           </CardContent>

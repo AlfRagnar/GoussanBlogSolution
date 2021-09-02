@@ -123,7 +123,7 @@ export default function Login() {
               className="mb-2"
               style={{ color: theme.text, background: theme.background }}
               variant="outlined"
-              size="lg"
+              type="submit"
               disabled={!validateForm()}>
               Login
             </Button>

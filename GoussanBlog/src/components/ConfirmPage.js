@@ -18,8 +18,7 @@ export default function ConfirmPage(props) {
             },
           })
           .then((res) => {
-            console.log(res);
-            if (res.status(400)) {
+            if (res.status === 400) {
               setActivateStatus(false);
             } else {
               setActivateStatus(true);

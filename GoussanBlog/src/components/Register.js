@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
 import axios from "axios";
 import {
+  Button,
   Backdrop,
   Fade,
   makeStyles,
@@ -72,11 +72,7 @@ export default function Register() {
 
   return (
     <div>
-      <Button
-        className="mb-2"
-        variant="secondary"
-        type="button"
-        onClick={handleOpen}>
+      <Button color="inherit" onClick={handleOpen}>
         Register
       </Button>
       <Modal

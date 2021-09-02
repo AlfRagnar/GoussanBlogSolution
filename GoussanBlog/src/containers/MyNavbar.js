@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
+import { useHistory } from "react-router-dom";
 import { Nav } from "react-bootstrap";
-import { LinkContainer } from "react-router-bootstrap";
 import { ThemeContext } from "../contexts/ThemeContext";
 import { AuthContext } from "../contexts/AuthContext";
 import {
@@ -72,6 +72,11 @@ export default function MyNavbar(props) {
   const currentTheme = isDarkTheme ? darkTheme : lightTheme;
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
+  const history = useHistory();
+
+  const handleHome = () => {
+    history.push("/");
+  };
 
   const handleChange = (event) => {
     setTheme(event.target.checked);
@@ -135,11 +140,9 @@ export default function MyNavbar(props) {
             </MenuItem>
           </Menu>
           <Typography variant="h6" className={classes.title}>
-            <LinkContainer to="/">
-              <Button color="inherit" variant="text" size="large">
-                Goussanjarga Media Website
-              </Button>
-            </LinkContainer>
+            <Button color="inherit" size="large" onClick={handleHome}>
+              Goussanjarga Media Website
+            </Button>
           </Typography>
           <Nav activeKey={window.location.pathname}>
             {auth ? (

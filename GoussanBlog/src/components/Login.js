@@ -1,9 +1,9 @@
 import React, { useContext, useState } from "react";
 import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
 import axios from "axios";
 import { AuthContext } from "../contexts/AuthContext";
 import {
+  Button,
   Backdrop,
   Fade,
   makeStyles,
@@ -79,11 +79,7 @@ export default function Login() {
 
   return (
     <div>
-      <Button
-        className="mb-2"
-        variant="secondary"
-        type="button"
-        onClick={handleOpen}>
+      <Button color="inherit" onClick={handleOpen}>
         Login
       </Button>
       <Modal

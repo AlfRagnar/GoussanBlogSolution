@@ -23,6 +23,7 @@ import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import Switch from "@material-ui/core/Switch";
 import Login from "../components/Login";
 import Register from "../components/Register";
+import Upload from "../components/Upload";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -117,6 +118,7 @@ export default function MyNavbar(props) {
             open={open}
             onClose={handleClose}>
             {/*  MENU ITEMS */}
+
             <MenuItem>
               <FormGroup>
                 <FormControlLabel
@@ -142,15 +144,16 @@ export default function MyNavbar(props) {
           <Nav activeKey={window.location.pathname}>
             {auth ? (
               <>
+                <Upload />
                 <Button onClick={changeAuthStatus} color="inherit">
                   Logout
                 </Button>
               </>
             ) : (
-              <div>
+              <>
                 <Register />
                 <Login />
-              </div>
+              </>
             )}
           </Nav>
         </Toolbar>

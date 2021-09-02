@@ -15,7 +15,7 @@ namespace GoussanBlogData.Utils
             if (allowAnonymous) return;
 
             // authorization
-            var user = (User)context.HttpContext.Items["User"];
+            var user = context.HttpContext.Items["User"];
             if (user == null)
             {
                 context.Result = new JsonResult(new { message = "Unauthorized" }) { StatusCode = StatusCodes.Status401Unauthorized };

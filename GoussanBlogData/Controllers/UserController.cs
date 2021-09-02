@@ -33,7 +33,6 @@ public class UserController : ControllerBase
     /// <returns></returns>
 
     // GET /user
-    [AllowAnonymous]
     [HttpGet]
     public IActionResult List()
     {

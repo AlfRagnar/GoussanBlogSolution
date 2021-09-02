@@ -4,7 +4,7 @@ import Login from "./components/Login";
 import NotFound from "./components/NotFound";
 import Register from "./components/Register";
 import ConfirmPage from "./components/ConfirmPage";
-import Home from "./components/Home";
+import Home from "./containers/Home";
 import MyNavbar from "./containers/MyNavbar";
 
 export default function Routes() {

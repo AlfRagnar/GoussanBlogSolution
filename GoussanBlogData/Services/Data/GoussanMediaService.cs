@@ -57,6 +57,9 @@ namespace GoussanBlogData.Services.Data
             }
         }
 
+
+
+        // Upload File using IFormFile
         private static async Task<Response<BlobContentInfo>> UploadFile(IFormFile file, string fileName, Uri uri)
         {
             try
@@ -79,6 +82,8 @@ namespace GoussanBlogData.Services.Data
                 return null!;
             }
         }
+
+
 
         // Operations to create the asset
         private async Task<Asset> InternalCreate(string ID)

@@ -1,5 +1,6 @@
 ﻿
 using GoussanBlogData.Services;
+using Newtonsoft.Json;
 
 namespace GoussanBlogData.Utils
 {
@@ -15,11 +16,14 @@ namespace GoussanBlogData.Utils
         public async Task Invoke(HttpContext context, ICosmosDbService userService, IJwtUtils jwtUtils)
         {
             var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
-            var userId = jwtUtils.ValidateToken(token);
-            if (userId != null)
+            if (token != null)
             {
-                var userObject = await userService.GetUserAsync(userId);
-                context.Items["User"] = await userService.GetUserAsync(userId);
+                var userId = jwtUtils.ValidateToken(token);
+                if (userId != null)
+                {
+                    var userObject = await userService.GetUserAsync(userId);
+                    context.Items["User"] = userObject;
+                }
             }
 
             await _next(context);

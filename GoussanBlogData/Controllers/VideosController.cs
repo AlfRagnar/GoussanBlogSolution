@@ -15,19 +15,21 @@ public class VideosController : ControllerBase
     private readonly ILogger<VideosController> _logger;
     private readonly ICosmosDbService cosmosDb;
     private readonly IGoussanMediaService mediaService;
+    private readonly IJwtUtils jwtUtils;
 
-    public VideosController(ICosmosDbService cosmosDb, ILogger<VideosController> logger, IGoussanMediaService mediaService)
+    public VideosController(ICosmosDbService cosmosDb, ILogger<VideosController> logger, IGoussanMediaService mediaService, IJwtUtils jwtUtils)
     {
         this.cosmosDb = cosmosDb;
         this.mediaService = mediaService;
         _logger = logger;
+        this.jwtUtils = jwtUtils;
     }
 
+
     /// <summary>
-    /// 
+    /// Response with a JSON object containing a list of currently available videos
     /// </summary>
     /// <returns></returns>
-
     // GET /videos
     [AllowAnonymous]
     [HttpGet]
@@ -60,6 +62,12 @@ public class VideosController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Get a Specific Video Object from Cosmos DB using the Video ID
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+
     // GET /videos/{ID}
     [HttpGet("{id}")]
     public async Task<IActionResult> Get(string id)
@@ -74,29 +82,38 @@ public class VideosController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// POST request to API to upload a video to Azure Media Services and Add it to Cosmos DB.
+    /// This will Auto Populate to the website once the Video Object has finished encoding and a Streaming URL has become available.
+    /// All this is done in the backend using Azure Media Services, Azure Functions and Cosmos DB
+    /// </summary>
+    /// <param name="createVideoReq"></param>
+    /// <returns></returns>
+
     // POST /videos
     [HttpPost]
     [RequestSizeLimit(300000000)]
-    public async Task<IActionResult> Create([FromForm] VideoCreateModel video)
+    public async Task<IActionResult> Create([FromForm]VideoCreateModel createVideoReq)
     {
         try
         {
+            var userId = jwtUtils.ValidateToken(createVideoReq.Token);
             UploadVideo newVideo = new()
             {
                 Id = Regex.Replace(Convert.ToBase64String(Guid.NewGuid().ToByteArray()), "[/+=]", ""),
-                Filename = video.Filename,
-                Extension = video.File.ContentType,
-                Size = video.File.Length,
+                Filename = createVideoReq.File.Name,
+                Extension = createVideoReq.File.ContentType,
+                Size = createVideoReq.File.Length,
                 Created = DateTime.UtcNow.ToShortDateString(),
                 Updated = DateTime.UtcNow.ToString(),
                 State = "Not Set",
-                UserId = video.UserId,
-                BlogId = video.BlogId,
-                Description = video.Description,
-                Title = video.Title,
+                UserId = userId!,
+                BlogId = createVideoReq.BlogId,
+                Description = createVideoReq.Description,
+                Title = createVideoReq.Title,
                 Type = "Video"
             };
-            var res = await mediaService.CreateAsset(video.File, newVideo);
+            var res = await mediaService.CreateAsset(createVideoReq.File, newVideo);
             if (res != null)
             {
                 await cosmosDb.AddVideo(res);
@@ -108,9 +125,15 @@ public class VideosController : ControllerBase
         {
             return BadRequest();
         }
-
     }
 
+
+    /// <summary>
+    /// Request to EDIT a specific Video Object stored in Database.
+    /// This is the Data stored in the database, NOT the file object
+    /// </summary>
+    /// <param name="video"></param>
+    /// <returns>Accepted 202 Response with the ID of the video you requested to be changed</returns>
     // PUT /videos/{ID}
     [HttpPut("{id}")]
     public async Task<IActionResult> Edit([FromBody] VideoUpdateModel video)
@@ -125,6 +148,14 @@ public class VideosController : ControllerBase
             return NotFound();
         }
     }
+
+    /// <summary>
+    /// Request to Remove a video from the Database.
+    /// THIS IS NOT THE FILE OBJECT
+    /// This is just the Video Object stored in Database
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
 
     // DELETE /videos/{id}
     [HttpDelete("{id}")]

@@ -1,25 +1,31 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.AspNetCore.Components.Forms;
+using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
 
 namespace GoussanBlogData.Models.MediaModels;
 public class VideoCreateModel
 {
     // REQUIRED
-    [JsonProperty("filename")]
-    public string Filename { get; set; }
-
-    [JsonProperty("userid")]
-    public string UserId { get; set; }
+    [Required]
+    [JsonProperty("title")]
+    public string Title { get; set; }
+    [Required]
+    [JsonProperty("description")]
+    public string Description { get; set; }
+    [Required]
     [JsonProperty("uploadfile")]
     public IFormFile File { get; set; }
+    [Required]
+    [JsonProperty("token")]
+    public string Token { get; set; }
 
     // OPTIONAL
+    [JsonProperty("userid")]
+    public string? UserId { get; set; }
     [JsonProperty("blogid")]
     public string? BlogId { get; set; }
 
-    [JsonProperty("title")]
-    public string? Title { get; set; }
-    [JsonProperty("description")]
-    public string? Description { get; set; }
+    
 
 }
 

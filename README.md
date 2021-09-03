@@ -44,6 +44,13 @@ Documentation: [Link To Documentation](GoussanBlog/README.md)
 <br />
 Documentation: [Link To Documentation](GoussanBlogData/README.md)
 
+### Current Features
+* User Controller that handles User CRUD operations
+* JWT Utilities Verifies JWT Token and extract user information from database
+* Video Controller that handles CRUD operations related to Videos received by the API
+* Media Services that consumers Video File and encodes video and stores video in Azure and provide VoD and streaming capabilities
+* CosmosDb Services Service handler for operations related to Cosmos DB
+
 ### Planned Features
 * Image Controller to handle CRUD operations for Images received by the front end application
 * Blog Controller to handle CRUD operations for Blog Posts received by the front end application

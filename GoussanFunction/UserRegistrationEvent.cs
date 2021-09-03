@@ -12,12 +12,12 @@ namespace GoussanFunction
         [FunctionName("UserRegistrationEvent")]
         public static async Task Run(
             [CosmosDBTrigger(
-            databaseName: "GoussanDatabase",
+            databaseName: "GoussanServerless",
             collectionName: "User",
-            ConnectionStringSetting = "CosmosDbCon",
+            ConnectionStringSetting = "CosmosDBServerless",
             LeaseCollectionName = "leases",
             CreateLeaseCollectionIfNotExists = true,
-            LeasesCollectionThroughput = 400, LeaseCollectionPrefix = "regEvent")]IReadOnlyList<Document> input,
+            LeaseCollectionPrefix = "registrationEvent")]IReadOnlyList<Document> input,
             ILogger log,
             [SendGrid(ApiKey = "SendGridAPIKey")] IAsyncCollector<SendGridMessage> messageCollector)
         {

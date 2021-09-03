@@ -25,7 +25,7 @@ var Configuration = builder.Configuration;
 Config.AppName = "GoussanMedia";
 Config.AppRegion = Regions.WestEurope;
 Config.Secret = Configuration["GoussanBlogSecret"]; // JWT Master Key Secret
-Config.AzureCosmosConnectionString = Configuration["GoussanCosmos"]; // Cosmos DB Connection String
+Config.AzureCosmosConnectionString = Configuration["GoussanCosmosServerless"]; // Cosmos DB Connection String
 Config.CosmosDBName = Configuration["CosmosDb:DatabaseName"]; // Cosmos DB database name
 Config.CosmosUser = Configuration["CosmosDb:Containers:User:containerName"]; // Cosmos DB container name
 Config.CosmosMedia = Configuration["CosmosDb:Containers:Media:containerName"]; // Cosmos DB container name
@@ -138,7 +138,7 @@ async Task<CosmosDbService> InitializeCosmosClientInstanceAsync()
         {
             string containerName = item.GetSection("containerName").Value;
             string paritionKeyPath = item.GetSection("paritionKeyPath").Value;
-            await databaseClient.CreateContainerIfNotExistsAsync(containerName, paritionKeyPath, throughput: 400);
+            await databaseClient.CreateContainerIfNotExistsAsync(containerName, paritionKeyPath);
         }
         catch (CosmosException)
         {

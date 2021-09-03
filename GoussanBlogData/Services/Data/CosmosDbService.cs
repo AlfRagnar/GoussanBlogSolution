@@ -25,7 +25,9 @@ public class CosmosDbService : ICosmosDbService
     {
         try
         {
-            dynamic Users = UserContainer.GetItemLinqQueryable<Models.DatabaseModels.User>(allowSynchronousQueryExecution: true).Select(x => new
+            dynamic Users = UserContainer
+                .GetItemLinqQueryable<Models.DatabaseModels.User>(allowSynchronousQueryExecution: true)
+                .Select(x => new
             {
                 username = x.Username,
                 created = x.Created
@@ -59,7 +61,10 @@ public class CosmosDbService : ICosmosDbService
         try
         {
             List<Models.DatabaseModels.User> result = new();
-            using (FeedIterator<Models.DatabaseModels.User> setIterator = UserContainer.GetItemLinqQueryable<Models.DatabaseModels.User>().Where(x => x.Username == Username).ToFeedIterator())
+            using (FeedIterator<Models.DatabaseModels.User> setIterator = UserContainer
+                .GetItemLinqQueryable<Models.DatabaseModels.User>()
+                .Where(x => x.Username == Username)
+                .ToFeedIterator())
             {
                 while (setIterator.HasMoreResults)
                 {
@@ -81,7 +86,10 @@ public class CosmosDbService : ICosmosDbService
         try
         {
             List<Models.DatabaseModels.User> result = new();
-            using (FeedIterator<Models.DatabaseModels.User> setIterator = UserContainer.GetItemLinqQueryable<Models.DatabaseModels.User>().Where(x => x.Email == Email).ToFeedIterator())
+            using (FeedIterator<Models.DatabaseModels.User> setIterator = UserContainer
+                .GetItemLinqQueryable<Models.DatabaseModels.User>()
+                .Where(x => x.Email == Email)
+                .ToFeedIterator())
             {
                 while (setIterator.HasMoreResults)
                 {
@@ -197,7 +205,10 @@ public class CosmosDbService : ICosmosDbService
         try
         {
             List<UploadVideo> result = new();
-            using (FeedIterator<UploadVideo> setIterator = MediaContainer.GetItemLinqQueryable<UploadVideo>().Where(x => x.Type == "Video" && x.State == "Finished").ToFeedIterator())
+            using (FeedIterator<UploadVideo> setIterator = MediaContainer
+                .GetItemLinqQueryable<UploadVideo>()
+                .Where(x => x.Type == "Video" && x.State == "Finished")
+                .ToFeedIterator())
             {
                 while (setIterator.HasMoreResults)
                 {
@@ -219,7 +230,8 @@ public class CosmosDbService : ICosmosDbService
     {
         try
         {
-            FeedIterator<UploadVideo> query = MediaContainer.GetItemQueryIterator<UploadVideo>(new QueryDefinition(queryString));
+            FeedIterator<UploadVideo> query = MediaContainer
+                .GetItemQueryIterator<UploadVideo>(new QueryDefinition(queryString));
             List<UploadVideo> results = new();
             while (query.HasMoreResults)
             {
@@ -265,7 +277,10 @@ public class CosmosDbService : ICosmosDbService
         try
         {
             List<Image> result = new();
-            using (FeedIterator<Image> setIterator = MediaContainer.GetItemLinqQueryable<Image>().Where(x => x.Type == "Image").ToFeedIterator())
+            using (FeedIterator<Image> setIterator = MediaContainer
+                .GetItemLinqQueryable<Image>()
+                .Where(x => x.Type == "Image")
+                .ToFeedIterator())
             {
                 while (setIterator.HasMoreResults)
                 {

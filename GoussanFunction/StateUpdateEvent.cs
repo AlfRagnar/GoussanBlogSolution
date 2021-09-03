@@ -14,10 +14,10 @@ namespace GoussanFunction
         [FunctionName("StateUpdateEvent")]
         public static async Task RunAsync(
             [EventGridTrigger] EventGridEvent gridEvent,
-            [CosmosDB(databaseName: "GoussanDatabase", collectionName: "Media", ConnectionStringSetting = "CosmosDbCon")] DocumentClient client,
+            [CosmosDB(databaseName: "GoussanServerless", collectionName: "Media", ConnectionStringSetting = "CosmosDBServerless")] DocumentClient client,
             ILogger log)
         {
-            string database = "GoussanDatabase";
+            string database = "GoussanServerless";
             string collection = "Media";
 
             log.LogInformation("Processing Event Trigger from AMS");

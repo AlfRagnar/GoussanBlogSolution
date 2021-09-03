@@ -4,9 +4,15 @@
 
  ## GoussanBlog
 
-React Javascript Frontend Application/Website that handles calls to backend API and renders it to Users
+React Javascript Single Page Application/Website that handles calls to backend API and renders it to Users
 <br />
 Documentation: [Link To Documentation](GoussanBlog/README.md)
+
+### Current Features
+* User Registration and Login
+* User Confirmation
+* Video Upload
+* Video Streaming
 
 ### Planned Features
 * File Validation on Video Upload to ensure valid video file provided for encoding

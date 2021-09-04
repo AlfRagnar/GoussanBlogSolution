@@ -86,4 +86,21 @@ The API will on start up configure back end services to ensure that it can run p
 * Models - Data models used in interactions the API handles, Models it accepts and models it sends out
 * Controllers - API Endpoint definition and interactions. Action definition is handled here along with where services are called
 * Utils - Misc Utilities used within the project, mainly definition of stuff like AutoMapper, JWT middleware and attribute modification.
+
+
+
+### Current Features
+* User Controller that handles User CRUD operations
+* JWT Utilities Verifies JWT Token and extract user information from database
+* Video Controller that handles CRUD operations related to Videos received by the API
+* Media Services that consumers Video File and encodes video and stores video in Azure and provide VoD and streaming capabilities
+* CosmosDb Services Service handler for operations related to Cosmos DB
+
+### Planned Features
+* Image Controller to handle CRUD operations for Images received by the front end application
+* Blog Controller to handle CRUD operations for Blog Posts received by the front end application
+* Write up documentation for the Swagger Docs to give a easier overview and ways to test out the API
+* Refactor the Code to remove unused references
+* Redo Models in Use to remove unused properties
+
  

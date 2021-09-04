@@ -44,6 +44,8 @@ namespace GoussanFunction
                 dbVid.Outputasset = assetName.ToString();
                 dbVid.State = state.ToString();
                 dbVid.Modified = gridEvent.EventTime.ToUniversalTime().ToString();
+                log.LogInformation(dbVid.State);
+
 
                 Uri DocumentCollectionUri = UriFactory.CreateDocumentCollectionUri(database, collection);
                 Uri DatabaseLink = UriFactory.CreateDatabaseUri(database);

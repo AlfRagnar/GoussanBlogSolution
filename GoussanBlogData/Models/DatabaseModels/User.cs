@@ -1,5 +1,4 @@
-﻿using GoussanBlogData.Models.MediaModels;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace GoussanBlogData.Models.DatabaseModels;
 public class User

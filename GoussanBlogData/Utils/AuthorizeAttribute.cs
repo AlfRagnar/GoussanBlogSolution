@@ -1,6 +1,4 @@
-﻿
-using GoussanBlogData.Models.DatabaseModels;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace GoussanBlogData.Utils

@@ -28,10 +28,10 @@ public class CosmosDbService : ICosmosDbService
             dynamic Users = UserContainer
                 .GetItemLinqQueryable<Models.DatabaseModels.User>(allowSynchronousQueryExecution: true)
                 .Select(x => new
-            {
-                username = x.Username,
-                created = x.Created
-            });
+                {
+                    username = x.Username,
+                    created = x.Created
+                });
             return Users;
         }
         catch (CosmosException)

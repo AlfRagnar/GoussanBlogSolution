@@ -178,6 +178,7 @@ namespace GoussanBlogData.Services.Data
             return transform;
         }
 
+
         // Need to create a Streaming Locator for the specified asset to be available for playback for clients.
         public async Task<StreamingLocator> CreateStreamingLocatorAsync(string assetName, string? locatorName = null)
         {
@@ -222,6 +223,7 @@ namespace GoussanBlogData.Services.Data
                 return null!;
             }
         }
+
 
         // Ensure that streaming endpoint is online and running
         public async Task<StreamingEndpoint?> EnsureStreamingEndpoint(string Endpoint = "default")

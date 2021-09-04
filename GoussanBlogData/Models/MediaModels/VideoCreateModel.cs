@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Components.Forms;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
 
 namespace GoussanBlogData.Models.MediaModels;
@@ -25,7 +24,7 @@ public class VideoCreateModel
     [JsonProperty("blogid")]
     public string? BlogId { get; set; }
 
-    
+
 
 }
 

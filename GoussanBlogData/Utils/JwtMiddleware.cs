@@ -1,6 +1,5 @@
 ﻿
 using GoussanBlogData.Services;
-using Newtonsoft.Json;
 
 namespace GoussanBlogData.Utils
 {

@@ -45,8 +45,9 @@ public class VideosController : ControllerBase
                     if (video.StreamingPaths == null)
                     {
                         video.StreamingPaths = await mediaService.GetStreamingURL(video.Locator);
-                        await cosmosDb.UpdateVideoAsync(video.Id, video).ConfigureAwait(false);
                     }
+                    
+                    await cosmosDb.UpdateVideoAsync(video.Id, video).ConfigureAwait(false);
                 }
                 catch (Exception)
                 {
@@ -93,7 +94,7 @@ public class VideosController : ControllerBase
     // POST /videos
     [HttpPost]
     [RequestSizeLimit(300000000)]
-    public async Task<IActionResult> Create([FromForm]VideoCreateModel createVideoReq)
+    public async Task<IActionResult> Create([FromForm] VideoCreateModel createVideoReq)
     {
         try
         {

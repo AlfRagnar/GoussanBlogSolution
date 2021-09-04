@@ -136,7 +136,7 @@ export default function Upload() {
                 className="mb-2"
                 style={{ color: theme.text, background: theme.background }}
                 variant="outlined"
-                size="lg"
+                size="medium"
                 type="submit"
                 disabled={!validateForm()}>
                 Upload

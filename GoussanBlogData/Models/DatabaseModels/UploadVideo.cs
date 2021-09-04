@@ -1,14 +1,23 @@
 ﻿using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
 
 namespace GoussanBlogData.Models.DatabaseModels;
 public class UploadVideo
 {
     // REQUIRED
+    [Required]
     [JsonProperty("id")]
     public string Id { get; set; }
+    [Required]
     [JsonProperty("type")]
     public string Type { get; set; }
-
+    [Required]
+    [JsonProperty("title")]
+    public string Title { get; set; }
+    [Required]
+    [JsonProperty("description")]
+    public string Description { get; set; }
+    // OPTIONAL
     [JsonProperty("filename")]
     public string Filename { get; set; }
     [JsonProperty("extension")]
@@ -27,16 +36,14 @@ public class UploadVideo
     public string Locator { get; set; }
     [JsonProperty("outputasset")]
     public string OutputAsset { get; set; }
-    // OPTIONAL
     [JsonProperty("streamingpaths")]
     public IList<string> StreamingPaths { get; set; }
+    [JsonProperty("thumbnailurl")]
+    public string ThumbnailUrl { get; set; }
+
     [JsonProperty("blogid")]
     public string? BlogId { get; set; }
 
-    [JsonProperty("title")]
-    public string? Title { get; set; }
-    [JsonProperty("description")]
-    public string? Description { get; set; }
 
 }
 

@@ -9,6 +9,7 @@ React JS Frontend App that handles user interaction with backend API. Works as a
 * User Confirmation
 * Video Upload
 * Video Streaming
+* Displays Videos in a Grid-like fashion with clickable thumbnails that will render the video upon user interaction
 
 ### Planned Features
 * File Validation on Video Upload to ensure valid video file provided for encoding
@@ -16,7 +17,7 @@ React JS Frontend App that handles user interaction with backend API. Works as a
 * Image Upload Validation to ensure valid Image file
 * Blog post Creation
 * Blog post validation to ensure blog post does not contain anything malicious like file insertion or malicious links
-* Render Videos/Images/Blog Posts/Blogs? in Cards in a sidescrolling slide
+* Render Images/Blogs in a sidescrolling fashion or something
 * Preview Blog Posts before creation
 * Insertion of Images and Videos into Blog Posts
 * View Uploads/Blog Posts by Users
@@ -25,4 +26,4 @@ React JS Frontend App that handles user interaction with backend API. Works as a
 * Create a Subscribe to Users button
 * Create a theme for the whole project
 * Redo the styling of all the components
-* Make the Website respon
+* Make the Website more responsive

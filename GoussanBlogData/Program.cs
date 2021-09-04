@@ -45,6 +45,7 @@ Config.AzureStorageBlob = Configuration["GoussanStorage:blob"];
 Config.AzureStorageQueue = Configuration["GoussanStorage:queue"];
 // Azure Application Insight for diagnostics, metrics and logs of the application
 Config.AzureAppInsight = Configuration["AppInsightConString"];
+Config.AzureAppInsightInstrumentKey = Configuration["AppInsightInstrumentKey"];
 
 // Add Singleton Services of the Azure Service Client instances since they are Thread-safe and this is recommended usage
 builder.Services.AddSingleton<ICosmosDbService>(await InitializeCosmosClientInstanceAsync());
@@ -52,7 +53,7 @@ builder.Services.AddSingleton<IGoussanMediaService>(await InitializeMediaService
 builder.Services.AddSingleton<IBlobStorageService>(InitializeStorageClientInstance());
 // Add Misc services for App to functions and for utilities to be initialized properly
 builder.Services.AddScoped<IJwtUtils, JwtUtils>();
-builder.Services.AddApplicationInsightsTelemetry(Configuration);
+builder.Services.AddApplicationInsightsTelemetry(Config.AzureAppInsight);
 builder.Services.AddControllers();
 builder.Services.AddCors();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

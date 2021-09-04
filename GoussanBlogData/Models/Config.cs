@@ -24,5 +24,6 @@
         public static string AadSecret { get; set; }
         public static string Secret { get; set; }
         public static string StreamingEndpoint { get; set; }
+        public static string AzureAppInsightInstrumentKey { get; set; }
     }
 }

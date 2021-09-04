@@ -20,9 +20,9 @@ public class VideoCreateModel
 
     // OPTIONAL
     [JsonProperty("userid")]
-    public string? UserId { get; set; }
+    public string UserId { get; set; }
     [JsonProperty("blogid")]
-    public string? BlogId { get; set; }
+    public string BlogId { get; set; }
 
 
 

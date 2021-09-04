@@ -180,7 +180,7 @@ namespace GoussanBlogData.Services.Data
 
 
         // Need to create a Streaming Locator for the specified asset to be available for playback for clients.
-        public async Task<StreamingLocator> CreateStreamingLocatorAsync(string assetName, string? locatorName = null)
+        public async Task<StreamingLocator> CreateStreamingLocatorAsync(string assetName, string locatorName = null)
         {
             if (string.IsNullOrEmpty(locatorName))
             {
@@ -226,7 +226,7 @@ namespace GoussanBlogData.Services.Data
 
 
         // Ensure that streaming endpoint is online and running
-        public async Task<StreamingEndpoint?> EnsureStreamingEndpoint(string Endpoint = "default")
+        public async Task<StreamingEndpoint> EnsureStreamingEndpoint(string Endpoint = "default")
         {
             StreamingEndpoint streamingEndpoint = await _azMediaServices.StreamingEndpoints.GetAsync(resourceGroupName, accountName, Endpoint);
 

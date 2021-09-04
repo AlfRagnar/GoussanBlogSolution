@@ -42,7 +42,7 @@ public class UploadVideo
     public string ThumbnailUrl { get; set; }
 
     [JsonProperty("blogid")]
-    public string? BlogId { get; set; }
+    public string BlogId { get; set; }
 
 
 }

@@ -4,17 +4,20 @@ using Azure.Storage.Blobs.Models;
 
 namespace GoussanBlogData.Services.Data
 {
+
     public class BlobStorageService : IBlobStorageService
     {
         private readonly BlobServiceClient _blobServiceClient;
         private readonly BlobContainerClient _blobContainerClient;
 
+    
         public BlobStorageService(BlobServiceClient blobServiceClient, string Container)
         {
             _blobServiceClient = blobServiceClient;
             _blobContainerClient = GetContainer(Container).GetAwaiter().GetResult();
         }
 
+   
         public async Task<BlobContainerClient> GetContainer(string ID)
         {
             try
@@ -41,6 +44,7 @@ namespace GoussanBlogData.Services.Data
             }
             return null;
         }
+ 
 
         public IAsyncEnumerable<Page<BlobHierarchyItem>> ListBlobsPublic(BlobContainerClient blobContainerClient, int? segmentSize)
         {
@@ -55,6 +59,7 @@ namespace GoussanBlogData.Services.Data
             }
         }
 
+
         public async Task<BlobProperties> GetBlobPropertiesAsync(BlobClient blob)
         {
             try
@@ -67,6 +72,7 @@ namespace GoussanBlogData.Services.Data
                 return null;
             }
         }
+
 
         public BlobClient RetrieveBlobAsync(string id)
         {
@@ -81,6 +87,7 @@ namespace GoussanBlogData.Services.Data
             }
         }
 
+
         public async Task<string> UploadImage(IFormFile file, string imageName)
         {
             var blob = _blobContainerClient.GetBlobClient(imageName);
@@ -92,12 +99,15 @@ namespace GoussanBlogData.Services.Data
             string blobUri = blob.Uri.AbsoluteUri;
             return blobUri;
         }
+
         public Response<bool> DeleteVideo(string videoName)
         {
             var blob = _blobContainerClient.GetBlobClient(videoName);
             var res = blob.DeleteIfExists(DeleteSnapshotsOption.IncludeSnapshots);
             return res;
         }
+
+
 
         public async Task<Uri> UploadFileToStorage(Stream stream, string container, string fileName)
         {
@@ -109,6 +119,7 @@ namespace GoussanBlogData.Services.Data
             return blobUri;
         }
 
+       
         public Task Save(Stream fileStream, string name)
         {
             throw new NotImplementedException();

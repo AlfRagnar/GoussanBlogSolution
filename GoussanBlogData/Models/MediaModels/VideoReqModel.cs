@@ -24,9 +24,9 @@ public class VideoReqModel
     // OPTIONAL
 
     [JsonProperty("title")]
-    public string? Title { get; set; }
+    public string Title { get; set; }
     [JsonProperty("description")]
-    public string? Description { get; set; }
+    public string Description { get; set; }
 
 }
 

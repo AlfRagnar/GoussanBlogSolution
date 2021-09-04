@@ -11,7 +11,7 @@ namespace GoussanBlogData.Utils
     public interface IJwtUtils
     {
         public string GenerateToken(User user);
-        public string? ValidateToken(string token);
+        public string ValidateToken(string token);
     }
 
     public class JwtUtils : IJwtUtils
@@ -38,7 +38,7 @@ namespace GoussanBlogData.Utils
             return tokenHandler.WriteToken(token);
         }
 
-        public string? ValidateToken(string token)
+        public string ValidateToken(string token)
         {
             if (token == null) return null;
 

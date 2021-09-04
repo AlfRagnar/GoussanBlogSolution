@@ -7,9 +7,9 @@ namespace GoussanBlogData.Services
     {
         Task<UploadVideo> CreateAsset(IFormFile fileToUpload, UploadVideo video);
 
-        Task<StreamingLocator> CreateStreamingLocatorAsync(string assetName, string? locatorName = null);
+        Task<StreamingLocator> CreateStreamingLocatorAsync(string assetName, string locatorName = null);
 
-        Task<StreamingEndpoint?> EnsureStreamingEndpoint(string Endpoint = "default");
+        Task<StreamingEndpoint> EnsureStreamingEndpoint(string Endpoint = "default");
 
         Task<Transform> GetOrCreateTransformAsync(string transformName = "GoussanAdaptiveStreamingPreset");
 

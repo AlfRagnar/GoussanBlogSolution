@@ -10,6 +10,10 @@
     "cosmosdb1": {
       "type": "cosmosdb",
       "connectionId": "CosmosCon"
+    },
+    "appInsights1": {
+      "type": "appInsights",
+      "connectionId": "APPINSIGHTS_CONNECTIONSTRING"
     }
   }
 }

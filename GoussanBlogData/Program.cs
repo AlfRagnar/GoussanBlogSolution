@@ -52,6 +52,7 @@ builder.Services.AddSingleton<IGoussanMediaService>(await InitializeMediaService
 builder.Services.AddSingleton<IBlobStorageService>(InitializeStorageClientInstance());
 // Add Misc services for App to functions and for utilities to be initialized properly
 builder.Services.AddScoped<IJwtUtils, JwtUtils>();
+builder.Services.AddApplicationInsightsTelemetry(Configuration);
 builder.Services.AddControllers();
 builder.Services.AddCors();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

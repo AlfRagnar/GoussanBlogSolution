@@ -121,9 +121,9 @@ public class UserController : ControllerBase
             {
                 return NotFound();
             }
-            User? User = userList.FirstOrDefault();
+            User User = userList.First();
 
-            if (User.Status is null or not "Activated")
+            if (!User.Status.Contains("Activated"))
             {
                 return Unauthorized("Pending Account, Please Verify Your Email");
             }

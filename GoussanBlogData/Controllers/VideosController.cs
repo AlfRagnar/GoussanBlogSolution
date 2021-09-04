@@ -93,7 +93,7 @@ public class VideosController : ControllerBase
 
     // POST /videos
     [HttpPost]
-    [RequestSizeLimit(300000000)]
+    [RequestSizeLimit(900000000)]
     public async Task<IActionResult> Create([FromForm] VideoCreateModel createVideoReq)
     {
         try

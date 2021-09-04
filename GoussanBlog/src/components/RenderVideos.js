@@ -24,6 +24,14 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     justifyContent: "center",
   },
+  paper: {
+    position: "absolute",
+    width: 400,
+    backgroundColor: theme.palette.background.paper,
+    border: "2px solid #000",
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
+  },
 }));
 
 export default function RenderVideos() {
@@ -119,12 +127,18 @@ export default function RenderVideos() {
               color: theme.text,
               textAlign: "center",
             }}>
+            <Typography variant="h2" style={{ color: theme.text }}>
+              {popupVideo.title}
+            </Typography>
             <Replay
               initialPlaybackProps={{ isPaused: true }}
               source={popupVideo.streamingPaths[0]}
               options={replayOptions}>
               <HlsjsVideoStreamer />
             </Replay>
+            <Typography paragraph style={{ color: theme.text }}>
+              {popupVideo.description}
+            </Typography>
           </Paper>
         </Fade>
       </Modal>

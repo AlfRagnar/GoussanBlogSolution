@@ -16,13 +16,15 @@ const useStyles = makeStyles((theme) => ({
   root: {
     "& > *": {
       margin: theme.spacing(1),
-      width: "30ch",
+      width: "40ch",
     },
   },
   input: {
     background: "#ffff",
     borderRadius: 8,
+    alignItems: "center",
   },
+
   modal: {
     display: "flex",
     alignItems: "center",
@@ -102,10 +104,10 @@ export default function Login() {
             <Form.Group size="lg" controlId="username">
               <TextField
                 className={classes.input}
-                id="username"
+                id="standard-username-input"
                 label="Username"
-                variant="filled"
-                multiline
+                autoComplete="current-username"
+                variant="outlined"
                 onChange={(e) => setUsername(e.target.value)}
               />
             </Form.Group>
@@ -114,8 +116,9 @@ export default function Login() {
                 className={classes.input}
                 id="password"
                 label="Password"
-                variant="filled"
-                multiline
+                type="password"
+                autoComplete="current-password"
+                variant="outlined"
                 onChange={(e) => setPassword(e.target.value)}
               />
             </Form.Group>

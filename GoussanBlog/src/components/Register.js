@@ -40,6 +40,7 @@ export default function Register() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [rPassword, setRPassword] = useState("");
   const [open, setOpen] = React.useState(false);
 
   const { isDarkTheme, darkTheme, lightTheme } = useContext(ThemeContext);
@@ -47,7 +48,12 @@ export default function Register() {
   const theme = isDarkTheme ? darkTheme : lightTheme;
 
   function validateForm() {
-    return username.length > 0 && password.length > 0;
+    // eslint-disable-next-line no-useless-escape
+    var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    var emailCheck = email.match(mailformat);
+    var lengthCheck = username.length > 0 && password.length > 0;
+    var passwordCheck = password === rPassword;
+    return lengthCheck && passwordCheck && emailCheck;
   }
 
   const handleOpen = () => {
@@ -63,7 +69,7 @@ export default function Register() {
     try {
       await axios
         .post("/user/register", { username, email, password })
-        .then((res) => {
+        .then(() => {
           setUsername("");
           setEmail("");
           setPassword("");
@@ -118,9 +124,22 @@ export default function Register() {
                 className={classes.input}
                 id="password"
                 label="Password"
+                type="password"
+                autoComplete="current-password"
                 variant="filled"
-                multiline
                 onChange={(e) => setPassword(e.target.value)}
+              />
+            </Form.Group>
+            <Form.Group size="lg" controlId="repeat-password">
+              <TextField
+                className={classes.input}
+                id="repeat-password"
+                label="repeat-password"
+                type="password"
+                autoComplete="current-password"
+                variant="filled"
+                onChange={(e) => setRPassword(e.target.value)}
+                helperText="Repeat your Password"
               />
             </Form.Group>
             <div className="container">

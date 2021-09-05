@@ -10,9 +10,9 @@ React JS Frontend App that handles user interaction with backend API. Works as a
 * Video Upload
 * Video Streaming
 * Displays Videos in a Grid-like fashion with clickable thumbnails that will render the video upon user interaction
+* Simple File Validation handler to Regex
 
 ### Planned Features
-* File Validation on Video Upload to ensure valid video file provided for encoding
 * Image Upload
 * Image Upload Validation to ensure valid Image file
 * Blog post Creation

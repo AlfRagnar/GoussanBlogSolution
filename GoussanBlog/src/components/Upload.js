@@ -46,9 +46,31 @@ export default function Upload() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [file, setFile] = useState();
+  const [error, setError] = useState("");
 
-  function validateForm() {
-    return title.length > 0 && description.length > 0 && file !== undefined;
+  function validateForm(event) {
+    event.preventDefault();
+    var validateTitle = title.length > 1;
+    if (!validateTitle) {
+      const Message = "\nYou need to put in a Valid Title";
+      setError(Message);
+    }
+    var validateDescription = description.length > 1;
+    if (!validateDescription) {
+      const Message = "\nYou need to write a description for this video";
+      setError(Message);
+    }
+    var allowedExtensions = /(\.mp4|\.webm|\.avi)$/i;
+    var validateFile = allowedExtensions.exec(file.name);
+    if (!validateFile) {
+      const Message = "\nYou need to put in a valid file";
+      setError(Message);
+    }
+
+    if (validateTitle && validateDescription && validateFile) {
+      setError("Uploading...");
+      handleSubmit(event);
+    }
   }
 
   const handleOpen = () => {
@@ -83,6 +105,7 @@ export default function Upload() {
     } catch (e) {
       console.log(e.message);
     }
+    setError("");
   }
 
   return (
@@ -108,7 +131,7 @@ export default function Upload() {
               color: theme.text,
               textAlign: "center",
             }}>
-            <Form className={classes.root} onSubmit={handleSubmit}>
+            <Form className={classes.root} onSubmit={validateForm}>
               <Form.Group size="lg" controlId="title">
                 <TextField
                   className={classes.input}
@@ -137,10 +160,16 @@ export default function Upload() {
                 style={{ color: theme.text, background: theme.background }}
                 variant="outlined"
                 size="medium"
-                type="submit"
-                disabled={!validateForm()}>
+                type="submit">
                 Upload
               </Button>
+              {error.length > 1 ? (
+                <>
+                  <p>{error}</p>
+                </>
+              ) : (
+                <div>No Error</div>
+              )}
             </Form>
           </Paper>
         </Fade>

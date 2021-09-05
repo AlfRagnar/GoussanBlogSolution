@@ -81,11 +81,15 @@ export default function RenderVideos() {
           maxBufferSize: 1,
         },
       },
-      shaka: {
+    },
+  };
+  const replayPopUp = {
+    videoStreamer: {
+      hlsjs: {
         customConfiguration: {
-          streaming: {
-            bufferingGoal: 120,
-          },
+          capLevelToPlayerSize: true,
+          maxBufferLength: 30,
+          maxBufferSize: 10,
         },
       },
     },
@@ -106,10 +110,10 @@ export default function RenderVideos() {
               </Replay>
             </CardActionArea>
             <ImageListItemBar title={video.title} />
+            {RemoveControlBar()}
           </ImageListItem>
         ))}
       </ImageList>
-      {RemoveControlBar()}
 
       <Modal
         id="popupVideo"
@@ -137,7 +141,7 @@ export default function RenderVideos() {
             <Replay
               initialPlaybackProps={{ isPaused: true }}
               source={popupVideo.streamingPaths[0]}
-              options={replayOptions}>
+              options={replayPopUp}>
               <HlsjsVideoStreamer />
             </Replay>
             <Typography paragraph style={{ color: theme.text }}>

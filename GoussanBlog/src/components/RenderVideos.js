@@ -103,6 +103,7 @@ export default function RenderVideos() {
           <ImageListItem key={video.id + "-list"} cols={video.cols || 1}>
             <CardActionArea onClick={() => showVideo(video)}>
               <Replay
+                onPlaybackActionsReady={() => RemoveControlBar()}
                 initialPlaybackProps={{ isPaused: true }}
                 source={video.streamingPaths[0]}
                 options={replayOptions}>
@@ -110,7 +111,6 @@ export default function RenderVideos() {
               </Replay>
             </CardActionArea>
             <ImageListItemBar title={video.title} />
-            {RemoveControlBar()}
           </ImageListItem>
         ))}
       </ImageList>

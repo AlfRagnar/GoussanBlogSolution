@@ -70,11 +70,15 @@ export default function RenderVideos() {
   };
 
   const replayOptions = {
+    controls: {
+      includeControls: [],
+    },
     videoStreamer: {
       hlsjs: {
         customConfiguration: {
           capLevelToPlayerSize: true,
-          maxBufferLength: 45,
+          maxBufferLength: 20,
+          maxBufferSize: 1,
         },
       },
       shaka: {
@@ -90,26 +94,22 @@ export default function RenderVideos() {
   return (
     <div className={classes.root}>
       <Typography variant="h3">Uploaded Videos</Typography>
-      <ImageList className={classes.imageList} cols={3}>
+      <ImageList className={classes.imageList} cols={4}>
         {videos.map((video) => (
           <ImageListItem key={video.id + "-list"} cols={video.cols || 1}>
             <CardActionArea onClick={() => showVideo(video)}>
               <Replay
                 initialPlaybackProps={{ isPaused: true }}
                 source={video.streamingPaths[0]}
-                options={{
-                  controls: {
-                    includeControls: [],
-                  },
-                }}>
+                options={replayOptions}>
                 <HlsjsVideoStreamer />
               </Replay>
             </CardActionArea>
             <ImageListItemBar title={video.title} />
           </ImageListItem>
         ))}
-        {RemoveControlBar()}
       </ImageList>
+      {RemoveControlBar()}
 
       <Modal
         id="popupVideo"

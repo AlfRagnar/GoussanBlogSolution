@@ -193,7 +193,7 @@ BlobStorageService InitializeStorageClientInstance()
     // Create the new Blob Service Client
     BlobServiceClient blobService = new(Config.AzureStorageConnectionString);
     // Get the predefined Container name from Config
-    string container = Config.CosmosMedia;
+    string container = Config.CosmosMedia.ToLower();
     try
     {
         // Try to create blob container, will fail if container already exist

@@ -1,33 +1,40 @@
 ﻿using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
 
 namespace GoussanBlogData.Models.MediaModels;
+
+/// <summary>
+/// Image Model used to accept requests to create a new Image
+/// </summary>
 public class ImageCreateModel
 {
-    // Required
-    [JsonProperty("id")]
-    public string Id { get; set; }
-    [JsonProperty("type")]
-    public string Type { get; set; }
-
-    [JsonProperty("filename")]
-    public string FileName { get; set; }
-    [JsonProperty("created")]
-    public string Created { get; set; }
-    [JsonProperty("modified")]
-    public string Modified { get; set; }
-    [JsonProperty("userid")]
-    public string UserId { get; set; }
-    [JsonProperty("storagepath")]
-    public string StoragePath { get; set; }
-    [JsonProperty("imagefile")]
-    public IFormFile File { get; set; }
-    // Optional
-    [JsonProperty("blogid")]
-    public string? BlogId { get; set; }
+    // REQUIRED
+    /// <summary>
+    /// Require the Title property to be filled out or set
+    /// </summary>
+    [Required]
     [JsonProperty("title")]
-    public string? Title { get; set; }
-
+    public string Title { get; set; }
+    /// <summary>
+    /// Require the Description field to be filled out or set
+    /// </summary>
+    [Required]
     [JsonProperty("description")]
-    public string? Description { get; set; }
+    public string Description { get; set; }
+    /// <summary>
+    /// Require there to be a file present
+    /// </summary>
+    [Required]
+    [JsonProperty("uploadfile")]
+    public IFormFile File { get; set; }
+    
+
+    // OPTIONAL
+
+    /// <summary>
+    /// Optional property in case the image is tied to a blog post
+    /// </summary>
+    [JsonProperty("blogid")]
+    public string BlogId { get; set; }
 
 }

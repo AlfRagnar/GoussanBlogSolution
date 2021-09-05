@@ -267,9 +267,10 @@ public class CosmosDbService : ICosmosDbService
     }
 
     // IMAGE API
-    public async Task AddImage(Image image)
+    public async Task<ItemResponse<Image>> AddImage(Image image)
     {
-        await MediaContainer.CreateItemAsync(image, new PartitionKey(image.Id));
+        var res = await MediaContainer.CreateItemAsync(image, new PartitionKey(image.Id));
+        return res;
     }
 
     public async Task<List<Image>> GetImageList()

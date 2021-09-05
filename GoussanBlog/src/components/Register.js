@@ -77,7 +77,6 @@ export default function Register() {
         });
     } catch (e) {
       alert("Invalid Username/password");
-      console.log(e.message);
     }
   }
 

@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Upload() {
+export default function UploadImage() {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const { isDarkTheme, darkTheme, lightTheme } = useContext(ThemeContext);
@@ -60,7 +60,7 @@ export default function Upload() {
       const Message = "\nYou need to write a description for this video";
       setError(Message);
     }
-    var allowedExtensions = /(\.mp4|\.webm|\.avi)$/i;
+    var allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
     var validateFile = allowedExtensions.exec(file.name);
     if (!validateFile) {
       const Message = "\nYou need to put in a valid file";
@@ -91,27 +91,27 @@ export default function Upload() {
       formData.append("Title", title);
       formData.append("Description", description);
       formData.append("File", file, file.name);
-      formData.append("token", token);
 
       await axios
-        .post("/Videos", formData, {
+        .post("/Image", formData, {
           headers: {
             Authorization: `bearer ${token}`,
           },
         })
         .then((res) => {
           setOpen(false);
+        })
+        .catch((e) => {
+          setError(e.message);
         });
-    } catch (e) {
-      console.log(e.message);
-    }
+    } catch (e) {}
     setError("");
   }
 
   return (
     <div>
       <Button color="inherit" onClick={handleOpen}>
-        Upload
+        Upload Image
       </Button>
       <Modal
         aria-labelledby="transition-modal-title"

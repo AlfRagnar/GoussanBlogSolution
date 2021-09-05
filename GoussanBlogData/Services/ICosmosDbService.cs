@@ -24,7 +24,13 @@ public interface ICosmosDbService
     Task UpdateVideoAsync(string id, UploadVideo video);
     Task<IEnumerable<UploadVideo>> GetVideoList();
     // IMAGE API
-    Task AddImage(Image image);
+
+    /// <summary>
+    /// Adds a Image Object to COSMOS DB and returns a response to creation request
+    /// </summary>
+    /// <param name="image"></param>
+    /// <returns>Response to Creation Request</returns>
+    Task<ItemResponse<Image>> AddImage(Image image);
     Task<List<Image>> GetImageList();
     Task UpdateImageAsync(string id, Image image);
 

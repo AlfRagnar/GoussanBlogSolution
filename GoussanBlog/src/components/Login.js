@@ -74,7 +74,6 @@ export default function Login() {
           setToken(res.data.jwtToken);
           setUsername("");
           setPassword("");
-          console.log("User Logged In");
           sessionStorage.setItem("authToken", res.data.jwtToken);
           setOpen(false);
         });

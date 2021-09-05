@@ -95,12 +95,13 @@ The API will on start up configure back end services to ensure that it can run p
 * Video Controller that handles CRUD operations related to Videos received by the API
 * Media Services that consumers Video File and encodes video and stores video in Azure and provide VoD and streaming capabilities
 * CosmosDb Services Service handler for operations related to Cosmos DB
+* Image Controller to handle CRUD operations for Images received by the front end application
+* Swagger Docs with Documentation on how to cosume the API
 
 ### Planned Features
-* Image Controller to handle CRUD operations for Images received by the front end application
 * Blog Controller to handle CRUD operations for Blog Posts received by the front end application
-* Write up documentation for the Swagger Docs to give a easier overview and ways to test out the API
-* Refactor the Code to remove unused references
 * Redo Models in Use to remove unused properties
+* Refactor the Code to remove unused references
+* Write up documentation for the Swagger Docs to give a easier overview and ways to test out the API
 
  

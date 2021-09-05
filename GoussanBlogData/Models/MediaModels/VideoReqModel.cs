@@ -15,8 +15,7 @@ public class VideoReqModel
     public string Updated { get; set; }
     [JsonProperty("state")]
     public string State { get; set; }
-    [JsonProperty("userid")]
-    public string UserId { get; set; }
+    
     [JsonProperty("blogid")]
     public string BlogId { get; set; }
     [JsonProperty("storagepath")]

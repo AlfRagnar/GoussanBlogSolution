@@ -14,6 +14,10 @@
     "appInsights1": {
       "type": "appInsights",
       "connectionId": "APPINSIGHTS_CONNECTIONSTRING"
+    },
+    "storage1": {
+      "type": "storage",
+      "connectionId": "StorageCon"
     }
   }
 }

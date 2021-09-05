@@ -2,16 +2,16 @@ import React from "react";
 import Routes from "./Routes";
 import ThemeContextProvider from "./contexts/ThemeContext";
 import AuthContextProvider from "./contexts/AuthContext";
-import VideoContextProvider from "./contexts/VideoContext";
+import MediaContextProvider from "./contexts/MediaContext";
 
 function App() {
   return (
     <>
       <AuthContextProvider>
         <ThemeContextProvider>
-          <VideoContextProvider>
+          <MediaContextProvider>
             <Routes />
-          </VideoContextProvider>
+          </MediaContextProvider>
         </ThemeContextProvider>
       </AuthContextProvider>
     </>

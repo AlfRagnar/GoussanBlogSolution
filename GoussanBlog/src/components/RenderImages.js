@@ -13,9 +13,6 @@ import {
 } from "@material-ui/core";
 import { ThemeContext } from "../contexts/ThemeContext";
 import { MediaContext } from "../contexts/MediaContext";
-import { Replay } from "vimond-replay";
-import "vimond-replay/index.css";
-import HlsjsVideoStreamer from "vimond-replay/video-streamer/hlsjs";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -44,17 +41,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function RenderVideos() {
+export default function RenderImages() {
   const classes = useStyles();
-  const { videos } = useContext(MediaContext);
+  const { images } = useContext(MediaContext);
   const { isDarkTheme, darkTheme, lightTheme } = useContext(ThemeContext);
   const theme = isDarkTheme ? darkTheme : lightTheme;
 
-  const [popupVideo, setPopupVideo] = useState(videos[0]);
+  const [popupImage, setPopupImage] = useState(images[0]);
   const [open, setOpen] = useState(false);
 
-  const showVideo = (video) => {
-    setPopupVideo(video);
+  const showImage = (Image) => {
+    setPopupImage(Image);
     setOpen(true);
   };
 
@@ -62,57 +59,22 @@ export default function RenderVideos() {
     setOpen(false);
   };
 
-  const RemoveControlBar = () => {
-    var controlbar = document.querySelectorAll(".replay-controls-bar");
-    controlbar.forEach((el) => {
-      el.style.visibility = "hidden";
-    });
-  };
-
-  const replayOptions = {
-    videoStreamer: {
-      hlsjs: {
-        customConfiguration: {
-          capLevelToPlayerSize: true,
-          maxBufferLength: 45,
-        },
-      },
-      shaka: {
-        customConfiguration: {
-          streaming: {
-            bufferingGoal: 120,
-          },
-        },
-      },
-    },
-  };
-
   return (
     <div className={classes.root}>
-      <Typography variant="h3">Uploaded Videos</Typography>
+      <Typography variant="h3">Uploaded Images</Typography>
       <ImageList className={classes.imageList} cols={3}>
-        {videos.map((video) => (
-          <ImageListItem key={video.id + "-list"} cols={video.cols || 1}>
-            <CardActionArea onClick={() => showVideo(video)}>
-              <Replay
-                initialPlaybackProps={{ isPaused: true }}
-                source={video.streamingPaths[0]}
-                options={{
-                  controls: {
-                    includeControls: [],
-                  },
-                }}>
-                <HlsjsVideoStreamer />
-              </Replay>
+        {images.map((image) => (
+          <ImageListItem key={image.id + "-list"} cols={image.cols || 1}>
+            <CardActionArea onClick={() => showImage(image)}>
+              <img src={image.storagePath} alt={image.title} />
             </CardActionArea>
-            <ImageListItemBar title={video.title} />
+            <ImageListItemBar title={image.title} />
           </ImageListItem>
         ))}
-        {RemoveControlBar()}
       </ImageList>
 
       <Modal
-        id="popupVideo"
+        id="popupImage"
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
         className={classes.modal}
@@ -132,16 +94,12 @@ export default function RenderVideos() {
               textAlign: "center",
             }}>
             <Typography variant="h2" style={{ color: theme.text }}>
-              {popupVideo.title}
+              {popupImage.title}
             </Typography>
-            <Replay
-              initialPlaybackProps={{ isPaused: true }}
-              source={popupVideo.streamingPaths[0]}
-              options={replayOptions}>
-              <HlsjsVideoStreamer />
-            </Replay>
+            <img src={popupImage.storagePath} alt={popupImage.title} />
+
             <Typography paragraph style={{ color: theme.text }}>
-              {popupVideo.description}
+              {popupImage.description}
             </Typography>
           </Paper>
         </Fade>

@@ -23,7 +23,8 @@ import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import Switch from "@material-ui/core/Switch";
 import Login from "../components/Login";
 import Register from "../components/Register";
-import Upload from "../components/Upload";
+import UploadImage from "../components/UploadImage";
+import UploadVideo from "../components/UploadVideo";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -147,7 +148,8 @@ export default function MyNavbar(props) {
           <Nav activeKey={window.location.pathname}>
             {auth ? (
               <>
-                <Upload />
+                <UploadImage />
+                <UploadVideo />
                 <Button onClick={changeAuthStatus} color="inherit">
                   Logout
                 </Button>

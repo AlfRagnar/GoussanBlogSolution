@@ -98,7 +98,7 @@ public class VideosController : ControllerBase
     {
         try
         {
-            var userId = jwtUtils.ValidateToken(createVideoReq.Token);
+            User user = (User)HttpContext.Items["User"];
             UploadVideo newVideo = new()
             {
                 Id = Regex.Replace(Convert.ToBase64String(Guid.NewGuid().ToByteArray()), "[/+=]", ""),
@@ -108,7 +108,7 @@ public class VideosController : ControllerBase
                 Created = DateTime.UtcNow.ToShortDateString(),
                 Updated = DateTime.UtcNow.ToString(),
                 State = "Not Set",
-                UserId = userId!,
+                UserId = user!.Id,
                 BlogId = createVideoReq.BlogId,
                 Description = createVideoReq.Description,
                 Title = createVideoReq.Title,

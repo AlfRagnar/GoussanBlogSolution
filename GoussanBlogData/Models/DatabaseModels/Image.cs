@@ -14,8 +14,8 @@ public class Image
     public string FileName { get; set; }
     [JsonProperty("created")]
     public string Created { get; set; }
-    [JsonProperty("modified")]
-    public string Modified { get; set; }
+    [JsonProperty("lastmodified")]
+    public string LastModified { get; set; }
     [JsonProperty("userid")]
     public string UserId { get; set; }
     [JsonProperty("blogid")]

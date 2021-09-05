@@ -6,15 +6,23 @@ import { Typography } from "@material-ui/core";
 import axios from "axios";
 import { Skeleton } from "@material-ui/lab";
 import ViewJWTButton from "../components/ViewJWTButton";
-import { VideoContext } from "../contexts/VideoContext";
+import { MediaContext } from "../contexts/MediaContext";
 import RenderVideos from "../components/RenderVideos";
+import RenderImages from "../components/RenderImages";
 
 export default function Home() {
   const { auth, setAuth, setToken } = useContext(AuthContext);
   const { isDarkTheme, darkTheme, lightTheme } = useContext(ThemeContext);
   const theme = isDarkTheme ? darkTheme : lightTheme;
-  const { setVideos } = useContext(VideoContext);
-  const [fetchedVideos, setFetchedVideos] = useState(false);
+  const {
+    setVideos,
+    setImages,
+    setFetchedVideos,
+    setFetchedImages,
+    fetchedVideos,
+    fetchedImages,
+  } = useContext(MediaContext);
+
   const [loading, isLoading] = useState(true);
 
   useEffect(() => {
@@ -35,7 +43,24 @@ export default function Home() {
         setFetchedVideos(false);
       }
     }
+
+    async function fetchImages() {
+      try {
+        await axios
+          .get("/Image")
+          .then((res) => {
+            setImages(res.data);
+            setFetchedImages(true);
+          })
+          .catch((e) => {});
+      } catch (err) {
+        setVideos("");
+        setFetchedVideos(false);
+      }
+    }
     fetchVideos();
+    fetchImages();
+
     setTimeout(() => {
       isLoading(false);
     }, 2000);
@@ -55,8 +80,8 @@ export default function Home() {
         {loading ? (
           <>
             <Skeleton variant="text" />
-            <Skeleton variant="circle" width={40} height={40} />
-            <Skeleton variant="rect" width={210} height={118} />
+            <Skeleton variant="circle" />
+            <Skeleton variant="rect" />
           </>
         ) : (
           <>
@@ -87,6 +112,11 @@ export default function Home() {
               <RenderVideos />
             ) : (
               <Typography variant="body2">No Video Data in Database</Typography>
+            )}
+            {fetchedImages ? (
+              <RenderImages />
+            ) : (
+              <Typography variant="body2">No Image Data in Database</Typography>
             )}
           </>
         )}

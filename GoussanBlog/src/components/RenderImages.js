@@ -15,6 +15,16 @@ import { ThemeContext } from "../contexts/ThemeContext";
 import { MediaContext } from "../contexts/MediaContext";
 
 const useStyles = makeStyles((theme) => ({
+  img: {
+    // display: "Block",
+    maxWidth: 450,
+    maxHeight: 450,
+  },
+  imgPopup: {
+    // display: "block",
+    maxWidth: 940,
+    maxHeight: 940,
+  },
   modal: {
     display: "flex",
     alignItems: "center",
@@ -22,19 +32,20 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: {
     position: "absolute",
-    width: 400,
+    maxWidth: 1050,
     backgroundColor: theme.palette.background.paper,
     border: "2px solid #000",
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
+    // overflow: "hidden",
   },
   imageList: {
-    flexWrap: "nowrap",
+    flexWrap: "wrap",
     // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
     transform: "translateZ(0)",
   },
   root: {
-    // display: "flex",
+    display: "flex",
     flexWrap: "wrap",
     justifyContent: "space-around",
     overflow: "hidden",
@@ -66,7 +77,11 @@ export default function RenderImages() {
         {images.map((image) => (
           <ImageListItem key={image.id + "-list"} cols={image.cols || 1}>
             <CardActionArea onClick={() => showImage(image)}>
-              <img src={image.storagePath} alt={image.title} />
+              <img
+                className={classes.img}
+                src={image.storagePath}
+                alt={image.title}
+              />
             </CardActionArea>
             <ImageListItemBar title={image.title} />
           </ImageListItem>
@@ -87,17 +102,19 @@ export default function RenderImages() {
         }}>
         <Fade in={open}>
           <Paper
-            className="container"
+            className={classes.paper}
             style={{
               background: theme.background,
               color: theme.text,
-              textAlign: "center",
             }}>
             <Typography variant="h2" style={{ color: theme.text }}>
               {popupImage.title}
             </Typography>
-            <img src={popupImage.storagePath} alt={popupImage.title} />
-
+            <img
+              className={classes.imgPopup}
+              src={popupImage.storagePath}
+              alt={popupImage.title}
+            />
             <Typography paragraph style={{ color: theme.text }}>
               {popupImage.description}
             </Typography>

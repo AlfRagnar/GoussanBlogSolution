@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2, 4, 3),
   },
   imageList: {
-    flexWrap: "nowrap",
+    flexWrap: "wrap",
     // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
     transform: "translateZ(0)",
   },

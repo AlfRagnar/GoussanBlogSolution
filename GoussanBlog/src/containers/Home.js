@@ -103,6 +103,9 @@ export default function Home() {
                 data protection is not guaranteed. Chances are the website
                 database and file storage will be wiped multiple times a day.
               </Typography>
+              <Typography variant="body2">
+                Current Upload limit size per File: <em>30MB</em>
+              </Typography>
 
               {auth ? (
                 <ViewJWTButton />

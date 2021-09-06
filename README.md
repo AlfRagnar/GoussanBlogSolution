@@ -14,10 +14,10 @@ Documentation: [Link To Documentation](GoussanBlog/README.md)
 * User Registration and Login
 * User Confirmation
 * Video Upload
-* Video Streaming
-* File Validation on Video Upload to ensure valid video file provided for encoding
 * Image Upload
-* Image Upload Validation to ensure valid Image file
+* Video Streaming
+* Display Videos and images in a Side-scrolling list with clickable thumbnails that will open a Modal that will render the item in full-view
+* File Validation on Videos and Images
 
 ### Planned Features
 * Blog post Creation
@@ -40,11 +40,13 @@ Documentation: [Link To Documentation](GoussanBlogData/README.md)
 
 ### Current Features
 * User Controller that handles User CRUD operations
-* JWT Utilities Verifies JWT Token and extract user information from database
-* Video Controller that handles CRUD operations related to Videos received by the API
-* Media Services that consumers Video File and encodes video and stores video in Azure and provide VoD and streaming capabilities
+* JWT Utilities Verifies JWT Token and extract user information from database 
+* Video Controller that handles CRUD operations related to Videos
+* Media Services service handler for operations related to Media Services like Encoding, Streaming, Endpoint creation etc.
 * CosmosDb Services Service handler for operations related to Cosmos DB
 * Image Controller Handles CRUD operations related to Images
+* Swagger Docs with Documentation on how to cosume the API
+
 
 ### Planned Features
 * Blog Controller to handle CRUD operations for Blog Posts received by the front end application

@@ -119,12 +119,22 @@ export default function Home() {
             {fetchedVideos && videos.length > 0 ? (
               <RenderVideos />
             ) : (
-              <Typography variant="body2">No Video Data in Database</Typography>
+              <>
+                <Typography>Trying to get Videos</Typography>
+                <Skeleton variant="text" />
+                <Skeleton variant="circle" />
+                <Skeleton variant="rect" />
+              </>
             )}
             {fetchedImages && images.length > 0 ? (
               <RenderImages />
             ) : (
-              <Typography variant="body2">No Image Data in Database</Typography>
+              <>
+                <Typography>Trying to get Images</Typography>
+                <Skeleton variant="text" />
+                <Skeleton variant="circle" />
+                <Skeleton variant="rect" />
+              </>
             )}
           </>
         )}

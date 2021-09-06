@@ -1,6 +1,8 @@
 # GoussanBlogSolution
  
  A Simple Media Web App that works using a .NET 6.0 (Preview) Backend API along with React.js frontend Client Application
+ 
+ ![Visual representation of Solution](/SolutionOverviewVisual.png)
 
  ## GoussanBlog
 
@@ -13,14 +15,13 @@ Documentation: [Link To Documentation](GoussanBlog/README.md)
 * User Confirmation
 * Video Upload
 * Video Streaming
-
-### Planned Features
 * File Validation on Video Upload to ensure valid video file provided for encoding
 * Image Upload
 * Image Upload Validation to ensure valid Image file
+
+### Planned Features
 * Blog post Creation
 * Blog post validation to ensure blog post does not contain anything malicious like file insertion or malicious links
-* Render Videos/Images/Blog Posts/Blogs? in Cards in a sidescrolling slide
 * Preview Blog Posts before creation
 * Insertion of Images and Videos into Blog Posts
 * View Uploads/Blog Posts by Users
@@ -43,9 +44,9 @@ Documentation: [Link To Documentation](GoussanBlogData/README.md)
 * Video Controller that handles CRUD operations related to Videos received by the API
 * Media Services that consumers Video File and encodes video and stores video in Azure and provide VoD and streaming capabilities
 * CosmosDb Services Service handler for operations related to Cosmos DB
+* Image Controller Handles CRUD operations related to Images
 
 ### Planned Features
-* Image Controller to handle CRUD operations for Images received by the front end application
 * Blog Controller to handle CRUD operations for Blog Posts received by the front end application
 * Write up documentation for the Swagger Docs to give a easier overview and ways to test out the API
 * Refactor the Code to remove unused references
@@ -56,6 +57,10 @@ Documentation: [Link To Documentation](GoussanBlogData/README.md)
 Azure Functions App that events received from Azure Services to perform changes on data in Cosmos DB depending on their state. Like Encoding Tasks finishing or User Creation and sending a verification email to User upon completing registration.
 <br />
 Documentation: [Link To Documentation](GoussanFunction/README.md)
+
+### Current Features
+* Send out activation Link to users upon User Registration
+* Update state in Cosmos DB upon Job Task being scheduled in Azure Media Services
 
 ### Planned Features
 * Send out Emails to users subscribed to other Users upon new uploads or blogs from users

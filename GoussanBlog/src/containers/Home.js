@@ -21,6 +21,8 @@ export default function Home() {
     setFetchedImages,
     fetchedVideos,
     fetchedImages,
+    images,
+    videos,
   } = useContext(MediaContext);
 
   const [loading, isLoading] = useState(true);
@@ -52,8 +54,11 @@ export default function Home() {
             setImages(res.data);
             setFetchedImages(true);
           })
-          .catch((e) => {});
+          .catch((e) => {
+            console.log(e);
+          });
       } catch (err) {
+        console.log(err);
         setVideos("");
         setFetchedVideos(false);
       }
@@ -108,12 +113,12 @@ export default function Home() {
               )}
             </div>
 
-            {fetchedVideos ? (
+            {fetchedVideos && videos.length > 0 ? (
               <RenderVideos />
             ) : (
               <Typography variant="body2">No Video Data in Database</Typography>
             )}
-            {fetchedImages ? (
+            {fetchedImages && images.length > 0 ? (
               <RenderImages />
             ) : (
               <Typography variant="body2">No Image Data in Database</Typography>

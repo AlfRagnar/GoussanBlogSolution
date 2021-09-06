@@ -84,6 +84,17 @@ export default function RenderVideos() {
     },
   };
   const replayPopUp = {
+    controls: {
+      includeControls: [
+        "playPauseButton",
+        "timeline",
+        "timeDisplay",
+        "volume",
+        "fullscreenButton",
+        "qualitySelector",
+        "bufferingIndicator",
+      ],
+    },
     videoStreamer: {
       hlsjs: {
         customConfiguration: {

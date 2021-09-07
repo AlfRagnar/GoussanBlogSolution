@@ -14,7 +14,7 @@ React JS Frontend App that handles user interaction with backend API. Works as a
 * Simple File Validation handler to Regex
 * Image Upload
 * Image Upload Validation to ensure valid Image file
-
+* Real-Time Live Chat with chat log of last 20 entries
 ### Planned Features
 * Blog post Creation
 * Blog post validation to ensure blog post does not contain anything malicious like file insertion or malicious links

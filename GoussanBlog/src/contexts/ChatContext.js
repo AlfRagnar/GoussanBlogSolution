@@ -9,7 +9,7 @@ const ChatContextProvider = ({ children }) => {
   const [connection, setConnection] = useState(null);
   const [chat, setChat] = useState([]);
   const latestChat = useRef(null);
-  const endpoint = config.defaultEndpoint;
+  const endpoint = config.chatEndpoint;
   latestChat.current = chat;
   useEffect(() => {
     const newConnection = new HubConnectionBuilder()

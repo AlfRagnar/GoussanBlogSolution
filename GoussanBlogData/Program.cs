@@ -63,9 +63,11 @@ builder.Services.AddSignalR();
 builder.Services.AddCors(options => {
     options.AddPolicy("ClientPermission", policy =>
     {
-        policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:3000", "https://goussanmedia.com").AllowCredentials();
+        policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:3000", "https://goussanmedia.com", "https://goussan-api.azure-api.net").AllowCredentials();
     });
 });
+
+
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddSwaggerGen(c =>
 {

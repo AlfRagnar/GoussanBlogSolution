@@ -97,6 +97,7 @@ The API will on start up configure back end services to ensure that it can run p
 * CosmosDb Services Service handler for operations related to Cosmos DB
 * Image Controller controls the Image endpoint and handles Image CRUD operations
 * Swagger Docs with Documentation on how to cosume the API
+* SignalR Integration, API works as a chathub where every message gets logged into Cosmos DB
 
 ### Planned Features
 * Blog Controller to handle CRUD operations for Blog Posts received by the front end application

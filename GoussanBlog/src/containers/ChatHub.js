@@ -4,7 +4,7 @@ import ChatWrapper from "../components/Chat/ChatWrapper";
 export default function ChatHub() {
   return (
     <ChatWrapper>
-      <ChatWindow></ChatWindow>
+      <ChatWindow />
     </ChatWrapper>
   );
 }

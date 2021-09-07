@@ -10,8 +10,8 @@ import {
   TextField,
 } from "@material-ui/core";
 import axios from "axios";
-import { ThemeContext } from "../contexts/ThemeContext";
-import { AuthContext } from "../contexts/AuthContext";
+import { ThemeContext } from "../../contexts/ThemeContext";
+import { AuthContext } from "../../contexts/AuthContext";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function UploadImage() {
+export default function UploadVideo() {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const { isDarkTheme, darkTheme, lightTheme } = useContext(ThemeContext);
@@ -60,7 +60,7 @@ export default function UploadImage() {
       const Message = "\nYou need to write a description for this video";
       setError(Message);
     }
-    var allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+    var allowedExtensions = /(\.mp4|\.webm|\.avi)$/i;
     var validateFile = allowedExtensions.exec(file.name);
     if (!validateFile) {
       const Message = "\nYou need to put in a valid file";
@@ -91,18 +91,16 @@ export default function UploadImage() {
       formData.append("Title", title);
       formData.append("Description", description);
       formData.append("File", file, file.name);
+      formData.append("token", token);
 
       await axios
-        .post("/Image", formData, {
+        .post("/Videos", formData, {
           headers: {
             Authorization: `bearer ${token}`,
           },
         })
         .then((res) => {
           setOpen(false);
-        })
-        .catch((e) => {
-          setError(e.message);
         });
     } catch (e) {}
     setError("");
@@ -111,7 +109,7 @@ export default function UploadImage() {
   return (
     <div>
       <Button color="inherit" onClick={handleOpen}>
-        Upload Image
+        Upload Video
       </Button>
       <Modal
         aria-labelledby="transition-modal-title"

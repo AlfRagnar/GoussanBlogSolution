@@ -1,70 +1,33 @@
 import React, { useContext, useEffect, useState } from "react";
-import { ThemeContext } from "../contexts/ThemeContext";
 import Paper from "@material-ui/core/Paper";
-import { AuthContext } from "../contexts/AuthContext";
 import { Typography } from "@material-ui/core";
-import axios from "axios";
 import { Skeleton } from "@material-ui/lab";
-import ViewJWTButton from "../components/ViewJWTButton";
+import { AuthContext } from "../contexts/AuthContext";
+import { ThemeContext } from "../contexts/ThemeContext";
 import { MediaContext } from "../contexts/MediaContext";
-import RenderVideos from "../components/RenderVideos";
-import RenderImages from "../components/RenderImages";
+import ViewJWTButton from "../components/Utilities/ViewJWTButton";
+import RenderVideos from "../components/Media/RenderVideos";
+import RenderImages from "../components/Media/RenderImages";
 
 export default function Home() {
-  const { auth, setAuth, setToken } = useContext(AuthContext);
+  const { auth, setAuth, setToken, setUser } = useContext(AuthContext);
   const { isDarkTheme, darkTheme, lightTheme } = useContext(ThemeContext);
   const theme = isDarkTheme ? darkTheme : lightTheme;
-  const {
-    setVideos,
-    setImages,
-    setFetchedVideos,
-    setFetchedImages,
-    fetchedVideos,
-    fetchedImages,
-    images,
-    videos,
-  } = useContext(MediaContext);
+  const { fetchedVideos, fetchedImages, images, videos } =
+    useContext(MediaContext);
 
   const [loading, isLoading] = useState(true);
 
   useEffect(() => {
     var localToken = sessionStorage.getItem("authToken");
+    var localUser = sessionStorage.getItem("user");
     if (localToken !== null) {
       setToken(localToken);
       setAuth(true);
     }
-
-    async function fetchVideos() {
-      try {
-        await axios.get("/videos").then((res) => {
-          setVideos(res.data);
-          setFetchedVideos(true);
-        });
-      } catch (err) {
-        setVideos("");
-        setFetchedVideos(false);
-      }
+    if (localUser !== null) {
+      setUser(localUser);
     }
-
-    async function fetchImages() {
-      try {
-        await axios
-          .get("/Image")
-          .then((res) => {
-            setImages(res.data);
-            setFetchedImages(true);
-          })
-          .catch((e) => {
-            console.log(e);
-          });
-      } catch (err) {
-        console.log(err);
-        setVideos("");
-        setFetchedVideos(false);
-      }
-    }
-    fetchVideos();
-    fetchImages();
 
     setTimeout(() => {
       isLoading(false);
@@ -74,7 +37,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="container">
+    <div className="container-fluid" style={{ marginTop: 10 }}>
       <Paper
         variant="outlined"
         style={{

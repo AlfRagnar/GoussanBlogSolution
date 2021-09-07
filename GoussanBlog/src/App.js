@@ -3,6 +3,7 @@ import Routes from "./Routes";
 import ThemeContextProvider from "./contexts/ThemeContext";
 import AuthContextProvider from "./contexts/AuthContext";
 import MediaContextProvider from "./contexts/MediaContext";
+import ChatContextProvider from "./contexts/ChatContext";
 
 function App() {
   return (
@@ -10,7 +11,9 @@ function App() {
       <AuthContextProvider>
         <ThemeContextProvider>
           <MediaContextProvider>
-            <Routes />
+            <ChatContextProvider>
+              <Routes />
+            </ChatContextProvider>
           </MediaContextProvider>
         </ThemeContextProvider>
       </AuthContextProvider>

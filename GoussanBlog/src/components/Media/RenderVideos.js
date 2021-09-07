@@ -11,8 +11,8 @@ import {
   ImageListItem,
   ImageListItemBar,
 } from "@material-ui/core";
-import { ThemeContext } from "../contexts/ThemeContext";
-import { MediaContext } from "../contexts/MediaContext";
+import { ThemeContext } from "../../contexts/ThemeContext";
+import { MediaContext } from "../../contexts/MediaContext";
 import { Replay } from "vimond-replay";
 import "vimond-replay/index.css";
 import HlsjsVideoStreamer from "vimond-replay/video-streamer/hlsjs";

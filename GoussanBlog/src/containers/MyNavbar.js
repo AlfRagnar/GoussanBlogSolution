@@ -1,8 +1,6 @@
 import React, { useContext, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { Nav } from "react-bootstrap";
-import { ThemeContext } from "../contexts/ThemeContext";
-import { AuthContext } from "../contexts/AuthContext";
 import {
   Button,
   Toolbar,
@@ -10,9 +8,7 @@ import {
   makeStyles,
   Typography,
   IconButton,
-  Zoom,
   Fab,
-  useScrollTrigger,
   Menu,
   MenuItem,
   FormGroup,
@@ -21,52 +17,24 @@ import {
 import MenuIcon from "@material-ui/icons/Menu";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import Switch from "@material-ui/core/Switch";
-import Login from "../components/Login";
+import { ThemeContext } from "../contexts/ThemeContext";
+import { AuthContext } from "../contexts/AuthContext";
+import UploadImage from "../components/Media/UploadImage";
+import UploadVideo from "../components/Media/UploadVideo";
 import Register from "../components/Register";
-import UploadImage from "../components/UploadImage";
-import UploadVideo from "../components/UploadVideo";
+import Login from "../components/Login";
+import ScrollTop from "../components/Utilities/ScrollTop";
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    position: "fixed",
-    bottom: theme.spacing(2),
-    right: theme.spacing(2),
-  },
   menuButton: {
     marginRight: theme.spacing(2),
   },
   title: {
     flexGrow: 1,
   },
-  offset: theme.mixins.toolbar,
 }));
 
-function ScrollTop(props) {
-  const { children } = props;
-  const classes = useStyles();
-
-  const trigger = useScrollTrigger();
-
-  const handleClick = (event) => {
-    const anchor = (event.target.ownerDocument || document).querySelector(
-      "#back-to-top-anchor"
-    );
-
-    if (anchor) {
-      anchor.scrollIntoView({ behavior: "smooth", block: "center" });
-    }
-  };
-
-  return (
-    <Zoom in={trigger}>
-      <div onClick={handleClick} role="presentation" className={classes.root}>
-        {children}
-      </div>
-    </Zoom>
-  );
-}
-
-export default function MyNavbar(props) {
+export default function MyNavbar() {
   const { isDarkTheme, darkTheme, lightTheme, setTheme } =
     useContext(ThemeContext);
   const { auth, changeAuthStatus } = useContext(AuthContext);
@@ -164,12 +132,11 @@ export default function MyNavbar(props) {
         </Toolbar>
       </AppBar>
       <Toolbar id="back-to-top-anchor" />
-      <ScrollTop {...props}>
+      <ScrollTop>
         <Fab color="secondary" size="small" aria-label="scroll back to top">
           <KeyboardArrowUpIcon />
         </Fab>
       </ScrollTop>
-      <div className={classes.offset} />
     </>
   );
 }

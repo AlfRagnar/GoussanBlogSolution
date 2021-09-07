@@ -9,6 +9,7 @@ public class CosmosDbService : ICosmosDbService
 {
     private readonly Container MediaContainer;
     private readonly Container UserContainer;
+    private readonly Container ChatContainer;
     private readonly CosmosClient cosmosClient;
     private readonly Database dbService;
     public CosmosDbService(CosmosClient cosmosClient, string databaseName)
@@ -17,10 +18,17 @@ public class CosmosDbService : ICosmosDbService
         dbService = cosmosClient.GetDatabase(databaseName);
         MediaContainer = dbService.GetContainer(Config.CosmosMedia);
         UserContainer = dbService.GetContainer(Config.CosmosUser);
+        ChatContainer = dbService.GetContainer(Config.CosmosChat);
     }
 
 
     // USER API
+
+    /// <summary>
+    /// Request to get a list of users stored in database
+    /// Returns only the Username and the date when they were created
+    /// </summary>
+    /// <returns></returns>
     public IQueryable<dynamic> GetUsersAsync()
     {
         try
@@ -39,11 +47,21 @@ public class CosmosDbService : ICosmosDbService
             return null!;
         }
     }
+    /// <summary>
+    /// Adds a user to the Database
+    /// </summary>
+    /// <param name="user"></param>
+    /// <returns></returns>
     public async Task<ItemResponse<Models.DatabaseModels.User>> AddUser(Models.DatabaseModels.User user)
     {
         var res = await UserContainer.CreateItemAsync(user, new PartitionKey(user.Id));
         return res;
     }
+    /// <summary>
+    /// Tries to get a user by the ID submitted
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     public async Task<Models.DatabaseModels.User> GetUserAsync(string id)
     {
         try
@@ -56,6 +74,11 @@ public class CosmosDbService : ICosmosDbService
             return null!;
         }
     }
+    /// <summary>
+    /// Tries to get the user by their Username in the database
+    /// </summary>
+    /// <param name="Username"></param>
+    /// <returns></returns>
     public async Task<IEnumerable<Models.DatabaseModels.User>> GetUserByName(string Username)
     {
         try
@@ -81,6 +104,12 @@ public class CosmosDbService : ICosmosDbService
             return null!;
         }
     }
+
+    /// <summary>
+    /// Tries to get a user by Email submitted
+    /// </summary>
+    /// <param name="Email"></param>
+    /// <returns></returns>
     public async Task<IEnumerable<Models.DatabaseModels.User>> GetUserByMail(string Email)
     {
         try
@@ -106,6 +135,13 @@ public class CosmosDbService : ICosmosDbService
             return null!;
         }
     }
+
+    /// <summary>
+    /// Checks if there is any user currently in database with matching username or email
+    /// </summary>
+    /// <param name="Username"></param>
+    /// <param name="Email"></param>
+    /// <returns></returns>
     public async Task<IEnumerable<Models.DatabaseModels.User>> CheckUser(string Username, string Email)
     {
         try
@@ -132,7 +168,12 @@ public class CosmosDbService : ICosmosDbService
         }
     }
 
-    // Try to Activate User
+
+    /// <summary>
+    /// Tries to activate the user
+    /// </summary>
+    /// <param name="Token"></param>
+    /// <returns></returns>
     public async Task<string> ConfirmUser(string Token)
     {
         try
@@ -178,16 +219,32 @@ public class CosmosDbService : ICosmosDbService
 
     // VIDEO API
 
+    /// <summary>
+    /// Adds a new video object to the database, does not contain any raw video data
+    /// </summary>
+    /// <param name="video"></param>
+    /// <returns></returns>
     public async Task AddVideo(UploadVideo video)
     {
         await MediaContainer.CreateItemAsync(video, new PartitionKey(video.Id));
     }
+
+    /// <summary>
+    /// Removes a video object from the database, does not remove any raw video data
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
 
     public async Task DeleteVideoAsync(string id)
     {
         await MediaContainer.DeleteItemAsync<UploadVideo>(id, new PartitionKey(id));
     }
 
+    /// <summary>
+    /// Tries to find a video object by the ID provided
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     public async Task<UploadVideo> GetVideoAsync(string id)
     {
         try
@@ -200,6 +257,11 @@ public class CosmosDbService : ICosmosDbService
             return null!;
         }
     }
+
+    /// <summary>
+    /// Returns a list of videos in the database with the State set to "Finished"
+    /// </summary>
+    /// <returns></returns>
     public async Task<IEnumerable<UploadVideo>> GetVideoList()
     {
         try
@@ -226,6 +288,11 @@ public class CosmosDbService : ICosmosDbService
         }
     }
 
+    /// <summary>
+    /// Tries to get multiple videos from the database with the supplied query
+    /// </summary>
+    /// <param name="queryString"></param>
+    /// <returns></returns>
     public async Task<IEnumerable<UploadVideo>> GetMultipleVideosAsync(string queryString)
     {
         try
@@ -246,6 +313,13 @@ public class CosmosDbService : ICosmosDbService
         }
     }
 
+
+    /// <summary>
+    /// Updates a video object in the database
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="video"></param>
+    /// <returns></returns>
     public async Task UpdateVideoAsync(string id, VideoUpdateModel video)
     {
         var documentResource = await MediaContainer.ReadItemAsync<UploadVideo>(id, new PartitionKey(id));
@@ -261,6 +335,12 @@ public class CosmosDbService : ICosmosDbService
         document.Updated = DateTime.UtcNow.ToString();
         await MediaContainer.UpsertItemAsync(document, new PartitionKey(id));
     }
+    /// <summary>
+    /// Updates or Adds a video to the database 
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="video"></param>
+    /// <returns></returns>
     public async Task UpdateVideoAsync(string id, UploadVideo video)
     {
         await MediaContainer.UpsertItemAsync(video, new PartitionKey(id));
@@ -302,6 +382,52 @@ public class CosmosDbService : ICosmosDbService
     public async Task UpdateImageAsync(string id, Image image)
     {
         await MediaContainer.UpsertItemAsync(image, new PartitionKey(id));
+    }
+
+
+    // Chat API
+
+    /// <summary>
+    /// Tries to get the chat history from the database
+    /// </summary>
+    /// <returns></returns>
+    public async Task<List<LoggedMessage>> GetChatHistory()
+    {
+        try
+        {
+            FeedIterator<LoggedMessage> query = ChatContainer
+                .GetItemQueryIterator<LoggedMessage>(new QueryDefinition("SELECT TOP 20 * FROM c ORDER BY c._ts DESC"));
+            List<LoggedMessage> results = new();
+            while (query.HasMoreResults)
+            {
+                FeedResponse<LoggedMessage> response = await query.ReadNextAsync();
+                results.AddRange(response.Resource);
+            }
+            return results;
+        }
+        catch (CosmosException ex)
+        {
+            Console.WriteLine(ex);
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// Tries to add a message to the Chat container in the database
+    /// </summary>
+    /// <param name="message"></param>
+    /// <returns></returns>
+
+    public async Task AddMessage(LoggedMessage message)
+    {
+        try
+        {
+            await ChatContainer.CreateItemAsync<LoggedMessage>(message, new PartitionKey(message.Id));
+        }
+        catch (CosmosException)
+        {
+            throw;
+        }
     }
 
 }

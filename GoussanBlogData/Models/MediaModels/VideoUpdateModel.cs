@@ -2,6 +2,10 @@
 using System.ComponentModel.DataAnnotations;
 
 namespace GoussanBlogData.Models.MediaModels;
+
+/// <summary>
+/// Model used to handle validation for Update Requests on Videos
+/// </summary>
 public class VideoUpdateModel
 {
     // REQUIRED
@@ -15,12 +19,12 @@ public class VideoUpdateModel
 
     // OPTIONAL
     [JsonProperty("blogid")]
-    public string? BlogId { get; set; }
+    public string BlogId { get; set; }
 
     [JsonProperty("title")]
-    public string? Title { get; set; }
+    public string Title { get; set; }
     [JsonProperty("description")]
-    public string? Description { get; set; }
+    public string Description { get; set; }
 
 }
 

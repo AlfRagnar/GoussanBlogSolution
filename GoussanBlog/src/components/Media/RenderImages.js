@@ -11,8 +11,8 @@ import {
   ImageListItem,
   ImageListItemBar,
 } from "@material-ui/core";
-import { ThemeContext } from "../contexts/ThemeContext";
-import { MediaContext } from "../contexts/MediaContext";
+import { ThemeContext } from "../../contexts/ThemeContext";
+import { MediaContext } from "../../contexts/MediaContext";
 
 const useStyles = makeStyles((theme) => ({
   img: {

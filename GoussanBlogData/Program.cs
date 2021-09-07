@@ -1,6 +1,7 @@
 using Azure;
 using Azure.Identity;
 using Azure.Storage.Blobs;
+using GoussanBlogData.Hubs;
 using GoussanBlogData.Models;
 using GoussanBlogData.Services;
 using GoussanBlogData.Services.Data;
@@ -29,6 +30,7 @@ Config.AzureCosmosConnectionString = Configuration["GoussanCosmosServerless"]; /
 Config.CosmosDBName = Configuration["CosmosDb:DatabaseName"]; // Cosmos DB database name
 Config.CosmosUser = Configuration["CosmosDb:Containers:User:containerName"]; // Cosmos DB container name
 Config.CosmosMedia = Configuration["CosmosDb:Containers:Media:containerName"]; // Cosmos DB container name
+Config.CosmosChat = Configuration["CosmosDb:Containers:Chat:containerName"]; // Cosmos DB container name
 // Azure Active Directory Information / Configuration needed to use Azure Media Services and to create a service Client
 Config.AadClientId = Configuration["AadClientId"];
 Config.AadSecret = Configuration["AadSecret"];
@@ -47,6 +49,8 @@ Config.AzureStorageQueue = Configuration["GoussanStorage:queue"];
 Config.AzureAppInsight = Configuration["AppInsightConString"];
 Config.AzureAppInsightInstrumentKey = Configuration["AppInsightInstrumentKey"];
 
+
+
 // Add Singleton Services of the Azure Service Client instances since they are Thread-safe and this is recommended usage
 builder.Services.AddSingleton<ICosmosDbService>(await InitializeCosmosClientInstanceAsync());
 builder.Services.AddSingleton<IGoussanMediaService>(await InitializeMediaService());
@@ -55,7 +59,13 @@ builder.Services.AddSingleton<IBlobStorageService>(InitializeStorageClientInstan
 builder.Services.AddScoped<IJwtUtils, JwtUtils>();
 builder.Services.AddApplicationInsightsTelemetry(Config.AzureAppInsight);
 builder.Services.AddControllers();
-builder.Services.AddCors();
+builder.Services.AddSignalR();
+builder.Services.AddCors(options => {
+    options.AddPolicy("ClientPermission", policy =>
+    {
+        policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:3000", "https://goussanmedia.com").AllowCredentials();
+    });
+});
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddSwaggerGen(c =>
 {
@@ -64,18 +74,13 @@ builder.Services.AddSwaggerGen(c =>
     {
         Version = "v1",
         Title = "Goussanjarga Blog And Media API",
-        Description = "A simple API that is used to communicate with different Azure Services and provide data to Client",
-        TermsOfService = new Uri("https://example.com/terms"),
+        Description = "A simple API that is used to communicate with different Azure Services and provide data to Client. Use at own risk, there is no SLA.",
         Contact = new OpenApiContact
         {
             Name = "Alf Ragnar",
             Email = "alf@goussanjarga.com",
         },
-        License = new OpenApiLicense
-        {
-            Name = "Use under LICX",
-            Url = new Uri("https://example.com/license"),
-        }
+
     });
     var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
@@ -83,6 +88,7 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (builder.Environment.IsDevelopment())
@@ -100,17 +106,22 @@ app.UseSwaggerUI(c =>
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "GoussanBlogData v1");
     c.RoutePrefix = string.Empty;
 });
-// Configure Cors, most of Endpoint interaction with the outside will be handled through Azure API Management,
-// but otherwise it is handled by JWT token verification by the application
-app.UseCors(builder =>
-{
-    builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
-});
+// Need Use Cors for SignalR to function properly
+app.UseCors("ClientPermission");
 app.UseHttpsRedirection();
 app.UseAuthorization();
 // Add Jwt Token Middleware
 app.UseMiddleware<JwtMiddleware>();
-app.MapControllers();
+
+//app.MapControllers();
+
+app.UseRouting();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+    endpoints.MapHub<ChatHub>("/chathub");
+});
+
 app.Run();
 
 

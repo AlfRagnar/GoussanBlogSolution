@@ -34,6 +34,21 @@ public interface ICosmosDbService
     Task<List<Image>> GetImageList();
     Task UpdateImageAsync(string id, Image image);
 
+    // CHAT API
+    
+    /// <summary>
+    /// Tries to get chat history from Database
+    /// </summary>
+    /// <returns></returns>
+    Task<List<LoggedMessage>> GetChatHistory();
+    /// <summary>
+    /// Adds a message to the Database for storage
+    /// </summary>
+    /// <param name="message"></param>
+    /// <returns></returns>
+    Task AddMessage(LoggedMessage message);
+    
+
 
     // BLOG API
 }

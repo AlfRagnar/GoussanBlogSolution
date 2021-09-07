@@ -1,7 +1,6 @@
 import React, { useContext, useState } from "react";
 import Form from "react-bootstrap/Form";
 import axios from "axios";
-import { AuthContext } from "../contexts/AuthContext";
 import {
   Button,
   Backdrop,
@@ -11,6 +10,7 @@ import {
   TextField,
 } from "@material-ui/core";
 import { ThemeContext } from "../contexts/ThemeContext";
+import { AuthContext } from "../contexts/AuthContext";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -44,7 +44,7 @@ export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const { setAuth, setToken } = useContext(AuthContext);
+  const { setAuth, setToken, setUser } = useContext(AuthContext);
   const { isDarkTheme, darkTheme, lightTheme } = useContext(ThemeContext);
 
   const theme = isDarkTheme ? darkTheme : lightTheme;
@@ -71,10 +71,12 @@ export default function Login() {
         })
         .then((res) => {
           setAuth(true);
+          setUser(username);
           setToken(res.data.jwtToken);
+          sessionStorage.setItem("authToken", res.data.jwtToken);
+          sessionStorage.setItem("user", username);
           setUsername("");
           setPassword("");
-          sessionStorage.setItem("authToken", res.data.jwtToken);
           setOpen(false);
         });
     } catch (e) {

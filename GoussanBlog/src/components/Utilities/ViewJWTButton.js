@@ -6,7 +6,7 @@ import {
   DialogTitle,
   DialogContentText,
 } from "@material-ui/core";
-import { AuthContext } from "../contexts/AuthContext";
+import { AuthContext } from "../../contexts/AuthContext";
 
 export default function ViewJWTButton() {
   const [open, setOpen] = useState(false);

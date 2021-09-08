@@ -6,8 +6,10 @@ export const MediaContext = createContext();
 const MediaContextProvider = ({ children }) => {
   const [videos, setVideos] = useState([""]);
   const [images, setImages] = useState([""]);
+  const [blogs, setBlogs] = useState([""]);
   const [fetchedVideos, setFetchedVideos] = useState(false);
   const [fetchedImages, setFetchedImages] = useState(false);
+  const [fetchedBlogs, setFetchedBlogs] = useState(false);
 
   useEffect(() => {
     async function fetchVideos() {
@@ -27,18 +29,34 @@ const MediaContextProvider = ({ children }) => {
         await axios
           .get("/Image")
           .then((res) => {
-            setImages(res.data);
-            setFetchedImages(true);
+            if (res.data !== null) {
+              setImages(res.data);
+              setFetchedImages(true);
+            }
           })
           .catch((e) => {
             console.log(e);
           });
       } catch (err) {
         console.log(err);
-        setVideos("");
-        setFetchedVideos(false);
+        setImages("");
+        setFetchedImages(false);
       }
     }
+
+    async function fetchBlogs() {
+      try {
+        await axios.get("/blog").then((res) => {
+          setBlogs(res.data);
+          setFetchedBlogs(true);
+        });
+      } catch (err) {
+        setBlogs("");
+        setFetchedBlogs(false);
+      }
+    }
+
+    fetchBlogs();
     fetchVideos();
     fetchImages();
   }, []);
@@ -50,10 +68,14 @@ const MediaContextProvider = ({ children }) => {
         setVideos,
         images,
         setImages,
+        blogs,
+        setBlogs,
         fetchedVideos,
         setFetchedVideos,
         fetchedImages,
         setFetchedImages,
+        fetchedBlogs,
+        setFetchedBlogs,
       }}>
       {children}
     </MediaContext.Provider>

@@ -27,18 +27,18 @@ public class User
     [JsonProperty("confirmationcode")]
     public string Confirmationcode { get; set; }
 
-    [JsonProperty("_rid")]
-    public string Rid { get; set; }
+    //[JsonProperty("_rid")]
+    //public string Rid { get; set; }
 
-    [JsonProperty("_self")]
-    public string Self { get; set; }
+    //[JsonProperty("_self")]
+    //public string Self { get; set; }
 
-    [JsonProperty("_etag")]
-    public string Etag { get; set; }
+    //[JsonProperty("_etag")]
+    //public string Etag { get; set; }
 
-    [JsonProperty("_attachments")]
-    public string Attachments { get; set; }
+    //[JsonProperty("_attachments")]
+    //public string Attachments { get; set; }
 
-    [JsonProperty("_ts")]
-    public int Ts { get; set; }
+    //[JsonProperty("_ts")]
+    //public int Ts { get; set; }
 }

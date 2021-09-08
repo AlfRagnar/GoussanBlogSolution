@@ -34,6 +34,15 @@ public class UploadVideo
     public string UserId { get; set; }
     [JsonProperty("locator")]
     public string Locator { get; set; }
+    /// <summary>
+    /// Asset ID of the Video Object
+    /// </summary>
+    [JsonProperty("assetid")]
+    public string Assetid { get; set; }
+    /// <summary>
+    /// Output Asset the Encoded File is put into by Azure Media Service
+    /// </summary>
+
     [JsonProperty("outputasset")]
     public string OutputAsset { get; set; }
     [JsonProperty("streamingpaths")]
@@ -43,7 +52,9 @@ public class UploadVideo
 
     [JsonProperty("blogid")]
     public string BlogId { get; set; }
-
-
+    [JsonProperty("sas")]
+    public string Sas { get; set; }
+    public string SASUri { get; internal set; }
+    public string accountUrl { get; internal set; }
 }
 

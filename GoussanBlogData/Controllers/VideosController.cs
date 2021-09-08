@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using System.Text.RegularExpressions;
 
 namespace GoussanBlogData.Controllers;
+/// <summary>
+/// Here Interaction with the Video Endpoint is handled and defined
+/// </summary>
 [Produces("application/json")]
 [Authorize]
 [ApiController]
@@ -15,14 +18,23 @@ public class VideosController : ControllerBase
     private readonly ILogger<VideosController> _logger;
     private readonly ICosmosDbService cosmosDb;
     private readonly IGoussanMediaService mediaService;
+    private readonly IBlobStorageService blobStorage;
     private readonly IJwtUtils jwtUtils;
-
-    public VideosController(ICosmosDbService cosmosDb, ILogger<VideosController> logger, IGoussanMediaService mediaService, IJwtUtils jwtUtils)
+    /// <summary>
+    /// Constructor function required to initialize services in use by the Controller
+    /// </summary>
+    /// <param name="cosmosDb"></param>
+    /// <param name="logger"></param>
+    /// <param name="mediaService"></param>
+    /// <param name="jwtUtils"></param>
+    /// <param name="blobStorage"></param>
+    public VideosController(ICosmosDbService cosmosDb, ILogger<VideosController> logger, IGoussanMediaService mediaService, IJwtUtils jwtUtils, IBlobStorageService blobStorage)
     {
         this.cosmosDb = cosmosDb;
         this.mediaService = mediaService;
         _logger = logger;
         this.jwtUtils = jwtUtils;
+        this.blobStorage = blobStorage;
     }
 
 
@@ -37,8 +49,9 @@ public class VideosController : ControllerBase
     {
         try
         {
-            var videoList = await cosmosDb.GetVideoList();
-            foreach (var video in videoList)
+            IEnumerable<UploadVideo> videoEnum = await cosmosDb.GetVideoList();
+            var videoList = videoEnum.ToList();
+            foreach (var video in new List<UploadVideo>(videoList))
             {
                 try
                 {
@@ -46,8 +59,13 @@ public class VideosController : ControllerBase
                     {
                         video.StreamingPaths = await mediaService.GetStreamingURL(video.Locator);
                     }
-                    
+                    if (video.StreamingPaths == null)
+                    {
+                        video.State = "Error";
+                        videoList.Remove(video);
+                    }
                     await cosmosDb.UpdateVideoAsync(video.Id, video).ConfigureAwait(false);
+
                 }
                 catch (Exception)
                 {
@@ -93,38 +111,112 @@ public class VideosController : ControllerBase
 
     // POST /videos
     [HttpPost]
-    [RequestSizeLimit(900000000)]
     public async Task<IActionResult> Create([FromForm] VideoCreateModel createVideoReq)
     {
         try
         {
             User user = (User)HttpContext.Items["User"];
-            UploadVideo newVideo = new()
+
+            if (createVideoReq.File != null)
             {
-                Id = Regex.Replace(Convert.ToBase64String(Guid.NewGuid().ToByteArray()), "[/+=]", ""),
-                Filename = createVideoReq.File.Name,
-                Extension = createVideoReq.File.ContentType,
-                Size = createVideoReq.File.Length,
-                Created = DateTime.UtcNow.ToShortDateString(),
-                Updated = DateTime.UtcNow.ToString(),
-                State = "Not Set",
-                UserId = user!.Id,
-                BlogId = createVideoReq.BlogId,
-                Description = createVideoReq.Description,
-                Title = createVideoReq.Title,
-                Type = "Video"
-            };
-            var res = await mediaService.CreateAsset(createVideoReq.File, newVideo);
-            if (res != null)
-            {
-                await cosmosDb.AddVideo(res);
-                return CreatedAtAction(nameof(Create), new { res.Id }, res);
+
+                UploadVideo newVideo = new()
+                {
+                    Id = Regex.Replace(Convert.ToBase64String(Guid.NewGuid().ToByteArray()), "[/+=]", ""),
+                    Filename = createVideoReq.File.Name,
+                    Extension = createVideoReq.File.ContentType,
+                    Size = createVideoReq.File.Length,
+                    Created = DateTime.UtcNow.ToShortDateString(),
+                    Updated = DateTime.UtcNow.ToString(),
+                    State = "Not Set",
+                    UserId = user!.Id,
+                    BlogId = createVideoReq.BlogId,
+                    Description = createVideoReq.Description,
+                    Title = createVideoReq.Title,
+                    Type = "Video"
+                };
+                var res = await mediaService.CreateAsset(createVideoReq.File, newVideo);
+                if (res != null)
+                {
+                    await cosmosDb.AddVideo(res);
+                    return CreatedAtAction(nameof(Create), new { res.Id }, res);
+                }
+                return BadRequest();
             }
-            return BadRequest();
+            else
+            {
+                UploadVideo newVideoRef = new()
+                {
+                    Id = Regex.Replace(Convert.ToBase64String(Guid.NewGuid().ToByteArray()), "[/+=]", ""),
+                    Created = DateTime.UtcNow.ToShortDateString(),
+                    Updated = DateTime.UtcNow.ToString(),
+                    State = "Not Set",
+                    UserId = user!.Id,
+                    BlogId = createVideoReq.BlogId,
+                    Description = createVideoReq.Description,
+                    Title = createVideoReq.Title,
+                    Type = "Video"
+                };
+
+                var res = await mediaService.CreateAsset(newVideoRef).ConfigureAwait(true);
+                var containerClient = await blobStorage.GetContainer("asset-" + res.Assetid);
+                var sas = blobStorage.GetServiceSasUriForContainer(containerClient);
+                var SASToken = sas.Query.TrimStart('?');
+
+                res.Sas = SASToken;
+                res.SASUri = sas.AbsoluteUri;
+                res.accountUrl = $"{containerClient.Uri.Scheme}://{containerClient.Uri.Host}";
+
+
+                if (res != null)
+                {
+                    await cosmosDb.AddVideo(res);
+                    return CreatedAtAction(nameof(Create), new { res.Id }, res);
+                }
+                return BadRequest();
+            }
         }
         catch (Exception)
         {
             return BadRequest();
+        }
+    }
+
+    /// <summary>
+    /// Request to Update a Video, usually called once a large video file has finished uploading to Azure Storage from the Client App
+    /// </summary>
+    /// <param name="videoUpdate"></param>
+    /// <response code="200">If Task is successfully started</response>
+    /// <response code="404">If Video cannot be found</response>
+    /// <response code="400">If some of the required fields are not filled out correctly</response>
+    /// <returns>OK response with Video Object</returns>
+
+    // POST: /videos/update
+    [HttpPost("update")]
+    public async Task<IActionResult> Update([FromBody] VideoUpdateModel videoUpdate)
+    {
+        var orgVideo = await cosmosDb.GetVideoAsync(videoUpdate.Id);
+        if (orgVideo == null)
+        {
+            return NotFound("Video not found with ID: " + videoUpdate.Id);
+        }
+        else
+        {
+            await mediaService.SubmitJobAsync(orgVideo.Id, orgVideo.OutputAsset);
+            if (!string.IsNullOrEmpty(videoUpdate.Filename))
+            {
+                orgVideo.Filename = videoUpdate.Filename;
+            }
+            if (!string.IsNullOrEmpty(videoUpdate.Filesize))
+            {
+                orgVideo.Size = Convert.ToInt32(videoUpdate.Filesize);
+            }
+            if (!string.IsNullOrEmpty(videoUpdate.Contenttype))
+            {
+                orgVideo.Extension = videoUpdate.Contenttype;
+            }
+            await cosmosDb.UpdateVideoAsync(orgVideo.Id, orgVideo);
+            return Ok(orgVideo);
         }
     }
 
@@ -134,7 +226,9 @@ public class VideosController : ControllerBase
     /// This is the Data stored in the database, NOT the file object
     /// </summary>
     /// <param name="video"></param>
-    /// <returns>Accepted 202 Response with the ID of the video you requested to be changed</returns>
+    /// <response code="202">ID of Video Requested to be updated</response>
+    /// <response code="404">If Video with given ID is not found</response>
+    /// <returns>ID of the video you requested to be updated</returns>
     // PUT /videos/{ID}
     [HttpPut("{id}")]
     public async Task<IActionResult> Edit([FromBody] VideoUpdateModel video)
@@ -146,7 +240,7 @@ public class VideosController : ControllerBase
         }
         catch (Exception)
         {
-            return NotFound();
+            return NotFound(video.Id);
         }
     }
 
@@ -156,7 +250,9 @@ public class VideosController : ControllerBase
     /// This is just the Video Object stored in Database
     /// </summary>
     /// <param name="id"></param>
-    /// <returns></returns>
+    /// <response code="202">If video is set to be deleted</response>
+    /// <response code="404">If Video with given ID is not found</response>
+    /// <returns>ID of video being deleted</returns>
 
     // DELETE /videos/{id}
     [HttpDelete("{id}")]
@@ -169,7 +265,7 @@ public class VideosController : ControllerBase
         }
         catch (Exception)
         {
-            return NotFound();
+            return NotFound(id);
         }
 
     }

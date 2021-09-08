@@ -12,13 +12,12 @@ import {
 import axios from "axios";
 import { ThemeContext } from "../../contexts/ThemeContext";
 import { AuthContext } from "../../contexts/AuthContext";
+import { ContainerClient } from "@azure/storage-blob";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    "& > *": {
-      margin: theme.spacing(1),
-      width: "30ch",
-    },
+    margin: theme.spacing(1),
+    width: "30ch",
   },
   input: {
     background: "#ffff",
@@ -90,8 +89,7 @@ export default function UploadVideo() {
       const formData = new FormData();
       formData.append("Title", title);
       formData.append("Description", description);
-      formData.append("File", file, file.name);
-      formData.append("token", token);
+      let ID = "";
 
       await axios
         .post("/Videos", formData, {
@@ -99,10 +97,43 @@ export default function UploadVideo() {
             Authorization: `bearer ${token}`,
           },
         })
-        .then((res) => {
-          setOpen(false);
+        .then(async (res) => {
+          const sasUri = res.data.sasUri;
+          ID = res.data.id;
+
+          const containerClient = new ContainerClient(sasUri);
+          containerClient.uploadBlockBlob(
+            "asset-" + res.data.assetid,
+            file,
+            file.size
+          );
+          console.log("File uploaded to Azure Blob Storage");
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+        .then(async () => {
+          const data = {
+            Id: ID,
+            filename: file.name,
+            filesize: `${file.size}`,
+            contenttype: file.type,
+          };
+
+          await axios
+            .post("/videos/update", data, {
+              headers: {
+                Authorization: `bearer ${token}`,
+              },
+            })
+            .then(() => {
+              console.log("File Scheduled to be Encoded");
+              setOpen(false);
+            });
         });
-    } catch (e) {}
+    } catch (e) {
+      console.log(e.response.data);
+    }
     setError("");
   }
 

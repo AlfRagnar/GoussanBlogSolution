@@ -26,7 +26,6 @@ public class VideoCreateModel
     /// <summary>
     /// Require there to be a file present in the request
     /// </summary>
-    [Required]
     [JsonProperty("uploadfile")]
     public IFormFile File { get; set; }
 

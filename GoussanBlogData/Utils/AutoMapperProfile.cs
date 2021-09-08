@@ -5,8 +5,14 @@ using GoussanBlogData.Models.UserModels;
 
 namespace GoussanBlogData.Utils
 {
+    /// <summary>
+    /// Object Mapping is handled here
+    /// </summary>
     public class AutoMapperProfile : Profile
     {
+        /// <summary>
+        /// Here we define the profiles for Object to Object mapping
+        /// </summary>
         public AutoMapperProfile()
         {
             // User => AuthResponse
@@ -15,14 +21,7 @@ namespace GoussanBlogData.Utils
             // CreateUser => User
             CreateMap<CreateUser, User>();
 
-            // UpdateRequest => User
-            CreateMap<UpdateRequest, User>().ForAllMembers(x => x.Condition((src, dest, prop) =>
-                {
-                    if (prop == null) return false;
-                    if (prop.GetType() == typeof(string) && string.IsNullOrEmpty((string)prop)) return false;
-
-                    return true;
-                }));
+            
         }
     }
 

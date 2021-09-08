@@ -8,6 +8,9 @@ using System.Text.RegularExpressions;
 
 namespace GoussanBlogData.Controllers;
 
+/// <summary>
+/// Here all interactions with the User Endpoint is handled, like Authentication requests and User Registration and Login
+/// </summary>
 [Authorize]
 [Produces("application/json")]
 [ApiController]
@@ -19,6 +22,13 @@ public class UserController : ControllerBase
     private readonly IJwtUtils _jwtUtils;
     private readonly IMapper _mapper;
 
+    /// <summary>
+    /// Constructor function needed to initialize services in use by the controller
+    /// </summary>
+    /// <param name="cosmosDb"></param>
+    /// <param name="logger"></param>
+    /// <param name="jwtUtils"></param>
+    /// <param name="mapper"></param>
     public UserController(ICosmosDbService cosmosDb, ILogger<UserController> logger, IJwtUtils jwtUtils, IMapper mapper)
     {
         this.cosmosDb = cosmosDb;

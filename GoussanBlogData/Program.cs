@@ -60,10 +60,16 @@ builder.Services.AddScoped<IJwtUtils, JwtUtils>();
 builder.Services.AddApplicationInsightsTelemetry(Config.AzureAppInsight);
 builder.Services.AddControllers();
 builder.Services.AddSignalR();
-builder.Services.AddCors(options => {
+// Define CORS Policy, need to whitelist domains for SignalR integration to function properly
+builder.Services.AddCors(options =>
+{
     options.AddPolicy("ClientPermission", policy =>
     {
-        policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:3000", "https://goussanmedia.com", "https://goussan-api.azure-api.net").AllowCredentials();
+        policy
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .WithOrigins("https://localhost:3000", "https://goussanmedia.com", "https://goussan-api.azure-api.net")
+        .AllowCredentials();
     });
 });
 
@@ -71,7 +77,6 @@ builder.Services.AddCors(options => {
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddSwaggerGen(c =>
 {
-    //c.SwaggerDoc("v1", new() { Title = "GoussanBlogData", Version = "v1" });
     c.SwaggerDoc("v1", new OpenApiInfo
     {
         Version = "v1",
@@ -115,9 +120,9 @@ app.UseAuthorization();
 // Add Jwt Token Middleware
 app.UseMiddleware<JwtMiddleware>();
 
-//app.MapControllers();
 
 app.UseRouting();
+// Configure Endpoints
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
@@ -127,6 +132,7 @@ app.UseEndpoints(endpoints =>
 app.Run();
 
 
+// Function to initialize the Cosmos Client Singleton Instance
 async Task<CosmosDbService> InitializeCosmosClientInstanceAsync()
 {
     // Define Azure Cosmos Db Client options like preferred operation region and Application Name
@@ -165,6 +171,7 @@ async Task<CosmosDbService> InitializeCosmosClientInstanceAsync()
 }
 
 
+// Function to Initialize the Media Service singleton Instance
 async Task<GoussanMediaService> InitializeMediaService()
 {
     // Create the new Azure Media Service Client
@@ -184,6 +191,7 @@ async Task<GoussanMediaService> InitializeMediaService()
 }
 
 
+// Used to 
 static async Task<ServiceClientCredentials> GetCredentialsAsync()
 {
     // Use ConfidentialClientApplicationBuilder.AcquireTokenForClient to get a token using a service principal with symmetric key
@@ -201,6 +209,7 @@ static async Task<ServiceClientCredentials> GetCredentialsAsync()
 }
 
 
+// Used to initialize singleton Instance for usage of Azure Storage
 BlobStorageService InitializeStorageClientInstance()
 {
     // Create the new Blob Service Client

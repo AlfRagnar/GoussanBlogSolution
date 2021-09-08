@@ -47,8 +47,23 @@ public interface ICosmosDbService
     /// <param name="message"></param>
     /// <returns></returns>
     Task AddMessage(LoggedMessage message);
-    
-
 
     // BLOG API
+    /// <summary>
+    /// Call to Database to get a list of blogs available
+    /// </summary>
+    /// <returns>List of Blog Posts</returns>
+    Task<List<BlogPost>> GetBlogs();
+    /// <summary>
+    /// Call to Database to retrieve blogs with matching ID, can be more than one
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    Task<List<BlogPost>> GetBlogs(int id);
+    /// <summary>
+    /// Request to create a new blog post object in the database
+    /// </summary>
+    /// <param name="post"></param>
+    /// <returns>Response from Cosmos</returns>
+    Task<ItemResponse<BlogPost>> CreateBlogPost(BlogPost post);
 }

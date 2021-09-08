@@ -375,7 +375,7 @@ public class CosmosDbService : ICosmosDbService
         }
         catch (CosmosException)
         {
-            return null!;
+            return null;
         }
     }
 
@@ -430,4 +430,83 @@ public class CosmosDbService : ICosmosDbService
         }
     }
 
+
+    // BLOG API
+
+    /// <summary>
+    /// Call to Retrieve a list of blogs from the database
+    /// </summary>
+    /// <returns>List of Blogs</returns>
+    public async Task<List<BlogPost>> GetBlogs()
+    {
+        try
+        {
+            List<BlogPost> result = new();
+            using (FeedIterator<BlogPost> setIterator = MediaContainer
+                .GetItemLinqQueryable<BlogPost>()
+                .Where(x => x.Type == "Blog")
+                .ToFeedIterator())
+            {
+                while (setIterator.HasMoreResults)
+                {
+                    foreach (var item in await setIterator.ReadNextAsync())
+                    {
+                        result.Add(item);
+                    }
+                }
+            }
+            return result;
+        }
+        catch (CosmosException ex)
+        {
+            Console.WriteLine(ex);
+            throw;
+        }
+    }
+
+    /// <summary>
+    /// Tries to get a Specific blog post
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns>Returns specified blog post</returns>
+    public async Task<List<BlogPost>> GetBlogs(int id)
+    {
+        try
+        {
+            List<BlogPost> result = new();
+            using (FeedIterator<BlogPost> setIterator = MediaContainer
+                .GetItemLinqQueryable<BlogPost>()
+                .Where(x => x.Id == id.ToString())
+                .ToFeedIterator())
+            {
+                while (setIterator.HasMoreResults)
+                {
+                    foreach (var item in await setIterator.ReadNextAsync())
+                    {
+                        result.Add(item);
+                    }
+                }
+            }
+            return result;
+        }
+        catch (CosmosException ex)
+        {
+            Console.WriteLine(ex);
+            return null;
+        }
+    }
+
+    public async Task<ItemResponse<BlogPost>> CreateBlogPost(BlogPost post)
+    {
+        try
+        {
+            var response = await MediaContainer.CreateItemAsync<BlogPost>(post, new PartitionKey(post.Id));
+            return response;
+        }
+        catch (CosmosException ex)
+        {
+            Console.WriteLine(ex);
+            return null;
+        }
+    }
 }

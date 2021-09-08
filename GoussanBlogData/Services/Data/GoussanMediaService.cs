@@ -9,45 +9,89 @@ using System.Text.RegularExpressions;
 
 namespace GoussanBlogData.Services.Data
 {
+    /// <summary>
+    /// Handles Communication and interactions with Azure Media Services
+    /// </summary>
     public class GoussanMediaService : IGoussanMediaService
     {
         private readonly AzureMediaServicesClient _azMediaServices;
         private readonly string resourceGroupName = Config.ResourceGroup;
         private readonly string accountName = Config.AccountName;
 
+        /// <summary>
+        /// Constructor to define how to startup and initialize Media Services
+        /// </summary>
+        /// <param name="azureMediaServicesClient"></param>
         public GoussanMediaService(AzureMediaServicesClient azureMediaServicesClient)
         {
             _azMediaServices = azureMediaServicesClient;
         }
 
+        /// <summary>
+        /// Function to create a new Video asset to be scheduled to be streamed by Azure Media Service
+        /// </summary>
+        /// <param name="fileToUpload"></param>
+        /// <param name="videos"></param>
+        /// <returns></returns>
         public async Task<UploadVideo> CreateAsset(IFormFile fileToUpload, UploadVideo videos)
         {
             try
             {
                 // Create Asset Container in Azure Blob Storage for file storage
                 Asset asset = await InternalCreate(videos.Id);
-
                 // Get the Shared Access Signature for the Asset Container matching the Video ID
                 // This SAS has a limited availability to make sure the file retains integrity and can't be modified once it has been uploaded
                 // Without having access to the blob storage
-                // Expiry Time on SAS set to: 4 Hours UTC from time of creation
+                // Expiry Time on SAS set to: 5 Min UTC from time of creation
                 AssetContainerSas response = await ListContainers(asset.Name);
-
                 // Fetch the first available SAS Uri available
                 Uri sasUri = new(response.AssetContainerSasUrls.First());
-
                 // Upload the file to Azure Blob Storage with the SAS URI from Azure Media Services
                 _ = await UploadFile(fileToUpload, asset.Name, sasUri);
-
                 Asset outputAsset = await CreateOutputAsset(asset.Name);
-
                 _ = await SubmitJobAsync(asset.Name, outputAsset.Name);
-                // Create a Locator ID, Streaming Locator is fancy for URL to manifest file for HLS or DASH streaming manifest ref: https://stackoverflow.com/questions/63674468/what-does-a-streaming-locator-symbolize-in-azure-media-services
+                // Create a Locator ID, Streaming Locator is fancy for URL to manifest file for HLS or DASH streaming manifest
+                // ref: https://stackoverflow.com/questions/63674468/what-does-a-streaming-locator-symbolize-in-azure-media-services
                 StreamingLocator locator = await CreateStreamingLocatorAsync(outputAsset.Name);
                 videos.Locator = locator.Name;
-                // Generation of Streaming URL is handled by Azure Cloud Function that populates the field upon the job finishing
-
                 videos.OutputAsset = outputAsset.Name;
+                // Return the populated video object ready to be pushed to Cosmos DB for storage
+                return videos;
+            }
+            catch (Exception)
+            {
+                return null!;
+            }
+        }
+
+        /// <summary>
+        /// Create the Asset for the file and return a SAS Uri to the caller for them to upload the file.
+        /// </summary>
+        /// <param name="videos"></param>
+        /// <returns>SAS URI for uploading of File</returns>
+        public async Task<UploadVideo> CreateAsset(UploadVideo videos)
+        {
+            try
+            {
+                // Create Asset Container in Azure Blob Storage for file storage
+                Asset asset = await InternalCreate(videos.Id);
+                videos.Assetid = asset.AssetId.ToString();
+                // Get the Shared Access Signature for the Asset Container matching the Video ID
+                // This SAS has a limited availability to make sure the file retains integrity and can't be modified once it has been uploaded
+                // Without having access to the blob storage
+                // Expiry Time on SAS set to: 5 Min UTC from time of creation
+                AssetContainerSas response = await ListContainers(asset.Name);
+                // Fetch the first available SAS Uri available
+                Uri sasUri = new(response.AssetContainerSasUrls.FirstOrDefault()!);
+                videos.Sas = sasUri.AbsoluteUri;
+
+                Asset outputAsset = await CreateOutputAsset(asset.Name);
+                videos.OutputAsset = outputAsset.Name;
+
+                // Create a Locator ID, Streaming Locator is fancy for URL to manifest file for HLS or DASH streaming manifest
+                // ref: https://stackoverflow.com/questions/63674468/what-does-a-streaming-locator-symbolize-in-azure-media-services
+                StreamingLocator locator = await CreateStreamingLocatorAsync(outputAsset.Name);
+                videos.Locator = locator.Name;
                 // Return the populated video object ready to be pushed to Cosmos DB for storage
                 return videos;
             }
@@ -95,10 +139,13 @@ namespace GoussanBlogData.Services.Data
         // Operations to Get a list of Containers matching the ID passed
         private async Task<AssetContainerSas> ListContainers(string ID)
         {
-            AssetContainerSas response = await _azMediaServices.Assets.ListContainerSasAsync(resourceGroupName, accountName, ID,
-                permissions: AssetContainerPermission.ReadWrite,
-                expiryTime: DateTime.UtcNow.AddHours(4).ToUniversalTime());
-
+            AssetContainerSas response = await _azMediaServices.Assets.ListContainerSasAsync(
+                resourceGroupName, 
+                accountName, 
+                ID,
+                permissions: AssetContainerPermission.ReadWriteDelete,
+                expiryTime: DateTime.UtcNow.AddMinutes(10).ToUniversalTime());
+            
             return response;
         }
 
@@ -121,7 +168,11 @@ namespace GoussanBlogData.Services.Data
         }
 
         // Creates a Job with information about how to Encode the Asset
-        private async Task<Job> SubmitJobAsync(string inputAsset, string outputAsset, string transformName = "GoussanAdaptiveStreamingPreset", string jobName = "GoussanEncoding")
+        public async Task<Job> SubmitJobAsync(
+            string inputAsset, 
+            string outputAsset, 
+            string transformName = "GoussanAdaptiveStreamingPreset", 
+            string jobName = "GoussanEncoding")
         {
             jobName += "-" + inputAsset;
 

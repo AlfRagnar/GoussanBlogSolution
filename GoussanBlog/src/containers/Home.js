@@ -67,7 +67,8 @@ export default function Home() {
                 database and file storage will be wiped multiple times a day.
               </Typography>
               <Typography variant="body2">
-                Current Upload limit size per File: <em>30MB</em>
+                No File Size Limit set on Video Files yet, might change it the
+                future
               </Typography>
 
               {auth ? (

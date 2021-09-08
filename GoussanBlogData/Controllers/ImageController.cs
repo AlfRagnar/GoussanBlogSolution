@@ -33,19 +33,16 @@ public class ImageController : ControllerBase
 
 
     // GET: Image/
+    /// <summary>
+    /// Gets a list of Images
+    /// </summary>
+    /// <returns>List of Images</returns>
     [AllowAnonymous]
     [HttpGet]
     public async Task<IActionResult> Get()
     {
         var list = await cosmosDb.GetImageList();
         return Ok(list);
-    }
-
-    // GET Images/{id}
-    [HttpGet("{id}")]
-    public string Get(int id)
-    {
-        return "value";
     }
 
 
@@ -66,10 +63,11 @@ public class ImageController : ControllerBase
             Created = DateTime.UtcNow.ToShortDateString(),
             Description = createImageReq.Description,
             FileName = createImageReq.File.FileName,
+            ContentType = createImageReq.File.ContentType,
             LastModified = DateTime.UtcNow.ToString(),
             Title = createImageReq.Title,
             Type = "Image",
-            UserId = user.Id
+            UserId = user!.Id
         };
         // UPLOAD IMAGE TO AZURE BLOB STORAGE
         // RECEIVE ABSOLUTE URL TO IMAGE UPLOADED TO STORAGE
@@ -82,17 +80,5 @@ public class ImageController : ControllerBase
             return CreatedAtAction(nameof(Post), new { image.Id }, image);
         }
         return BadRequest(res.StatusCode);
-    }
-
-    // PUT Images/5
-    [HttpPut("{id}")]
-    public void Put(int id, [FromBody] string value)
-    {
-    }
-
-    // DELETE Images/5
-    [HttpDelete("{id}")]
-    public void Delete(int id)
-    {
     }
 }

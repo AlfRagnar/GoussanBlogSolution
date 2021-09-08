@@ -12,6 +12,8 @@ public class Image
 
     [JsonProperty("filename")]
     public string FileName { get; set; }
+    [JsonProperty("contenttype")]
+    public string ContentType { get; set; }
     [JsonProperty("created")]
     public string Created { get; set; }
     [JsonProperty("lastmodified")]

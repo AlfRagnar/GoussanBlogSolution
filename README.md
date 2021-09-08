@@ -18,6 +18,8 @@ Documentation: [Link To Documentation](GoussanBlog/README.md)
 * Video Streaming
 * Display Videos and images in a Side-scrolling list with clickable thumbnails that will open a Modal that will render the item in full-view
 * File Validation on Videos and Images
+* * Real-Time Live Chat with chat history of the last 20 messages
+
 
 ### Planned Features
 * Blog post Creation
@@ -46,6 +48,8 @@ Documentation: [Link To Documentation](GoussanBlogData/README.md)
 * CosmosDb Services Service handler for operations related to Cosmos DB
 * Image Controller Handles CRUD operations related to Images
 * Swagger Docs with Documentation on how to cosume the API
+* * SignalR Integration, API works as a chathub where every message gets logged into Cosmos DB
+
 
 
 ### Planned Features

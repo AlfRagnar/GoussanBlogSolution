@@ -102,11 +102,11 @@ export default function UploadVideo() {
           ID = res.data.id;
 
           const containerClient = new ContainerClient(sasUri);
-          containerClient.uploadBlockBlob(
-            "asset-" + res.data.assetid,
-            file,
-            file.size
+          const blobBlockClient = containerClient.getBlockBlobClient(
+            "asset-" + res.data.assetid
           );
+          await blobBlockClient.uploadData(file);
+
           console.log("File uploaded to Azure Blob Storage");
         })
         .catch((err) => {

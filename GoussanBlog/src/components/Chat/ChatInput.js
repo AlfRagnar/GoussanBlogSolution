@@ -1,37 +1,46 @@
 import React, { useContext, useEffect, useState } from "react";
-import {
-  Input,
-  InputAdornment,
-  InputLabel,
-  makeStyles,
-} from "@material-ui/core";
 import { Form } from "react-bootstrap";
-import { AuthContext } from "../../contexts/AuthContext";
-import { ChatContext } from "../../contexts/ChatContext";
+import { makeStyles, TextField } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
-import { ThemeContext } from "../../contexts/ThemeContext";
 import AccountCircle from "@material-ui/icons/AccountCircle";
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    margin: theme.spacing(1),
-  },
-}));
+import { ThemeContext } from "../../contexts/ThemeContext";
+import { ChatContext } from "../../contexts/ChatContext";
+import { AuthContext } from "../../contexts/AuthContext";
 
 export default function ChatInput() {
-  const classes = useStyles();
   const { sendMessage } = useContext(ChatContext);
   const { user } = useContext(AuthContext);
   const [chatUser, setChatUser] = useState("Anonymous");
   const [message, setMessage] = useState("");
   const { isDarkTheme, darkTheme, lightTheme } = useContext(ThemeContext);
-  const theme = isDarkTheme ? darkTheme : lightTheme;
+  const currentTheme = isDarkTheme ? darkTheme : lightTheme;
 
   useEffect(() => {
     if (user && user !== "") {
       setChatUser(user);
     }
   }, [user]);
+
+  const useStyles = makeStyles((theme) => ({
+    root: {
+      margin: theme.spacing(2),
+    },
+    button: {
+      color: currentTheme.text,
+      background: currentTheme.background,
+      position: "fixed",
+    },
+    userDisplay: {
+      color: currentTheme.text,
+      background: currentTheme.background,
+    },
+    chatInput: {
+      color: currentTheme.text,
+      background: currentTheme.background,
+    },
+  }));
+
+  const classes = useStyles();
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -43,48 +52,46 @@ export default function ChatInput() {
       sendMessage(chatUser, message);
       setMessage("");
     } else {
-      alert("Please insert an user and a message");
+      if (!isUserProvided && isMessageProvided) {
+        alert("Please Insert a Username");
+      } else if (isUserProvided && !isMessageProvided) {
+        alert("Please Put in a Message");
+      } else {
+        alert("Please put in a Username and a Message");
+      }
     }
-  };
-
-  const onUserUpdate = (e) => {
-    setChatUser(e.target.value);
-  };
-  const onMessageUpdate = (e) => {
-    setMessage(e.target.value);
   };
 
   return (
     <div className={classes.root}>
       <Form onSubmit={onSubmit} noValidate autoComplete="off">
-        <Input
-          style={{ color: theme.text, background: theme.background }}
-          id="user"
-          name="user"
+        <TextField
+          id="userDisplay"
+          size="small"
           value={chatUser}
-          onChange={onUserUpdate}
-          startAdornment={
-            <InputAdornment position="start">
-              <AccountCircle />
-            </InputAdornment>
-          }
+          onChange={(e) => setChatUser(e.target.value)}
+          InputProps={{
+            className: classes.userDisplay,
+            startAdornment: (
+              <AccountCircle style={{ color: currentTheme.text, margin: 3 }} />
+            ),
+          }}
         />
-
-        <InputLabel
-          style={{ color: theme.text, background: theme.background }}
-          htmlFor="message">
-          Message
-        </InputLabel>
-
-        <Input
-          style={{ color: theme.text, background: theme.background }}
-          type="text"
+        <TextField
           id="message"
           value={message}
-          onChange={onMessageUpdate}
+          onChange={(e) => setMessage(e.target.value)}
+          label="Message"
+          placeholder="Message"
+          fullWidth
+          multiline
+          maxRows={2}
+          InputProps={{
+            className: classes.chatInput,
+          }}
         />
         <br />
-        <Button variant="contained" color="primary" type="submit">
+        <Button variant="contained" className={classes.button} type="submit">
           Submit
         </Button>
       </Form>

@@ -41,6 +41,7 @@ export default function ChatInput() {
 
     if (isUserProvided && isMessageProvided) {
       sendMessage(chatUser, message);
+      setMessage("");
     } else {
       alert("Please insert an user and a message");
     }

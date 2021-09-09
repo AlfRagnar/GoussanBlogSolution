@@ -6,10 +6,12 @@ import ChatHub from "./containers/ChatHub";
 import { Grid } from "@material-ui/core";
 import ConfirmPage from "./components/Utilities/ConfirmPage";
 import NotFound from "./components/Utilities/NotFound";
+import SimpleBar from "simplebar-react";
+import "simplebar/dist/simplebar.min.css";
 
 export default function Routes() {
   return (
-    <div style={{ flexGrow: 1 }}>
+    <SimpleBar style={{ flexGrow: 1, maxHeight: "100vh" }}>
       <Grid
         container
         direction="row"
@@ -33,6 +35,6 @@ export default function Routes() {
           </Switch>
         </Grid>
       </Grid>
-    </div>
+    </SimpleBar>
   );
 }

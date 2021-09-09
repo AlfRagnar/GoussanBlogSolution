@@ -1,9 +1,11 @@
 import { makeStyles } from "@material-ui/core";
-import { useContext, useEffect } from "react";
+import { createRef, useContext, useEffect } from "react";
 import { ChatContext } from "../../contexts/ChatContext";
 import { ThemeContext } from "../../contexts/ThemeContext";
 import ChatInput from "./ChatInput";
 import ChatMessage from "./ChatMessage";
+import SimpleBar from "simplebar-react";
+import "simplebar/dist/simplebar.min.css";
 
 const useStyles = makeStyles((theme) => ({
   chatInput: {
@@ -24,6 +26,7 @@ export default function ChatWindow() {
   const theme = isDarkTheme ? darkTheme : lightTheme;
   const classes = useStyles();
   const { chat } = useContext(ChatContext);
+  const scrollableNodeRef = createRef();
 
   const currentChat = chat.map((m) => (
     <ChatMessage
@@ -35,16 +38,19 @@ export default function ChatWindow() {
 
   useEffect(() => {
     var chatHistory = document.getElementById("chatcontent");
-    chatHistory.scrollTop = chatHistory.scrollHeight;
-  }, [chat]);
+    scrollableNodeRef.current.scrollTop = chatHistory.scrollHeight;
+  }, [chat, scrollableNodeRef]);
 
   return (
     <div
       className={classes.ChatContainer}
       style={{ color: theme.text, background: theme.background }}>
-      <div id="chatcontent" className={classes.chatContent}>
+      <SimpleBar
+        scrollableNodeProps={{ ref: scrollableNodeRef }}
+        id="chatcontent"
+        className={classes.chatContent}>
         {currentChat}
-      </div>
+      </SimpleBar>
       <ChatInput className={classes.chatInput} />
     </div>
   );

@@ -17,41 +17,48 @@ import { Replay } from "vimond-replay";
 import "vimond-replay/index.css";
 import HlsjsVideoStreamer from "vimond-replay/video-streamer/hlsjs";
 
-const useStyles = makeStyles((theme) => ({
-  modal: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  paper: {
-    position: "absolute",
-    width: 400,
-    backgroundColor: theme.palette.background.paper,
-    border: "2px solid #000",
-    boxShadow: theme.shadows[5],
-    padding: theme.spacing(2, 4, 3),
-  },
-  imageList: {
-    flexWrap: "wrap",
-    // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
-    transform: "translateZ(0)",
-  },
-  root: {
-    // display: "flex",
-    flexWrap: "wrap",
-    justifyContent: "space-around",
-    overflow: "hidden",
-  },
-}));
-
 export default function RenderVideos() {
-  const classes = useStyles();
   const { videos } = useContext(MediaContext);
   const { isDarkTheme, darkTheme, lightTheme } = useContext(ThemeContext);
-  const theme = isDarkTheme ? darkTheme : lightTheme;
+  const currentTheme = isDarkTheme ? darkTheme : lightTheme;
 
   const [popupVideo, setPopupVideo] = useState(videos[0]);
   const [open, setOpen] = useState(false);
+
+  const useStyles = makeStyles((theme) => ({
+    paperBody: {
+      background: currentTheme.background,
+      color: currentTheme.text,
+      textAlign: "center",
+      margin: theme.spacing(1),
+      width: "75%",
+    },
+    modal: {
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    imageList: {
+      flexWrap: "wrap",
+      // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
+      transform: "translateZ(0)",
+    },
+    root: {
+      margin: theme.spacing(1),
+    },
+    imageTitle: {
+      bottom: 19,
+    },
+    videoPlayer: { margin: theme.spacing(1) },
+    popupDescription: {
+      color: currentTheme.text,
+    },
+    popupTitle: {
+      color: currentTheme.text,
+    },
+  }));
+
+  const classes = useStyles();
 
   const showVideo = (video) => {
     setPopupVideo(video);
@@ -109,7 +116,7 @@ export default function RenderVideos() {
   return (
     <div className={classes.root}>
       <Typography variant="h3">Uploaded Videos</Typography>
-      <ImageList className={classes.imageList} cols={4}>
+      <ImageList className={classes.imageList} cols={4} rowHeight={150}>
         {videos.map((video) => (
           <ImageListItem key={video.id + "-list"} cols={video.cols || 1}>
             <CardActionArea onClick={() => showVideo(video)}>
@@ -120,8 +127,11 @@ export default function RenderVideos() {
                 options={replayOptions}>
                 <HlsjsVideoStreamer />
               </Replay>
+              <ImageListItemBar
+                className={classes.imageTitle}
+                title={video.title}
+              />
             </CardActionArea>
-            <ImageListItemBar title={video.title} />
           </ImageListItem>
         ))}
       </ImageList>
@@ -139,23 +149,19 @@ export default function RenderVideos() {
           timeout: 500,
         }}>
         <Fade in={open}>
-          <Paper
-            className="container"
-            style={{
-              background: theme.background,
-              color: theme.text,
-              textAlign: "center",
-            }}>
-            <Typography variant="h2" style={{ color: theme.text }}>
+          <Paper className={classes.paperBody}>
+            <Typography variant="h2" className={classes.popupTitle}>
               {popupVideo.title}
             </Typography>
-            <Replay
-              initialPlaybackProps={{ isPaused: true }}
-              source={popupVideo.streamingPaths[0]}
-              options={replayPopUp}>
-              <HlsjsVideoStreamer />
-            </Replay>
-            <Typography paragraph style={{ color: theme.text }}>
+            <div className={classes.videoPlayer}>
+              <Replay
+                initialPlaybackProps={{ isPaused: true }}
+                source={popupVideo.streamingPaths[0]}
+                options={replayPopUp}>
+                <HlsjsVideoStreamer />
+              </Replay>
+            </div>
+            <Typography paragraph className={classes.popupDescription}>
               {popupVideo.description}
             </Typography>
           </Paper>

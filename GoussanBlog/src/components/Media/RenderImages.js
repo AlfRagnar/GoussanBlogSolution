@@ -14,52 +14,56 @@ import {
 import { ThemeContext } from "../../contexts/ThemeContext";
 import { MediaContext } from "../../contexts/MediaContext";
 
-const useStyles = makeStyles((theme) => ({
-  img: {
-    // display: "Block",
-    maxWidth: 450,
-    maxHeight: 450,
-  },
-  imgPopup: {
-    // display: "block",
-    maxWidth: 940,
-    maxHeight: 940,
-  },
-  modal: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  paper: {
-    position: "absolute",
-    maxWidth: 1050,
-    backgroundColor: theme.palette.background.paper,
-    border: "2px solid #000",
-    boxShadow: theme.shadows[5],
-    padding: theme.spacing(2, 4, 3),
-    // overflow: "hidden",
-  },
-  imageList: {
-    flexWrap: "wrap",
-    // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
-    transform: "translateZ(0)",
-  },
-  root: {
-    display: "flex",
-    flexWrap: "wrap",
-    justifyContent: "space-around",
-    overflow: "hidden",
-  },
-}));
-
 export default function RenderImages() {
-  const classes = useStyles();
   const { images } = useContext(MediaContext);
   const { isDarkTheme, darkTheme, lightTheme } = useContext(ThemeContext);
-  const theme = isDarkTheme ? darkTheme : lightTheme;
-
+  const currentTheme = isDarkTheme ? darkTheme : lightTheme;
   const [popupImage, setPopupImage] = useState(images[0]);
   const [open, setOpen] = useState(false);
+
+  const useStyles = makeStyles((theme) => ({
+    img: {
+      // display: "Block",
+      maxWidth: "100%",
+      maxHeight: "100%",
+    },
+    imgPopup: {
+      // display: "block",
+      maxWidth: "100%",
+      maxHeight: "100%",
+    },
+    modal: {
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    paper: {
+      position: "absolute",
+      maxWidth: "75%",
+      border: "2px solid #000",
+      boxShadow: theme.shadows[5],
+      padding: theme.spacing(2, 4, 3),
+      background: currentTheme.background,
+      color: currentTheme.text,
+    },
+    imageList: {
+      flexWrap: "wrap",
+      // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
+      transform: "translateZ(0)",
+    },
+    bodyText: {
+      color: currentTheme.text,
+      background: currentTheme.background,
+    },
+    root: {
+      margin: theme.spacing(1),
+    },
+    imageTitle: {
+      top: "13vh",
+    },
+  }));
+
+  const classes = useStyles();
 
   const showImage = (Image) => {
     setPopupImage(Image);
@@ -82,8 +86,11 @@ export default function RenderImages() {
                 src={image.storagePath}
                 alt={image.title}
               />
+              <ImageListItemBar
+                className={classes.imageTitle}
+                title={image.title}
+              />
             </CardActionArea>
-            <ImageListItemBar title={image.title} />
           </ImageListItem>
         ))}
       </ImageList>
@@ -101,13 +108,8 @@ export default function RenderImages() {
           timeout: 500,
         }}>
         <Fade in={open}>
-          <Paper
-            className={classes.paper}
-            style={{
-              background: theme.background,
-              color: theme.text,
-            }}>
-            <Typography variant="h2" style={{ color: theme.text }}>
+          <Paper className={classes.paper}>
+            <Typography variant="h2" className={classes.bodyText}>
               {popupImage.title}
             </Typography>
             <img
@@ -115,7 +117,7 @@ export default function RenderImages() {
               src={popupImage.storagePath}
               alt={popupImage.title}
             />
-            <Typography paragraph style={{ color: theme.text }}>
+            <Typography className={classes.bodyText} paragraph>
               {popupImage.description}
             </Typography>
           </Paper>

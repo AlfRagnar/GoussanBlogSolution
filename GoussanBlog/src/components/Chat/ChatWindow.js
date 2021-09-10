@@ -8,17 +8,12 @@ import SimpleBar from "simplebar-react";
 import "simplebar/dist/simplebar.min.css";
 
 const useStyles = makeStyles((theme) => ({
-  chatInput: {
-    border: "2px solid #000",
-    flexDirection: "flex-end",
-  },
   chatContent: {
     margin: theme.spacing(1),
-    height: "55vh",
+    height: "57vh",
     flexDirection: "flex-end",
     overflowX: "auto",
   },
-  ChatContainer: {},
 }));
 
 export default function ChatWindow() {
@@ -42,16 +37,14 @@ export default function ChatWindow() {
   }, [chat, scrollableNodeRef]);
 
   return (
-    <div
-      className={classes.ChatContainer}
-      style={{ color: theme.text, background: theme.background }}>
+    <div style={{ color: theme.text, background: theme.background }}>
       <SimpleBar
         scrollableNodeProps={{ ref: scrollableNodeRef }}
         id="chatcontent"
         className={classes.chatContent}>
         {currentChat}
       </SimpleBar>
-      <ChatInput className={classes.chatInput} />
+      <ChatInput />
     </div>
   );
 }

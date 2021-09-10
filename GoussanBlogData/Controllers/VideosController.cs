@@ -85,7 +85,9 @@ public class VideosController : ControllerBase
     /// Get a Specific Video Object from Cosmos DB using the Video ID
     /// </summary>
     /// <param name="id"></param>
-    /// <returns></returns>
+    /// <response code="200">Returns Video Object with matching input ID</response>
+    /// <response code="400">If the input fails validation</response>
+    /// <response code="404">If can't find a file matching the ID</response>
 
     // GET /videos/{ID}
     [HttpGet("{id}")]
@@ -93,11 +95,16 @@ public class VideosController : ControllerBase
     {
         try
         {
-            return Ok(await cosmosDb.GetVideoAsync(id));
+            var res = await cosmosDb.GetVideoAsync(id);
+            if(res == null)
+            {
+                return NotFound(id);
+            }
+            return Ok(res);
         }
         catch (Exception)
         {
-            return BadRequest();
+            return BadRequest(id);
         }
     }
 
@@ -107,7 +114,8 @@ public class VideosController : ControllerBase
     /// All this is done in the backend using Azure Media Services, Azure Functions and Cosmos DB
     /// </summary>
     /// <param name="createVideoReq"></param>
-    /// <returns></returns>
+    /// <response code="201">If Video is created and returns ID of the new Video Object</response>
+    /// <response code="400">If the input file fails validation</response>
 
     // POST /videos
     [HttpPost]
@@ -141,7 +149,7 @@ public class VideosController : ControllerBase
                     await cosmosDb.AddVideo(res);
                     return CreatedAtAction(nameof(Create), new { res.Id }, res);
                 }
-                return BadRequest();
+                return BadRequest(createVideoReq);
             }
             else
             {
@@ -173,12 +181,12 @@ public class VideosController : ControllerBase
                     await cosmosDb.AddVideo(res);
                     return CreatedAtAction(nameof(Create), new { res.Id }, res);
                 }
-                return BadRequest();
+                return BadRequest(createVideoReq);
             }
         }
         catch (Exception)
         {
-            return BadRequest();
+            return BadRequest(createVideoReq);
         }
     }
 
@@ -189,7 +197,6 @@ public class VideosController : ControllerBase
     /// <response code="200">If Task is successfully started</response>
     /// <response code="404">If Video cannot be found</response>
     /// <response code="400">If some of the required fields are not filled out correctly</response>
-    /// <returns>OK response with Video Object</returns>
 
     // POST: /videos/update
     [HttpPost("update")]

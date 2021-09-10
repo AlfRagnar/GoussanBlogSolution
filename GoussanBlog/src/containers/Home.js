@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import Paper from "@material-ui/core/Paper";
-import { Typography } from "@material-ui/core";
+import { makeStyles, Typography } from "@material-ui/core";
 import { Skeleton } from "@material-ui/lab";
 import { AuthContext } from "../contexts/AuthContext";
 import { ThemeContext } from "../contexts/ThemeContext";
@@ -12,11 +12,26 @@ import RenderImages from "../components/Media/RenderImages";
 export default function Home() {
   const { auth, setAuth, setToken, setUser } = useContext(AuthContext);
   const { isDarkTheme, darkTheme, lightTheme } = useContext(ThemeContext);
-  const theme = isDarkTheme ? darkTheme : lightTheme;
+  const currentTheme = isDarkTheme ? darkTheme : lightTheme;
   const { fetchedVideos, fetchedImages, images, videos } =
     useContext(MediaContext);
 
   const [loading, isLoading] = useState(true);
+
+  const useStyles = makeStyles((theme) => ({
+    root: {},
+    paperBody: {
+      margin: theme.spacing(1, 1, 2, 2),
+      background: currentTheme.background,
+      color: currentTheme.text,
+      textAlign: "center",
+      border: "2px solid #000",
+    },
+    bodyText: {
+      color: currentTheme.text,
+    },
+  }));
+  const classes = useStyles();
 
   useEffect(() => {
     var localToken = sessionStorage.getItem("authToken");
@@ -37,72 +52,70 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="container-fluid" style={{ marginTop: 10 }}>
-      <Paper
-        variant="outlined"
-        style={{
-          background: theme.background,
-          color: theme.text,
-          textAlign: "center",
-        }}>
-        {loading ? (
-          <>
-            <Skeleton variant="text" />
-            <Skeleton variant="circle" />
-            <Skeleton variant="rect" />
-          </>
-        ) : (
-          <>
-            <div className="lander container-fluid">
-              <Typography style={{ color: theme.text }} variant="h2">
-                Goussanjarga
-              </Typography>
-              <Typography style={{ color: theme.text }} variant="body1">
-                A Simple Media Sharing Website
-              </Typography>
-              <Typography variant="body2">
-                Website is currently under development so any content made or
-                uploaded to this website are up for change and any integrity or
-                data protection is not guaranteed. Chances are the website
-                database and file storage will be wiped multiple times a day.
-              </Typography>
-              <Typography variant="body2">
-                No File Size Limit set on Video Files yet, might change it the
-                future
-              </Typography>
+    <Paper variant="outlined" className={classes.paperBody}>
+      {loading ? (
+        <>
+          <Skeleton variant="text" />
+          <Skeleton variant="circle" />
+          <Skeleton variant="rect" />
+        </>
+      ) : (
+        <>
+          <div className="lander container-fluid">
+            <Typography className={classes.bodyText} variant="h2">
+              Goussanjarga
+            </Typography>
+            <Typography className={classes.bodyText} variant="body1">
+              A Simple Media Sharing Website
+            </Typography>
+            <Typography className={classes.bodyText} variant="body2">
+              Website is currently under development so any content made or
+              uploaded to this website are up for change and any integrity or
+              data protection is not guaranteed. Chances are the website
+              database and file storage will be wiped multiple times a day.
+            </Typography>
+            <Typography className={classes.bodyText} variant="body2">
+              No File Size Limit set on Video Files yet, might change it the
+              future
+            </Typography>
 
-              {auth ? (
-                <ViewJWTButton />
-              ) : (
-                <>
-                  <Typography>You're not logged in</Typography>
-                </>
-              )}
-            </div>
-
-            {fetchedVideos && videos.length > 0 ? (
-              <RenderVideos />
+            {auth ? (
+              <ViewJWTButton />
             ) : (
               <>
-                <Typography>Trying to get Videos</Typography>
-                <Skeleton variant="text" />
-                <Skeleton variant="circle" />
-                <Skeleton variant="rect" />
+                <Typography className={classes.bodyText}>
+                  You're not logged in
+                </Typography>
               </>
             )}
-            {fetchedImages && images.length > 0 ? (
-              <RenderImages />
-            ) : (
-              <>
-                <Typography>Trying to get Images</Typography>
-                <Skeleton variant="text" />
-                <Skeleton variant="circle" />
-                <Skeleton variant="rect" />
-              </>
-            )}
-          </>
-        )}
-      </Paper>
-    </div>
+          </div>
+
+          {fetchedVideos && videos.length > 0 ? (
+            <RenderVideos />
+          ) : (
+            <>
+              <Typography className={classes.bodyText}>
+                Trying to get Videos
+              </Typography>
+              <Skeleton variant="text" />
+              <Skeleton variant="circle" />
+              <Skeleton variant="rect" />
+            </>
+          )}
+          {fetchedImages && images.length > 0 ? (
+            <RenderImages />
+          ) : (
+            <>
+              <Typography className={classes.bodyText}>
+                Trying to get Images
+              </Typography>
+              <Skeleton variant="text" />
+              <Skeleton variant="circle" />
+              <Skeleton variant="rect" />
+            </>
+          )}
+        </>
+      )}
+    </Paper>
   );
 }

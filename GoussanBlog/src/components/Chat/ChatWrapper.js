@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
   },
   chatBorder: {
     border: "2px solid #000",
-    height: "73vh",
+    height: "77vh",
   },
 }));
 

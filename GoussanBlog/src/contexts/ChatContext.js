@@ -22,7 +22,7 @@ const ChatContextProvider = ({ children }) => {
     if (connection) {
       connection
         .start()
-        .then((result) => {
+        .then(() => {
           console.log("Connected to Goussanjarga Chat Hub!");
 
           axios.get("/chat/history").then((res) => {

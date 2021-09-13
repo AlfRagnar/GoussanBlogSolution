@@ -71,7 +71,7 @@ public class BlogController : ControllerBase
         }
     }
 
-    // POST api/<BlogController>
+    // POST <BlogController>
     /// <summary>
     /// Tries to create a new blog post with the supplied information from the request
     /// </summary>
@@ -97,60 +97,99 @@ public class BlogController : ControllerBase
                 UserId = user.Id
             };
             // Check if there is any videos attached and if there is, attach them to the Blog Post Object
-            if (post.Videos != null && post.Videos.Any())
+            if (post.Videos != null)
             {
-                List<UploadVideo> videoList = new();
-                post.Videos.ForEach(async (video) =>
+                var video = post.Videos;
+                UploadVideo newVideo = new()
                 {
-                    UploadVideo newVideo = new()
-                    {
-                        Id = Regex.Replace(Convert.ToBase64String(Guid.NewGuid().ToByteArray()), "[/+=]", ""),
-                        Filename = video.File.Name,
-                        Extension = video.File.ContentType,
-                        Size = video.File.Length,
-                        Created = DateTime.UtcNow.ToShortDateString(),
-                        Updated = DateTime.UtcNow.ToString(),
-                        State = "Not Set",
-                        UserId = user.Id,
-                        BlogId = newPost.Id,
-                        Description = video.Description,
-                        Title = video.Title,
-                        Type = "Video"
-                    };
-                    var res = await mediaService.CreateAsset(video.File,newVideo);
-                    if (res != null)
-                    {
-                        videoList.Add(res);
-                    }
-                });
-                newPost.Videos = videoList;
+                    Id = Regex.Replace(Convert.ToBase64String(Guid.NewGuid().ToByteArray()), "[/+=]", ""),
+                    Filename = video.File.Name,
+                    Extension = video.File.ContentType,
+                    Size = video.File.Length,
+                    Created = DateTime.UtcNow.ToShortDateString(),
+                    Updated = DateTime.UtcNow.ToString(),
+                    State = "Not Set",
+                    UserId = user.Id,
+                    BlogId = newPost.Id,
+                    Description = video.Description,
+                    Title = video.Title,
+                    Type = "Video"
+                };
+                var res = await mediaService.CreateAsset(video.File, newVideo);
+
+
+                //List<UploadVideo> videoList = new();
+                //post.Videos.ForEach(async (video) =>
+                //{
+                //    UploadVideo newVideo = new()
+                //    {
+                //        Id = Regex.Replace(Convert.ToBase64String(Guid.NewGuid().ToByteArray()), "[/+=]", ""),
+                //        Filename = video.File.Name,
+                //        Extension = video.File.ContentType,
+                //        Size = video.File.Length,
+                //        Created = DateTime.UtcNow.ToShortDateString(),
+                //        Updated = DateTime.UtcNow.ToString(),
+                //        State = "Not Set",
+                //        UserId = user.Id,
+                //        BlogId = newPost.Id,
+                //        Description = video.Description,
+                //        Title = video.Title,
+                //        Type = "Video"
+                //    };
+                //    var res = await mediaService.CreateAsset(video.File,newVideo);
+                //    if (res != null)
+                //    {
+                //        videoList.Add(res);
+                //    }
+                //});
+                //newPost.Videos = videoList;
             }
-            if (post.Images != null && post.Images.Any())
+            // Check if the Blog Creation Request contains any Images
+            if (post.Images != null)
             {
-                List<Image> ImageList = new();
-                post.Images.ForEach(async (image) =>
+                var image = post.Images;
+                Image newImage = new()
                 {
-                    Image newImage = new()
-                    {
-                        Id = Regex.Replace(Convert.ToBase64String(Guid.NewGuid().ToByteArray()), "[/+=]", ""),
-                        Title = image.Title,
-                        Description = image.Description,
-                        UserId = user.Id,
-                        BlogId = newPost.Id,
-                        Created = DateTime.UtcNow.ToShortDateString(),
-                        LastModified = DateTime.UtcNow.ToString(),
-                        FileName = image.File.FileName,
-                        ContentType = image.File.ContentType,
-                        Type = "Image",
-                    };
-                    var res = await storageService.UploadImage(image.File, newImage.Id);
-                    if (!string.IsNullOrEmpty(res))
-                    {
-                        newImage.StoragePath = res;
-                        ImageList.Add(newImage);
-                    }
-                });
-                newPost.Images = ImageList;
+                    Id = Regex.Replace(Convert.ToBase64String(Guid.NewGuid().ToByteArray()), "[/+=]", ""),
+                    Title = image.Title,
+                    Description = image.Description,
+                    UserId = user.Id,
+                    BlogId = newPost.Id,
+                    Created = DateTime.UtcNow.ToShortDateString(),
+                    LastModified = DateTime.UtcNow.ToString(),
+                    FileName = image.File.FileName,
+                    ContentType = image.File.ContentType,
+                    Type = "Image",
+                };
+                var res = await storageService.UploadImage(image.File, newImage.Id);
+                
+
+
+
+                //List<Image> ImageList = new();
+                //post.Images.ForEach(async (image) =>
+                //{
+                //    Image newImage = new()
+                //    {
+                //        Id = Regex.Replace(Convert.ToBase64String(Guid.NewGuid().ToByteArray()), "[/+=]", ""),
+                //        Title = image.Title,
+                //        Description = image.Description,
+                //        UserId = user.Id,
+                //        BlogId = newPost.Id,
+                //        Created = DateTime.UtcNow.ToShortDateString(),
+                //        LastModified = DateTime.UtcNow.ToString(),
+                //        FileName = image.File.FileName,
+                //        ContentType = image.File.ContentType,
+                //        Type = "Image",
+                //    };
+                //    var res = await storageService.UploadImage(image.File, newImage.Id);
+                //    if (!string.IsNullOrEmpty(res))
+                //    {
+                //        newImage.StoragePath = res;
+                //        ImageList.Add(newImage);
+                //    }
+                //});
+                //newPost.Images = ImageList;
             }
 
             var response = await cosmosDb.CreateBlogPost(newPost);

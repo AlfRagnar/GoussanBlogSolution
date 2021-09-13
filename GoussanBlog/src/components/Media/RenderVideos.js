@@ -47,7 +47,7 @@ export default function RenderVideos() {
       margin: theme.spacing(1),
     },
     imageTitle: {
-      bottom: 19,
+      bottom: "5vh",
     },
     videoPlayer: { margin: theme.spacing(1) },
     popupDescription: {

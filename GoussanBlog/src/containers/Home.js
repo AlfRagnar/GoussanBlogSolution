@@ -1,19 +1,19 @@
 import React, { useContext, useEffect, useState } from "react";
 import Paper from "@material-ui/core/Paper";
-import { makeStyles, Typography } from "@material-ui/core";
+import { makeStyles, Typography, Grid } from "@material-ui/core";
 import { Skeleton } from "@material-ui/lab";
 import { AuthContext } from "../contexts/AuthContext";
 import { ThemeContext } from "../contexts/ThemeContext";
 import { MediaContext } from "../contexts/MediaContext";
-import ViewJWTButton from "../components/Utilities/ViewJWTButton";
 import RenderVideos from "../components/Media/RenderVideos";
 import RenderImages from "../components/Media/RenderImages";
+import RenderBlogs from "../components/Media/RenderBlogs";
 
 export default function Home() {
-  const { auth, setAuth, setToken, setUser } = useContext(AuthContext);
+  const { setAuth, setToken, setUser } = useContext(AuthContext);
   const { isDarkTheme, darkTheme, lightTheme } = useContext(ThemeContext);
   const currentTheme = isDarkTheme ? darkTheme : lightTheme;
-  const { fetchedVideos, fetchedImages, images, videos } =
+  const { fetchedVideos, fetchedImages, fetchedBlogs, images, videos, blogs } =
     useContext(MediaContext);
 
   const [loading, isLoading] = useState(true);
@@ -61,59 +61,97 @@ export default function Home() {
         </>
       ) : (
         <>
-          <div className="lander container-fluid">
-            <Typography className={classes.bodyText} variant="h2">
-              Goussanjarga
-            </Typography>
-            <Typography className={classes.bodyText} variant="body1">
-              A Simple Media Sharing Website
-            </Typography>
-            <Typography className={classes.bodyText} variant="body2">
-              Website is currently under development so any content made or
-              uploaded to this website are up for change and any integrity or
-              data protection is not guaranteed. Chances are the website
-              database and file storage will be wiped multiple times a day.
-            </Typography>
-            <Typography className={classes.bodyText} variant="body2">
-              No File Size Limit set on Video Files yet, might change it the
-              future
-            </Typography>
+          <Grid
+            container
+            direction="row"
+            justifyContent="flex-start"
+            alignItems="flex-start">
+            <Grid item xs={12}>
+              <Typography className={classes.bodyText} variant="h2">
+                Goussanjarga
+              </Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <Typography className={classes.bodyText} variant="body1">
+                A Simple Media Sharing Website
+              </Typography>
+            </Grid>
+            <Grid item xs={3}>
+              <Typography
+                className={classes.bodyText}
+                variant="body2"
+                paragraph>
+                Website is currently under development so any content made or
+                uploaded to this website are up for change and any integrity or
+                data protection is not guaranteed. Chances are the website
+                database and file storage will be wiped multiple times a day.
+              </Typography>
+            </Grid>
+            <Grid item xs={6}>
+              <Typography className={classes.bodyText} variant="body2">
+                No File Size Limit set on Video Files yet, might change it the
+                future
+              </Typography>
+            </Grid>
+            <Grid item xs={3}>
+              <Typography
+                className={classes.bodyText}
+                paragraph
+                variant="body2">
+                Link To Repo:
+                <a
+                  href="https://github.com/AlfRagnar/GoussanBlogSolution"
+                  target="_blank"
+                  rel="noreferrer">
+                  GitHub
+                </a>
+              </Typography>
+            </Grid>
 
-            {auth ? (
-              <ViewJWTButton />
+            {fetchedVideos && videos.length > 0 ? (
+              <Grid item xs={12}>
+                <RenderVideos />
+              </Grid>
             ) : (
-              <>
+              <Grid item xs={12}>
                 <Typography className={classes.bodyText}>
-                  You're not logged in
+                  Trying to get Videos
                 </Typography>
-              </>
+                <Skeleton variant="text" />
+                <Skeleton variant="circle" />
+                <Skeleton variant="rect" />
+              </Grid>
             )}
-          </div>
+            {fetchedImages && images.length > 0 ? (
+              <Grid item xs={12}>
+                <RenderImages />
+              </Grid>
+            ) : (
+              <Grid item xs={12}>
+                <Typography className={classes.bodyText}>
+                  Trying to get Images
+                </Typography>
+                <Skeleton variant="text" />
+                <Skeleton variant="circle" />
+                <Skeleton variant="rect" />
+              </Grid>
+            )}
 
-          {fetchedVideos && videos.length > 0 ? (
-            <RenderVideos />
-          ) : (
-            <>
-              <Typography className={classes.bodyText}>
-                Trying to get Videos
-              </Typography>
-              <Skeleton variant="text" />
-              <Skeleton variant="circle" />
-              <Skeleton variant="rect" />
-            </>
-          )}
-          {fetchedImages && images.length > 0 ? (
-            <RenderImages />
-          ) : (
-            <>
-              <Typography className={classes.bodyText}>
-                Trying to get Images
-              </Typography>
-              <Skeleton variant="text" />
-              <Skeleton variant="circle" />
-              <Skeleton variant="rect" />
-            </>
-          )}
+            {fetchedBlogs && blogs.length > 0 ? (
+              <Grid item xs={12}>
+                <RenderBlogs />
+              </Grid>
+            ) : (
+              <Grid item xs={12}>
+                <Typography className={classes.bodyText}>
+                  Trying to get Blogs
+                </Typography>
+                <Skeleton variant="text" />
+                <Skeleton variant="circle" />
+                <Skeleton variant="rect" />
+              </Grid>
+            )}
+          </Grid>
         </>
       )}
     </Paper>

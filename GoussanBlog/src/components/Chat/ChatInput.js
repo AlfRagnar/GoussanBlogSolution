@@ -24,6 +24,8 @@ export default function ChatInput() {
   const useStyles = makeStyles((theme) => ({
     root: {
       margin: theme.spacing(2),
+      background: currentTheme.background,
+      color: currentTheme.text,
     },
     button: {
       color: currentTheme.text,
@@ -36,7 +38,12 @@ export default function ChatInput() {
     },
     chatInput: {
       color: currentTheme.text,
+      // background: currentTheme.background,
+    },
+    startAdornment: {
+      color: currentTheme.text,
       background: currentTheme.background,
+      margin: theme.spacing(1),
     },
   }));
 
@@ -68,12 +75,14 @@ export default function ChatInput() {
         <TextField
           id="userDisplay"
           size="small"
+          placeholder="User Name"
           value={chatUser}
           onChange={(e) => setChatUser(e.target.value)}
+          InputLabelProps={{ className: classes.userDisplay }}
           InputProps={{
             className: classes.userDisplay,
             startAdornment: (
-              <AccountCircle style={{ color: currentTheme.text, margin: 3 }} />
+              <AccountCircle className={classes.startAdornment} />
             ),
           }}
         />
@@ -82,10 +91,12 @@ export default function ChatInput() {
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           label="Message"
-          placeholder="Message"
+          placeholder="Your Message"
+          variant="filled"
           fullWidth
           multiline
           maxRows={2}
+          InputLabelProps={{ className: classes.chatInput }}
           InputProps={{
             className: classes.chatInput,
           }}

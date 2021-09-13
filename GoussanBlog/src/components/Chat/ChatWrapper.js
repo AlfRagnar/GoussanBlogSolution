@@ -30,11 +30,11 @@ export default function ChatWrapper({ children }) {
         className={classes.paper}
         style={{ color: theme.text, background: theme.background }}>
         <Typography
-          variant="h6"
+          variant="subtitle1"
           style={{ color: theme.text, background: theme.background }}>
           Goussanjarga Real-Time Chat
         </Typography>
-        <Typography variant="body2">
+        <Typography variant="body2" paragraph>
           Here you can leave feedback, a greeting or just test out the different
           functionality that you will find around on this website.
         </Typography>

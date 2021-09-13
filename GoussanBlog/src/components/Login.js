@@ -8,38 +8,12 @@ import {
   makeStyles,
   Modal,
   TextField,
+  Paper,
 } from "@material-ui/core";
 import { ThemeContext } from "../contexts/ThemeContext";
 import { AuthContext } from "../contexts/AuthContext";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    "& > *": {
-      margin: theme.spacing(1),
-      width: "40ch",
-    },
-  },
-  input: {
-    background: "#ffff",
-    borderRadius: 8,
-    alignItems: "center",
-  },
-
-  modal: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  paper: {
-    backgroundColor: theme.palette.background.paper,
-    border: "2px solid #000",
-    boxShadow: theme.shadows[5],
-    padding: theme.spacing(2, 4, 3),
-  },
-}));
-
 export default function Login() {
-  const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -47,7 +21,49 @@ export default function Login() {
   const { setAuth, setToken, setUser } = useContext(AuthContext);
   const { isDarkTheme, darkTheme, lightTheme } = useContext(ThemeContext);
 
-  const theme = isDarkTheme ? darkTheme : lightTheme;
+  const currentTheme = isDarkTheme ? darkTheme : lightTheme;
+
+  const useStyles = makeStyles((theme) => ({
+    Button: {
+      color: currentTheme.background,
+      background: currentTheme.text,
+    },
+    modal: {
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    paper: {
+      position: "absolute",
+      maxWidth: "75%",
+      border: "2px solid #000",
+      boxShadow: theme.shadows[5],
+      padding: theme.spacing(2, 4, 3),
+      background: currentTheme.background,
+      color: currentTheme.text,
+    },
+    SubmitButton: {
+      color: currentTheme.text,
+      background: currentTheme.background,
+    },
+    input: {
+      color: currentTheme.text,
+      background: currentTheme.background,
+    },
+    inputLabel: {
+      color: currentTheme.text,
+    },
+    userInputGroup: {
+      margin: theme.spacing(1),
+    },
+    passInputGroup: {
+      margin: theme.spacing(1),
+    },
+    formSubmitBtn: {
+      margin: theme.spacing(1),
+    },
+  }));
+  const classes = useStyles();
 
   function validateForm() {
     return username.length > 0 && password.length > 0;
@@ -101,37 +117,48 @@ export default function Login() {
           timeout: 500,
         }}>
         <Fade in={open}>
-          <Form className={classes.root} onSubmit={handleSubmit}>
-            <Form.Group size="lg" controlId="username">
-              <TextField
-                className={classes.input}
-                id="standard-username-input"
-                label="Username"
-                autoComplete="current-username"
-                variant="outlined"
-                onChange={(e) => setUsername(e.target.value)}
-              />
-            </Form.Group>
-            <Form.Group size="lg" controlId="password">
-              <TextField
-                className={classes.input}
-                id="password"
-                label="Password"
-                type="password"
-                autoComplete="current-password"
-                variant="outlined"
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </Form.Group>
-            <Button
-              className="mb-2"
-              style={{ color: theme.text, background: theme.background }}
-              variant="outlined"
-              type="submit"
-              disabled={!validateForm()}>
-              Login
-            </Button>
-          </Form>
+          <Paper className={classes.paper}>
+            <Form onSubmit={handleSubmit}>
+              <Form.Group
+                className={classes.userInputGroup}
+                size="lg"
+                controlId="username">
+                <TextField
+                  InputProps={{ className: classes.input }}
+                  InputLabelProps={{ className: classes.inputLabel }}
+                  id="standard-username-input"
+                  label="Username"
+                  autoComplete="current-username"
+                  variant="outlined"
+                  onChange={(e) => setUsername(e.target.value)}
+                />
+              </Form.Group>
+              <Form.Group
+                className={classes.passInputGroup}
+                size="lg"
+                controlId="password">
+                <TextField
+                  InputProps={{ className: classes.input }}
+                  InputLabelProps={{ className: classes.inputLabel }}
+                  id="password"
+                  label="Password"
+                  type="password"
+                  autoComplete="current-password"
+                  variant="outlined"
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </Form.Group>
+              <Form.Group className={classes.formSubmitBtn}>
+                <Button
+                  className={classes.submitButton}
+                  variant="contained"
+                  type="submit"
+                  disabled={!validateForm()}>
+                  Login
+                </Button>
+              </Form.Group>
+            </Form>
+          </Paper>
         </Fade>
       </Modal>
     </>

@@ -55,7 +55,6 @@ const MediaContextProvider = ({ children }) => {
         setFetchedBlogs(false);
       }
     }
-
     fetchBlogs();
     fetchVideos();
     fetchImages();

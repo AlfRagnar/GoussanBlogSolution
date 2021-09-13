@@ -24,6 +24,7 @@ import UploadVideo from "../components/Media/UploadVideo";
 import Register from "../components/Register";
 import Login from "../components/Login";
 import ScrollTop from "../components/Utilities/ScrollTop";
+import CreateBlogs from "../components/Media/CreateBlogs";
 
 const useStyles = makeStyles((theme) => ({
   menuButton: {
@@ -116,6 +117,7 @@ export default function MyNavbar() {
           <Nav activeKey={window.location.pathname}>
             {auth ? (
               <>
+                <CreateBlogs />
                 <UploadImage />
                 <UploadVideo />
                 <Button onClick={changeAuthStatus} color="inherit">

@@ -26,10 +26,10 @@ public class BlogPostCreateModel
     /// Let them optionally attach Videos to the request creating a Blog Post
     /// </summary>
     [JsonProperty("videos")]
-    public List<VideoCreateModel> Videos { get; set; }
+    public VideoCreateModel Videos { get; set; }
     /// <summary>
     /// Let them optionally attach Images to the request when creating a Blog Post
     /// </summary>
     [JsonProperty("images")]
-    public List<ImageCreateModel> Images { get; set; }
+    public ImageCreateModel Images { get; set; }
 }

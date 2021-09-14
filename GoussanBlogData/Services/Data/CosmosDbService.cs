@@ -235,9 +235,18 @@ public class CosmosDbService : ICosmosDbService
     /// <param name="id"></param>
     /// <returns></returns>
 
-    public async Task DeleteVideoAsync(string id)
+    public async Task<ItemResponse<UploadVideo>> DeleteVideoAsync(string id)
     {
-        await MediaContainer.DeleteItemAsync<UploadVideo>(id, new PartitionKey(id));
+        try
+        {
+            var res = await MediaContainer.DeleteItemAsync<UploadVideo>(id, new PartitionKey(id));
+            return res;
+
+        }
+        catch (CosmosException ex)
+        {
+            return null!;
+        }
     }
 
     /// <summary>
@@ -270,6 +279,64 @@ public class CosmosDbService : ICosmosDbService
             using (FeedIterator<UploadVideo> setIterator = MediaContainer
                 .GetItemLinqQueryable<UploadVideo>()
                 .Where(x => x.Type == "Video" && x.State == "Finished")
+                .ToFeedIterator())
+            {
+                while (setIterator.HasMoreResults)
+                {
+                    foreach (var item in await setIterator.ReadNextAsync())
+                    {
+                        result.Add(item);
+                    }
+                }
+            }
+            return result;
+        }
+        catch (CosmosException)
+        {
+            return null!;
+        }
+    }
+    /// <summary>
+    /// Retrieves Videos from Database that have not finished encoding
+    /// </summary>
+    /// <returns>List of Videos that have not finished Encoding</returns>
+    public async Task<IEnumerable<UploadVideo>> GetNotFinishedVideosAsync()
+    {
+        try
+        {
+            List<UploadVideo> result = new();
+            using (FeedIterator<UploadVideo> setIterator = MediaContainer
+                .GetItemLinqQueryable<UploadVideo>()
+                .Where(x => x.Type == "Video" && x.State != "Finished")
+                .ToFeedIterator())
+            {
+                while (setIterator.HasMoreResults)
+                {
+                    foreach (var item in await setIterator.ReadNextAsync())
+                    {
+                        result.Add(item);
+                    }
+                }
+            }
+            return result;
+        }
+        catch (CosmosException)
+        {
+            return null!;
+        }
+    }
+    /// <summary>
+    /// Retrieves List of Videos stored in Database
+    /// </summary>
+    /// <returns>List of Videos</returns>
+    public async Task<IEnumerable<UploadVideo>> GetAllVideosAsync()
+    {
+        try
+        {
+            List<UploadVideo> result = new();
+            using (FeedIterator<UploadVideo> setIterator = MediaContainer
+                .GetItemLinqQueryable<UploadVideo>()
+                .Where(x => x.Type == "Video")
                 .ToFeedIterator())
             {
                 while (setIterator.HasMoreResults)

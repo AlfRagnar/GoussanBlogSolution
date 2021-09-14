@@ -6,6 +6,7 @@ const AuthContextProvider = ({ children }) => {
   const [auth, setAuth] = useState(false);
   const [user, setUser] = useState("");
   const [token, setToken] = useState("");
+  const [FileSizeLimit, setFileSizeLimit] = useState(50);
 
   const changeAuthStatus = () => {
     setAuth(!auth);
@@ -22,6 +23,8 @@ const AuthContextProvider = ({ children }) => {
         setToken,
         user,
         setUser,
+        FileSizeLimit,
+        setFileSizeLimit,
       }}>
       {children}
     </AuthContext.Provider>

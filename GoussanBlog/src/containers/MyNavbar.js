@@ -48,6 +48,10 @@ export default function MyNavbar() {
     history.push("/");
   };
 
+  const handleDisplayTable = () => {
+    history.push("/overview");
+  };
+
   const handleChange = (event) => {
     setTheme(event.target.checked);
   };
@@ -115,6 +119,9 @@ export default function MyNavbar() {
             </Button>
           </Typography>
           <Nav activeKey={window.location.pathname}>
+            <Button color="inherit" onClick={handleDisplayTable}>
+              Media Overview
+            </Button>
             {auth ? (
               <>
                 <CreateBlogs />

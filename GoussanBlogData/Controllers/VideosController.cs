@@ -39,7 +39,7 @@ public class VideosController : ControllerBase
 
 
     /// <summary>
-    /// Response with a JSON object containing a list of currently available videos
+    /// Response with a JSON object containing a list of videos that has finished Encoding
     /// </summary>
     /// <returns></returns>
     // GET /videos
@@ -59,9 +59,9 @@ public class VideosController : ControllerBase
                     {
                         video.StreamingPaths = await mediaService.GetStreamingURL(video.Locator);
                     }
-                    if (video.StreamingPaths == null)
+                    if (!video.StreamingPaths.Any())
                     {
-                        video.State = "Error";
+                        //video.State = "Error";
                         videoList.Remove(video);
                     }
                     await cosmosDb.UpdateVideoAsync(video.Id, video).ConfigureAwait(false);
@@ -71,6 +71,32 @@ public class VideosController : ControllerBase
                 {
                     video.StreamingPaths = null!;
                 }
+            }
+
+            return Ok(videoList);
+        }
+        catch (Exception)
+        {
+            return BadRequest();
+        }
+    }
+
+    /// <summary>
+    /// Respond with a list of ALL Video Objects in Database
+    /// </summary>
+    /// <returns>List of Videos</returns>
+    // GET /videos/all
+    [AllowAnonymous]
+    [HttpGet("all")]
+    public async Task<IActionResult> AllVideos()
+    {
+        try
+        {
+            IEnumerable<UploadVideo> videoEnum = await cosmosDb.GetAllVideosAsync();
+            var videoList = videoEnum.ToList();
+            if(videoList == null || videoList.Count == 0)
+            {
+                return NotFound();
             }
 
             return Ok(videoList);
@@ -105,6 +131,31 @@ public class VideosController : ControllerBase
         catch (Exception)
         {
             return BadRequest(id);
+        }
+    }
+
+    /// <summary>
+    /// Retrieves a list of Videos that have not finished Encoding
+    /// </summary>
+    /// <returns>List of Videos</returns>
+    // GET /videos/halted
+    [AllowAnonymous]
+    [HttpGet("halted")]
+    public async Task<IActionResult> Halted()
+    {
+        try
+        {
+            var res = await cosmosDb.GetNotFinishedVideosAsync();
+            if (res == null)
+            {
+                return NotFound();
+            }
+            var list = res.ToList();
+            return Ok(list);
+        }
+        catch (Exception)
+        {
+            return BadRequest();
         }
     }
 
@@ -267,8 +318,12 @@ public class VideosController : ControllerBase
     {
         try
         {
-            await cosmosDb.DeleteVideoAsync(id);
-            return AcceptedAtAction(nameof(Delete), id);
+            var res = await cosmosDb.DeleteVideoAsync(id);
+            if(res == null)
+            {
+                return BadRequest(id);
+            }
+            return Accepted(id);
         }
         catch (Exception)
         {

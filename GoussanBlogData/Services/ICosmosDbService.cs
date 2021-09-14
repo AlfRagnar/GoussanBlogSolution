@@ -17,12 +17,27 @@ public interface ICosmosDbService
 
     // VIDEO API
     Task AddVideo(UploadVideo video);
-    Task DeleteVideoAsync(string id);
+    /// <summary>
+    /// Request to delete a Video Object stored in Cosmos DB
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns>Response to Request</returns>
+    Task<ItemResponse<UploadVideo>> DeleteVideoAsync(string id);
     Task<IEnumerable<UploadVideo>> GetMultipleVideosAsync(string queryString);
     Task<UploadVideo> GetVideoAsync(string id);
     Task UpdateVideoAsync(string id, VideoUpdateModel video);
     Task UpdateVideoAsync(string id, UploadVideo video);
     Task<IEnumerable<UploadVideo>> GetVideoList();
+    /// <summary>
+    /// Request to retrieve videos that have not finished encoding
+    /// </summary>
+    /// <returns>List of Videos that have not finished encoding</returns>
+    Task<IEnumerable<UploadVideo>> GetNotFinishedVideosAsync();
+    /// <summary>
+    /// Request to retrieve a list of all videos stored in database
+    /// </summary>
+    /// <returns>List of all videos stored in database</returns>
+    Task<IEnumerable<UploadVideo>> GetAllVideosAsync();
     // IMAGE API
 
     /// <summary>

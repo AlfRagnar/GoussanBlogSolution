@@ -5,16 +5,22 @@ import { Skeleton } from "@material-ui/lab";
 import { AuthContext } from "../contexts/AuthContext";
 import { ThemeContext } from "../contexts/ThemeContext";
 import { MediaContext } from "../contexts/MediaContext";
-import RenderVideos from "../components/Media/RenderVideos";
-import RenderImages from "../components/Media/RenderImages";
-import RenderBlogs from "../components/Media/RenderBlogs";
+import VideoTable from "../components/Media/VideoTable";
+import ImageTable from "../components/Media/ImageTable";
+import BlogTable from "../components/Media/BlogTable";
 
-export default function Home() {
-  const { setAuth, setToken, setUser, FileSizeLimit } = useContext(AuthContext);
+export default function MediaOverview() {
+  const { setAuth, setToken, setUser } = useContext(AuthContext);
   const { isDarkTheme, darkTheme, lightTheme } = useContext(ThemeContext);
   const currentTheme = isDarkTheme ? darkTheme : lightTheme;
-  const { fetchedVideos, fetchedImages, fetchedBlogs, images, videos, blogs } =
-    useContext(MediaContext);
+  const {
+    fetchedVideos,
+    fetchedImages,
+    fetchedBlogs,
+    images,
+    allVideos,
+    blogs,
+  } = useContext(MediaContext);
 
   const [loading, isLoading] = useState(true);
 
@@ -76,41 +82,10 @@ export default function Home() {
                 A Simple Media Sharing Website
               </Typography>
             </Grid>
-            <Grid item xs={3}>
-              <Typography
-                className={classes.bodyText}
-                variant="body2"
-                paragraph>
-                Website is currently under development so any content made or
-                uploaded to this website are up for change and any integrity or
-                data protection is not guaranteed. Chances are the website
-                database and file storage will be wiped multiple times a day.
-              </Typography>
-            </Grid>
-            <Grid item xs={6}>
-              <Typography className={classes.bodyText} variant="body2">
-                Current File Size Limit for uploading is set to: {FileSizeLimit}{" "}
-                MB
-              </Typography>
-            </Grid>
-            <Grid item xs={3}>
-              <Typography
-                className={classes.bodyText}
-                paragraph
-                variant="body2">
-                Link To Repo:
-                <a
-                  href="https://github.com/AlfRagnar/GoussanBlogSolution"
-                  target="_blank"
-                  rel="noreferrer">
-                  GitHub
-                </a>
-              </Typography>
-            </Grid>
 
-            {fetchedVideos && videos.length > 0 ? (
+            {fetchedVideos && allVideos.length > 0 ? (
               <Grid item xs={12}>
-                <RenderVideos />
+                <VideoTable />
               </Grid>
             ) : (
               <Grid item xs={12}>
@@ -124,7 +99,7 @@ export default function Home() {
             )}
             {fetchedImages && images.length > 0 ? (
               <Grid item xs={12}>
-                <RenderImages />
+                <ImageTable />
               </Grid>
             ) : (
               <Grid item xs={12}>
@@ -139,7 +114,7 @@ export default function Home() {
 
             {fetchedBlogs && blogs.length > 0 ? (
               <Grid item xs={12}>
-                <RenderBlogs />
+                <BlogTable />
               </Grid>
             ) : (
               <Grid item xs={12}>

@@ -40,7 +40,7 @@ export default function UploadVideo() {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const { isDarkTheme, darkTheme, lightTheme } = useContext(ThemeContext);
-  const { token } = useContext(AuthContext);
+  const { token, FileSizeLimit } = useContext(AuthContext);
   const theme = isDarkTheme ? darkTheme : lightTheme;
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -49,6 +49,7 @@ export default function UploadVideo() {
 
   function validateForm(event) {
     event.preventDefault();
+    const One_MegaByte = 1024 * 1024;
     var validateTitle = title.length > 1;
     if (!validateTitle) {
       const Message = "\nYou need to put in a Valid Title";
@@ -65,8 +66,13 @@ export default function UploadVideo() {
       const Message = "\nYou need to put in a valid file";
       setError(Message);
     }
+    var validateSize = One_MegaByte * FileSizeLimit >= file.size;
+    if (!validateSize) {
+      const Message = `\nFile is too big, Try to keep the file size less than ${FileSizeLimit} MB`;
+      setError(Message);
+    }
 
-    if (validateTitle && validateDescription && validateFile) {
+    if (validateTitle && validateDescription && validateFile && validateSize) {
       setError("Uploading...");
       handleSubmit(event);
     }

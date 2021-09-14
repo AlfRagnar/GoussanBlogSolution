@@ -8,6 +8,7 @@ import ConfirmPage from "./components/Utilities/ConfirmPage";
 import NotFound from "./components/Utilities/NotFound";
 import SimpleBar from "simplebar-react";
 import "simplebar/dist/simplebar.min.css";
+import MediaOverview from "./containers/MediaOverview";
 
 export default function Routes() {
   return (
@@ -28,6 +29,7 @@ export default function Routes() {
             <Route exact path="/">
               <Home />
             </Route>
+            <Route path="/overview" component={MediaOverview} />
             <Route path="/confirm/:token" component={ConfirmPage} />
             <Route>
               <NotFound />

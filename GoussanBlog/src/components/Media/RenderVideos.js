@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Typography,
   Modal,
@@ -18,7 +18,7 @@ import "vimond-replay/index.css";
 import HlsjsVideoStreamer from "vimond-replay/video-streamer/hlsjs";
 
 export default function RenderVideos() {
-  const { videos } = useContext(MediaContext);
+  const { videos, fetchVideos } = useContext(MediaContext);
   const { isDarkTheme, darkTheme, lightTheme } = useContext(ThemeContext);
   const currentTheme = isDarkTheme ? darkTheme : lightTheme;
 
@@ -112,6 +112,12 @@ export default function RenderVideos() {
       },
     },
   };
+
+  useEffect(() => {
+    console.log("fetching videos");
+    fetchVideos();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className={classes.root}>

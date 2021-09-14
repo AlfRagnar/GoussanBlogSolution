@@ -19,16 +19,17 @@ Documentation: [Link To Documentation](GoussanBlog/README.md)
 * Display Videos and images in a Side-scrolling list with clickable thumbnails that will open a Modal that will render the item in full-view
 * File Validation on Videos and Images
 * Real-Time Live Chat with chat history of the last 20 messages
+* Media Overview - List Media Objects stored in Cosmos DB, Split by Media Type
+* Blog post Creation
 
 
 ### Planned Features
-* Blog post Creation
 * Blog post validation to ensure blog post does not contain anything malicious like file insertion or malicious links
 * Preview Blog Posts before creation
 * Insertion of Images and Videos into Blog Posts
 * View Uploads/Blog Posts by Users
 * Sort Videos/Images/Blog Posts by User, Upload Date or Recommended
-* Limit amount of Videos/Images/Blog Posts fetched/rendered at a time to reduce load time
+* Limit amount of Videos/Images/Blog Posts fetched/rendered at a time to reduce load time and Size
 * Create a Subscribe to Users button
 * Create a theme for the whole project
 * Redo the styling of all the components

@@ -68,11 +68,9 @@ const MediaContextProvider = ({ children }) => {
         })
         .then((res) => {
           setAllVideos(res.data);
-          setFetchedVideos(true);
         });
     } catch (err) {
       setAllVideos([""]);
-      setFetchedVideos(false);
     }
   }
 

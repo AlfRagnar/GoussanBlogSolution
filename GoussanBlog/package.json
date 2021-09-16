@@ -15,7 +15,7 @@
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
     "axios": "^0.21.1",
-    "bootstrap": "^5.1.0",
+    "bootstrap": "^5.1.1",
     "http-proxy-middleware": "^2.0.1",
     "jest-editor-support": "^29.0.0",
     "prop-types": "^15.7.2",

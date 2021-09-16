@@ -50,11 +50,11 @@ Documentation: [Link To Documentation](GoussanBlogData/README.md)
 * Image Controller Handles CRUD operations related to Images
 * Swagger Docs with Documentation on how to cosume the API
 * SignalR Integration, API works as a chathub where every message gets logged into Cosmos DB
+* Blog Controller to handle CRUD operations for Blog Posts received by the front end application
 
 
 
 ### Planned Features
-* Blog Controller to handle CRUD operations for Blog Posts received by the front end application
 * Write up documentation for the Swagger Docs to give a easier overview and ways to test out the API
 * Refactor the Code to remove unused references
 * Redo Models in Use to remove unused properties

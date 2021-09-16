@@ -9,7 +9,7 @@
     "@material-ui/data-grid": "^4.0.0-alpha.37",
     "@material-ui/icons": "^4.11.2",
     "@material-ui/lab": "^4.0.0-alpha.60",
-    "@microsoft/signalr": "^5.0.9",
+    "@microsoft/signalr": "^5.0.10",
     "@mui/x-data-grid": "^4.0.0",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",

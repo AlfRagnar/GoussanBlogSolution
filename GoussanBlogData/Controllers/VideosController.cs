@@ -203,7 +203,7 @@ public class VideosController : ControllerBase
                 if (res != null)
                 {
                     await cosmosDb.AddVideo(res);
-                    return CreatedAtAction(nameof(Create), new { res.Id }, res);
+                    return Created(res.Id, res);
                 }
                 return BadRequest(createVideoReq);
             }
@@ -235,7 +235,7 @@ public class VideosController : ControllerBase
                 if (res != null)
                 {
                     await cosmosDb.AddVideo(res);
-                    return CreatedAtAction(nameof(Create), new { res.Id }, res);
+                    return Created(res.Id, res);
                 }
                 return BadRequest(createVideoReq);
             }
@@ -265,7 +265,19 @@ public class VideosController : ControllerBase
         }
         else
         {
-            await mediaService.SubmitJobAsync(orgVideo.Id, orgVideo.OutputAsset);
+            try
+            {
+                var res = await mediaService.SubmitJobAsync(orgVideo.Id, orgVideo.OutputAsset);
+                if(res == null)
+                {
+                    return BadRequest(videoUpdate.Id);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return BadRequest(orgVideo.Id);
+            }
             if (!string.IsNullOrEmpty(videoUpdate.Filename))
             {
                 orgVideo.Filename = videoUpdate.Filename;

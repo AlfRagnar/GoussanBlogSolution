@@ -34,6 +34,7 @@ export default function Home() {
   const classes = useStyles();
 
   useEffect(() => {
+    console.log("Getting user Token and User ID");
     var localToken = sessionStorage.getItem("authToken");
     var localUser = sessionStorage.getItem("user");
     if (localToken !== null) {

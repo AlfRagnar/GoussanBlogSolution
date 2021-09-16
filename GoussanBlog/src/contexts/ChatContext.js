@@ -12,6 +12,7 @@ const ChatContextProvider = ({ children }) => {
   const endpoint = config.chatEndpoint;
   latestChat.current = chat;
   useEffect(() => {
+    console.log("Creating Chathub Connection");
     const newConnection = new HubConnectionBuilder()
       .withUrl(endpoint + "/chathub")
       .withAutomaticReconnect()

@@ -13,6 +13,7 @@ export default function Chat() {
   latestChat.current = chat;
 
   useEffect(() => {
+    console.log("Setting Connection");
     const newConnection = new HubConnectionBuilder()
       .withUrl(endpoint + "/chathub")
       .withAutomaticReconnect()
@@ -22,6 +23,7 @@ export default function Chat() {
   }, [endpoint]);
 
   useEffect(() => {
+    console.log("Checking connection");
     if (connection) {
       connection
         .start()

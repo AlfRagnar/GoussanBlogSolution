@@ -8,25 +8,26 @@ export default function ConfirmPage(props) {
   const [loading, isLoading] = useState(true);
   const [activateStatus, setActivateStatus] = useState(false);
 
-  useEffect(() => {
-    async function activateUser() {
-      try {
-        await axios
-          .post("/user/activate", null, {
-            params: {
-              token,
-            },
-          })
-          .then((res) => {
-            if (res.status === 400) {
-              setActivateStatus(false);
-            } else {
-              setActivateStatus(true);
-            }
-          });
-      } catch (err) {}
-    }
+  const activateUser = async () => {
+    try {
+      await axios
+        .post("/user/activate", null, {
+          params: {
+            token,
+          },
+        })
+        .then((res) => {
+          if (res.status === 400) {
+            setActivateStatus(false);
+          } else {
+            setActivateStatus(true);
+          }
+        });
+    } catch (err) {}
+  };
 
+  useEffect(() => {
+    console.log("Activating user");
     activateUser();
 
     setTimeout(() => {

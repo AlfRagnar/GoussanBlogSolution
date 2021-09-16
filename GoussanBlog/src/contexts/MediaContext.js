@@ -75,6 +75,9 @@ const MediaContextProvider = ({ children }) => {
   }
 
   useEffect(() => {
+    console.log(
+      "Fetching: Blogs, Videos, Images and All Videos in MediaContext"
+    );
     fetchBlogs();
     fetchVideos();
     fetchImages();

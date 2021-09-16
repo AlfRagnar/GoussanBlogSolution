@@ -32,6 +32,7 @@ export default function ChatWindow() {
   ));
 
   useEffect(() => {
+    console.log("Getting chat content");
     var chatHistory = document.getElementById("chatcontent");
     scrollableNodeRef.current.scrollTop = chatHistory.scrollHeight;
   }, [chat, scrollableNodeRef]);

@@ -66,13 +66,9 @@ export default function VideoTable() {
           },
         })
         .then(() => {
-          console.log(`Deleted Video Object: ${id}`);
-          fetchAllVideos();
+          // fetchAllVideos();
         })
-        .catch((err) => {
-          console.log(err);
-          console.log(`Failed to delete Video Object: ${id}`);
-        });
+        .catch(() => {});
     };
 
     const handleMouseDown = (event) => {
@@ -113,6 +109,7 @@ export default function VideoTable() {
   };
 
   useEffect(() => {
+    console.log("Video Table Getting all Videos");
     fetchAllVideos();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

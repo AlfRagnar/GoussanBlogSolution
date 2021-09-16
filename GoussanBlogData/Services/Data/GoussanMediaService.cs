@@ -145,12 +145,12 @@ namespace GoussanBlogData.Services.Data
         private async Task<AssetContainerSas> ListContainers(string ID)
         {
             AssetContainerSas response = await _azMediaServices.Assets.ListContainerSasAsync(
-                resourceGroupName, 
-                accountName, 
+                resourceGroupName,
+                accountName,
                 ID,
                 permissions: AssetContainerPermission.ReadWriteDelete,
                 expiryTime: DateTime.UtcNow.AddMinutes(10).ToUniversalTime());
-            
+
             return response;
         }
 
@@ -172,11 +172,19 @@ namespace GoussanBlogData.Services.Data
             return output;
         }
 
-        // Creates a Job with information about how to Encode the Asset
+        /// <summary>
+        /// Schedules a Encoding Job to run on the Input Asset and pipe the output to Output Asset
+        /// Has a default Transform and Job pre-defined but can also use Custom ones if defined before use
+        /// </summary>
+        /// <param name="inputAsset"></param>
+        /// <param name="outputAsset"></param>
+        /// <param name="transformName"></param>
+        /// <param name="jobName"></param>
+        /// <returns>Scheduled Job</returns>
         public async Task<Job> SubmitJobAsync(
-            string inputAsset, 
-            string outputAsset, 
-            string transformName = "GoussanAdaptiveStreamingPreset", 
+            string inputAsset,
+            string outputAsset,
+            string transformName = "GoussanAdaptiveStreamingPreset",
             string jobName = "GoussanEncoding")
         {
             jobName += "-" + inputAsset;
@@ -188,26 +196,55 @@ namespace GoussanBlogData.Services.Data
             {
                 new JobOutputAsset(outputAsset)
             };
-
-            // Check if job already exists
-            var getjob = await _azMediaServices.Jobs.GetAsync(resourceGroupName, accountName, transformName, jobName);
-
-            if (getjob == null)
+            try
             {
-                // if job doesn't exist, then we create a new job
-                Job job = await _azMediaServices.Jobs.CreateAsync(resourceGroupName, accountName, transformName, jobName, new Job
+
+                // Check if job already exists
+                var getjob = await _azMediaServices.Jobs.GetAsync(resourceGroupName, accountName, transformName, jobName);
+
+                if (getjob == null)
                 {
-                    Input = jobInput,
-                    Outputs = jobOutputs
-                });
+                    // if job doesn't exist, then we create a new job
+                    Job job = await _azMediaServices.Jobs.CreateAsync(resourceGroupName, accountName, transformName, jobName, new Job
+                    {
+                        Input = jobInput,
+                        Outputs = jobOutputs
+                    });
+                    // Return the job
+                    return job;
+                }
                 // Return the job
-                return job;
+                return getjob;
             }
-            // Return the job
-            return getjob;
+            catch (Exception ex)
+            {
+                if (ex.Message != null)
+                {
+                    if (ex.Message.Contains("NotFound"))
+                    {
+                        // if job doesn't exist, then we create a new job
+                        Job job = await _azMediaServices.Jobs.CreateAsync(resourceGroupName, accountName, transformName, jobName, new Job
+                        {
+                            Input = jobInput,
+                            Outputs = jobOutputs
+                        });
+                        // Return the job
+                        return job;
+                    }
+                }
+                Console.WriteLine(ex);
+                return null!;
+            }
+
         }
 
-        // Recipe or Encoding of the content in Media Services
+        // 
+        /// <summary>
+        /// Request to retrieve a Transform, has a default value set but can use Custom ones too.
+        /// Will Create the Transform if it doesn't exist
+        /// </summary>
+        /// <param name="transformName"></param>
+        /// <returns>Transform object</returns>
         public async Task<Transform> GetOrCreateTransformAsync(string transformName = "GoussanAdaptiveStreamingPreset")
         {
             // Does a Transform already exist with the desired name?

@@ -16,6 +16,7 @@ export default function ChatInput() {
   const currentTheme = isDarkTheme ? darkTheme : lightTheme;
 
   useEffect(() => {
+    console.log("Checking Chat User")
     if (user && user !== "") {
       setChatUser(user);
     }

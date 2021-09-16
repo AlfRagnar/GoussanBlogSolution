@@ -45,16 +45,16 @@ export default function Register() {
 
   const { isDarkTheme, darkTheme, lightTheme } = useContext(ThemeContext);
 
-  const theme = isDarkTheme ? darkTheme : lightTheme;
+  const currentTheme = isDarkTheme ? darkTheme : lightTheme;
 
-  function validateForm() {
-    // eslint-disable-next-line no-useless-escape
-    var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-    var emailCheck = email.match(mailformat);
+  const validateForm = () => {
+    let regex =
+      /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/i;
+    var emailCheck = email.match(regex);
     var lengthCheck = username.length > 0 && password.length > 0;
     var passwordCheck = password === rPassword;
     return lengthCheck && passwordCheck && emailCheck;
-  }
+  };
 
   const handleOpen = () => {
     setOpen(true);
@@ -81,7 +81,7 @@ export default function Register() {
   }
 
   return (
-    <div>
+    <>
       <Button color="inherit" onClick={handleOpen}>
         Register
       </Button>
@@ -144,7 +144,10 @@ export default function Register() {
             <div className="container">
               <Button
                 className="mb-2"
-                style={{ color: theme.text, background: theme.background }}
+                style={{
+                  color: currentTheme.text,
+                  background: currentTheme.background,
+                }}
                 variant="outlined"
                 type="submit"
                 disabled={!validateForm()}>
@@ -154,6 +157,6 @@ export default function Register() {
           </Form>
         </Fade>
       </Modal>
-    </div>
+    </>
   );
 }

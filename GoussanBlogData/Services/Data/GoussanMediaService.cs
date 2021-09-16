@@ -3,9 +3,14 @@ using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using GoussanBlogData.Models;
 using GoussanBlogData.Models.DatabaseModels;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.Management.Media;
 using Microsoft.Azure.Management.Media.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace GoussanBlogData.Services.Data
 {

@@ -1,6 +1,9 @@
 ﻿using GoussanBlogData.Models.DatabaseModels;
 using GoussanBlogData.Models.MediaModels;
 using Microsoft.Azure.Cosmos;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace GoussanBlogData.Services;
 public interface ICosmosDbService

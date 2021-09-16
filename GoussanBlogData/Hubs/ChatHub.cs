@@ -4,6 +4,8 @@ using GoussanBlogData.Models.ChatModels;
 using GoussanBlogData.Models.DatabaseModels;
 using GoussanBlogData.Services;
 using Microsoft.AspNetCore.SignalR;
+using System;
+using System.Threading.Tasks;
 
 namespace GoussanBlogData.Hubs;
 

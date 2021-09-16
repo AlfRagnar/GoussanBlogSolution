@@ -3,8 +3,15 @@ using GoussanBlogData.Models.DatabaseModels;
 using GoussanBlogData.Models.MediaModels;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Cosmos.Linq;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace GoussanBlogData.Services;
+/// <summary>
+/// Class Definition of Cosmos DB Service housing all the functions
+/// </summary>
 public class CosmosDbService : ICosmosDbService
 {
     private readonly Container MediaContainer;
@@ -12,6 +19,11 @@ public class CosmosDbService : ICosmosDbService
     private readonly Container ChatContainer;
     private readonly CosmosClient cosmosClient;
     private readonly Database dbService;
+    /// <summary>
+    /// Constructor function to initialize a instance of Cosmos DB
+    /// </summary>
+    /// <param name="cosmosClient"></param>
+    /// <param name="databaseName"></param>
     public CosmosDbService(CosmosClient cosmosClient, string databaseName)
     {
         this.cosmosClient = cosmosClient;

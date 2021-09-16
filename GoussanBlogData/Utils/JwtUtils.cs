@@ -2,26 +2,54 @@
 using GoussanBlogData.Models;
 using GoussanBlogData.Models.DatabaseModels;
 using Microsoft.IdentityModel.Tokens;
+using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 
 namespace GoussanBlogData.Utils
 {
+    /// <summary>
+    /// Interface that exports utilities accessible by the rest of the application
+    /// </summary>
     public interface IJwtUtils
     {
+        /// <summary>
+        /// Generate a JWT Token for the User Input
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns>JWT Token</returns>
         public string GenerateToken(User user);
+        /// <summary>
+        /// Validates a JWT Token
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns>ID of User extracted from JWT Token</returns>
         public string ValidateToken(string token);
     }
+
+    /// <summary>
+    /// Class Method that defines JWT Utility functions
+    /// </summary>
 
     public class JwtUtils : IJwtUtils
     {
         private readonly string _config;
 
+        /// <summary>
+        /// Extract Secret Key from configuration
+        /// </summary>
         public JwtUtils()
         {
             _config = Config.Secret;
         }
+
+        /// <summary>
+        /// Generate a new JWT Token and Sign it for the specific user
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns>Signed JWT Token</returns>
 
         public string GenerateToken(User user)
         {
@@ -38,6 +66,11 @@ namespace GoussanBlogData.Utils
             return tokenHandler.WriteToken(token);
         }
 
+        /// <summary>
+        /// Validates the JWT Token
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns>User ID extracted from the Token</returns>
         public string ValidateToken(string token)
         {
             if (token == null) return null;

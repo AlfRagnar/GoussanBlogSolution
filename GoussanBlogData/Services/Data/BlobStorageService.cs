@@ -3,6 +3,11 @@ using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Azure.Storage.Blobs.Specialized;
 using Azure.Storage.Sas;
+using Microsoft.AspNetCore.Http;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace GoussanBlogData.Services.Data
 {
@@ -143,7 +148,13 @@ namespace GoussanBlogData.Services.Data
         }
 
 
-
+        /// <summary>
+        /// Uploads File to Azure Blob Storage
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <param name="container"></param>
+        /// <param name="fileName"></param>
+        /// <returns>URI to the blob uploaded</returns>
         public async Task<Uri> UploadFileToStorage(Stream stream, string container, string fileName)
         {
             string newFileName = Guid.Parse(fileName).ToString();
@@ -154,7 +165,13 @@ namespace GoussanBlogData.Services.Data
             return blobUri;
         }
 
-
+        /// <summary>
+        /// Upserts a Blob
+        /// </summary>
+        /// <param name="fileStream"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
         public Task Save(Stream fileStream, string name)
         {
             throw new NotImplementedException();

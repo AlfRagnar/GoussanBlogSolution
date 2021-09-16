@@ -6,12 +6,20 @@ using GoussanBlogData.Models;
 using GoussanBlogData.Services;
 using GoussanBlogData.Services.Data;
 using GoussanBlogData.Utils;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Management.Media;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Identity.Client;
 using Microsoft.OpenApi.Models;
 using Microsoft.Rest;
+using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
+using System.Threading.Tasks;
 
 var builder = WebApplication.CreateBuilder(args);
 

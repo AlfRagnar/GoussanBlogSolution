@@ -1,23 +1,38 @@
 ﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace GoussanBlogData.Models.DatabaseModels;
+/// <summary>
+/// Model used in Goussanjarga Database
+/// </summary>
 public class UploadVideo
 {
-    // REQUIRED
+    /// <summary>
+    /// ID is required before the new Object can be manipulated
+    /// </summary>
     [Required]
     [JsonProperty("id")]
     public string Id { get; set; }
+    /// <summary>
+    /// A type has to be set
+    /// Example: "Not Set, Videos, Images" etc.
+    /// </summary>
     [Required]
     [JsonProperty("type")]
     public string Type { get; set; }
+    /// <summary>
+    /// A title is required to define what this Object is
+    /// </summary>
     [Required]
     [JsonProperty("title")]
     public string Title { get; set; }
+    /// <summary>
+    /// Description of what this Object contains
+    /// </summary>
     [Required]
     [JsonProperty("description")]
     public string Description { get; set; }
-    // OPTIONAL
     [JsonProperty("filename")]
     public string Filename { get; set; }
     [JsonProperty("extension")]

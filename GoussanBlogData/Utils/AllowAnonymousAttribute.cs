@@ -1,4 +1,6 @@
-﻿namespace GoussanBlogData.Utils
+﻿using System;
+
+namespace GoussanBlogData.Utils
 {
     /// <summary>
     /// Here modifications to the AllowAnonymous Attribute is handled

@@ -27,7 +27,7 @@
     "react-scripts": "4.0.3",
     "simplebar-react": "^2.3.5",
     "vimond-replay": "^3.2.1",
-    "web-vitals": "^1.1.2"
+    "web-vitals": "^2.1.0"
   },
   "scripts": {
     "start": "set HTTPS=true&&react-scripts start",

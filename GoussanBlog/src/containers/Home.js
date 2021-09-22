@@ -13,8 +13,18 @@ export default function Home() {
   const { setAuth, setToken, setUser, FileSizeLimit } = useContext(AuthContext);
   const { isDarkTheme, darkTheme, lightTheme } = useContext(ThemeContext);
   const currentTheme = isDarkTheme ? darkTheme : lightTheme;
-  const { fetchedVideos, fetchedImages, fetchedBlogs, images, videos, blogs } =
-    useContext(MediaContext);
+  const {
+    fetchedVideos,
+    fetchedImages,
+    fetchedBlogs,
+    images,
+    videos,
+    blogs,
+    fetchAllVideos,
+    fetchVideos,
+    fetchBlogs,
+    fetchImages,
+  } = useContext(MediaContext);
 
   const [loading, isLoading] = useState(true);
 
@@ -34,7 +44,7 @@ export default function Home() {
   const classes = useStyles();
 
   useEffect(() => {
-    console.log("Getting user Token and User ID");
+    console.log("Home Page Content");
     var localToken = sessionStorage.getItem("authToken");
     var localUser = sessionStorage.getItem("user");
     if (localToken !== null) {
@@ -47,7 +57,11 @@ export default function Home() {
 
     setTimeout(() => {
       isLoading(false);
-    }, 2000);
+    }, 200);
+    fetchAllVideos();
+    fetchVideos();
+    fetchBlogs();
+    fetchImages();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

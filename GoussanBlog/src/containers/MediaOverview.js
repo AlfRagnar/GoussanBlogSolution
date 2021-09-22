@@ -53,8 +53,7 @@ export default function MediaOverview() {
 
     setTimeout(() => {
       isLoading(false);
-    }, 2000);
-
+    }, 200);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

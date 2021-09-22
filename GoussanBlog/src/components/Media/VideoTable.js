@@ -58,7 +58,6 @@ export default function VideoTable() {
   const DeleteButton = () => {
     const handleClick = async () => {
       const { id } = selectedCell;
-
       await axios
         .delete(`/videos/${id}`, {
           headers: {
@@ -66,7 +65,8 @@ export default function VideoTable() {
           },
         })
         .then(() => {
-          // fetchAllVideos();
+          console.log(`Deleted Video Object: ${id}`);
+          fetchAllVideos();
         })
         .catch(() => {});
     };
@@ -77,15 +77,12 @@ export default function VideoTable() {
     };
 
     return (
-      <div style={{ margin: 1 }}>
-        <Button
-          onClick={handleClick}
-          onMouseDown={handleMouseDown}
-          disabled={!selectedCell}
-          variant="outlined">
-          Delete
-        </Button>
-      </div>
+      <Button
+        onClick={handleClick}
+        onMouseDown={handleMouseDown}
+        disabled={!selectedCell}>
+        Delete
+      </Button>
     );
   };
 

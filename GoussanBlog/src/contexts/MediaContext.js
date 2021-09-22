@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useState } from "react";
 import { AuthContext } from "./AuthContext";
 
 export const MediaContext = createContext();
@@ -74,17 +74,6 @@ const MediaContextProvider = ({ children }) => {
     }
   }
 
-  useEffect(() => {
-    console.log(
-      "Fetching: Blogs, Videos, Images and All Videos in MediaContext"
-    );
-    fetchBlogs();
-    fetchVideos();
-    fetchImages();
-    fetchAllVideos();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   return (
     <MediaContext.Provider
       value={{
@@ -104,6 +93,8 @@ const MediaContextProvider = ({ children }) => {
         setAllVideos,
         fetchAllVideos,
         fetchVideos,
+        fetchBlogs,
+        fetchImages,
       }}>
       {children}
     </MediaContext.Provider>

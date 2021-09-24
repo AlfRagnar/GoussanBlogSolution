@@ -17,7 +17,7 @@
     "axios": "^0.21.1",
     "bootstrap": "^5.1.1",
     "http-proxy-middleware": "^2.0.1",
-    "jest-editor-support": "^29.0.0",
+    "jest-editor-support": "^30.0.0",
     "prop-types": "^15.7.2",
     "react": "^17.0.2",
     "react-bootstrap": "^2.0.0-rc.0",

@@ -19,12 +19,12 @@ import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import Switch from "@material-ui/core/Switch";
 import { ThemeContext } from "../contexts/ThemeContext";
 import { AuthContext } from "../contexts/AuthContext";
-import UploadImage from "../components/Media/UploadImage";
-import UploadVideo from "../components/Media/UploadVideo";
+import UploadImage from "../components/Media/Images/UploadImage";
+import UploadVideo from "../components/Media/Videos/UploadVideo";
 import Register from "../components/Register";
 import Login from "../components/Login";
 import ScrollTop from "../components/Utilities/ScrollTop";
-import CreateBlogs from "../components/Media/CreateBlogs";
+import CreateBlogs from "../components/Media/Blogs/CreateBlogs";
 
 const useStyles = makeStyles((theme) => ({
   menuButton: {

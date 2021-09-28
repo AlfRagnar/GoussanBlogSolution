@@ -2,12 +2,13 @@ import React, { useContext, useEffect, useState } from "react";
 import Paper from "@material-ui/core/Paper";
 import { makeStyles, Typography, Grid } from "@material-ui/core";
 import { Skeleton } from "@material-ui/lab";
+// Local Modules/Components
 import { AuthContext } from "../contexts/AuthContext";
 import { ThemeContext } from "../contexts/ThemeContext";
 import { MediaContext } from "../contexts/MediaContext";
-import VideoTable from "../components/Media/VideoTable";
-import ImageTable from "../components/Media/ImageTable";
-import BlogTable from "../components/Media/BlogTable";
+import VideoTable from "../components/Media/Videos/VideoTable";
+import ImageTable from "../components/Media/Images/ImageTable";
+import BlogTable from "../components/Media/Blogs/BlogTable";
 
 export default function MediaOverview() {
   const { setAuth, setToken, setUser } = useContext(AuthContext);

@@ -10,8 +10,8 @@ import {
   TextField,
 } from "@material-ui/core";
 import axios from "axios";
-import { ThemeContext } from "../../contexts/ThemeContext";
-import { AuthContext } from "../../contexts/AuthContext";
+import { ThemeContext } from "../../../contexts/ThemeContext";
+import { AuthContext } from "../../../contexts/AuthContext";
 
 const useStyles = makeStyles((theme) => ({
   root: {

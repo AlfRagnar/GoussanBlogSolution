@@ -11,8 +11,9 @@ import {
   ImageListItem,
   ImageListItemBar,
 } from "@material-ui/core";
-import { ThemeContext } from "../../contexts/ThemeContext";
-import { MediaContext } from "../../contexts/MediaContext";
+// Local Modules/Components
+import { ThemeContext } from "../../../contexts/ThemeContext";
+import { MediaContext } from "../../../contexts/MediaContext";
 
 export default function RenderBlogs() {
   const { blogs } = useContext(MediaContext);

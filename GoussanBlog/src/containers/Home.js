@@ -5,9 +5,9 @@ import { Skeleton } from "@material-ui/lab";
 import { AuthContext } from "../contexts/AuthContext";
 import { ThemeContext } from "../contexts/ThemeContext";
 import { MediaContext } from "../contexts/MediaContext";
-import RenderVideos from "../components/Media/RenderVideos";
-import RenderImages from "../components/Media/RenderImages";
-import RenderBlogs from "../components/Media/RenderBlogs";
+import RenderVideos from "../components/Media/Videos/RenderVideos";
+import RenderImages from "../components/Media/Images/RenderImages";
+import RenderBlogs from "../components/Media/Blogs/RenderBlogs";
 
 export default function Home() {
   const { setAuth, setToken, setUser, FileSizeLimit } = useContext(AuthContext);

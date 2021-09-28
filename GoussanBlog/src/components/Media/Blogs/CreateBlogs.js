@@ -10,8 +10,8 @@ import {
 } from "@material-ui/core";
 import Form from "react-bootstrap/Form";
 import axios from "axios";
-import { ThemeContext } from "../../contexts/ThemeContext";
-import { AuthContext } from "../../contexts/AuthContext";
+import { ThemeContext } from "../../../contexts/ThemeContext";
+import { AuthContext } from "../../../contexts/AuthContext";
 
 export default function CreateBlogs() {
   const { isDarkTheme, darkTheme, lightTheme } = useContext(ThemeContext);

@@ -11,6 +11,7 @@ const ChatContextProvider = ({ children }) => {
   const latestChat = useRef(null);
   const endpoint = config.chatEndpoint;
   latestChat.current = chat;
+
   useEffect(() => {
     console.log("Creating Chathub Connection");
     const newConnection = new HubConnectionBuilder()
@@ -18,7 +19,9 @@ const ChatContextProvider = ({ children }) => {
       .withAutomaticReconnect()
       .build();
     setConnection(newConnection);
-  }, [endpoint]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   useEffect(() => {
     if (connection) {
       connection
@@ -60,7 +63,9 @@ const ChatContextProvider = ({ children }) => {
     if (connection.connectionStarted) {
       try {
         await connection.send("SendMessage", chatMessage);
-      } catch (error) {}
+      } catch (error) {
+        console.log(error);
+      }
     } else {
       console.log("No Connection to server yet");
     }

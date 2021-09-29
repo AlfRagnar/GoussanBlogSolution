@@ -35,27 +35,32 @@ export default function ImageTable() {
     setSelectedCell(params);
   };
 
+  const deleteOperation = async (id) => {
+    await axios
+      .delete(`/blog/${id}`, {
+        headers: {
+          Authorization: `bearer ${token}`,
+        },
+      })
+      .then(() => {
+        console.log(`Deleted Blog Object: ${id}`);
+        fetchBlogs();
+      })
+      .catch((err) => {
+        console.log(err);
+        console.log(`Failed to delete Blog Object: ${id}`);
+      });
+  };
+
   const DeleteButton = () => {
     const handleClick = async () => {
       const { id } = selectedCell;
-      await axios
-        .delete(`/videos/${id}`, {
-          headers: {
-            Authorization: `bearer ${token}`,
-          },
-        })
-        .then(() => {
-          console.log(`Deleted Blog Object: ${id}`);
-          fetchBlogs();
-        })
-        .catch(() => {});
+      await deleteOperation(id);
     };
-
     const handleMouseDown = (event) => {
       // Keep the focus in the cell
       event.preventDefault();
     };
-
     return (
       <Button
         onClick={handleClick}
@@ -69,20 +74,7 @@ export default function ImageTable() {
   const handleDoubleClick = async () => {
     const { id } = selectedCell;
     console.log("Double Click");
-    await axios
-      .delete(`/videos/${id}`, {
-        headers: {
-          Authorization: `bearer ${token}`,
-        },
-      })
-      .then(() => {
-        console.log(`Deleted Blog Object: ${id}`);
-        fetchBlogs();
-      })
-      .catch((err) => {
-        console.log(err);
-        console.log(`Failed to delete Blog Object: ${id}`);
-      });
+    await deleteOperation(id);
   };
 
   useEffect(() => {

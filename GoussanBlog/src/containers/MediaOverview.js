@@ -14,14 +14,7 @@ export default function MediaOverview() {
   const { setAuth, setToken, setUser } = useContext(AuthContext);
   const { isDarkTheme, darkTheme, lightTheme } = useContext(ThemeContext);
   const currentTheme = isDarkTheme ? darkTheme : lightTheme;
-  const {
-    fetchedVideos,
-    fetchedImages,
-    fetchedBlogs,
-    images,
-    allVideos,
-    blogs,
-  } = useContext(MediaContext);
+  const { fetchImages, fetchBlogs, fetchAllVideos } = useContext(MediaContext);
 
   const [loading, isLoading] = useState(true);
 
@@ -52,6 +45,10 @@ export default function MediaOverview() {
       setUser(localUser);
     }
 
+    fetchAllVideos();
+    fetchImages();
+    fetchBlogs();
+
     setTimeout(() => {
       isLoading(false);
     }, 200);
@@ -67,68 +64,31 @@ export default function MediaOverview() {
           <Skeleton variant="rect" />
         </>
       ) : (
-        <>
-          <Grid
-            container
-            direction="row"
-            justifyContent="flex-start"
-            alignItems="flex-start">
-            <Grid item xs={12}>
-              <Typography className={classes.bodyText} variant="h2">
-                Goussanjarga
-              </Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <Typography className={classes.bodyText} variant="body1">
-                A Simple Media Sharing Website
-              </Typography>
-            </Grid>
-
-            {fetchedVideos && allVideos.length > 0 ? (
-              <Grid item xs={12}>
-                <VideoTable />
-              </Grid>
-            ) : (
-              <Grid item xs={12}>
-                <Typography className={classes.bodyText}>
-                  Trying to get Videos
-                </Typography>
-                <Skeleton variant="text" />
-                <Skeleton variant="circle" />
-                <Skeleton variant="rect" />
-              </Grid>
-            )}
-            {fetchedImages && images.length > 0 ? (
-              <Grid item xs={12}>
-                <ImageTable />
-              </Grid>
-            ) : (
-              <Grid item xs={12}>
-                <Typography className={classes.bodyText}>
-                  Trying to get Images
-                </Typography>
-                <Skeleton variant="text" />
-                <Skeleton variant="circle" />
-                <Skeleton variant="rect" />
-              </Grid>
-            )}
-
-            {fetchedBlogs && blogs.length > 0 ? (
-              <Grid item xs={12}>
-                <BlogTable />
-              </Grid>
-            ) : (
-              <Grid item xs={12}>
-                <Typography className={classes.bodyText}>
-                  Trying to get Blogs
-                </Typography>
-                <Skeleton variant="text" />
-                <Skeleton variant="circle" />
-                <Skeleton variant="rect" />
-              </Grid>
-            )}
+        <Grid
+          container
+          direction="row"
+          justifyContent="flex-start"
+          alignItems="flex-start">
+          <Grid item xs={12}>
+            <Typography className={classes.bodyText} variant="h2">
+              Goussanjarga
+            </Typography>
           </Grid>
-        </>
+          <Grid item xs={12}>
+            <Typography className={classes.bodyText} variant="body1">
+              A Simple Media Sharing Website
+            </Typography>
+          </Grid>
+          <Grid item xs={12}>
+            <VideoTable />
+          </Grid>
+          <Grid item xs={12}>
+            <ImageTable />
+          </Grid>
+          <Grid item xs={12}>
+            <BlogTable />
+          </Grid>
+        </Grid>
       )}
     </Paper>
   );

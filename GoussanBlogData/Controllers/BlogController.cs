@@ -72,6 +72,26 @@ public class BlogController : ControllerBase
         }
     }
 
+    // DELETE blog/5
+    /// <summary>
+    /// Request to delete a blog object stored in the database
+    /// </summary>
+    /// <param name="id"></param>
+    /// <response code="200">If Delete request is successful</response>
+    /// <response code="404">If Blog Object is not Found</response>
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(string id)
+    {
+        var res = await cosmosDb.DeleteBlog(id);
+        if(res != null)
+        {
+            return Ok(res);
+        } else
+        {
+            return NotFound(res);
+        }
+    }
+
     // POST <BlogController>
     /// <summary>
     /// Tries to create a new blog post with the supplied information from the request

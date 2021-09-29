@@ -46,7 +46,7 @@ const columns = [
 export default function VideoTable() {
   const apiRef = useGridApiRef();
   const [selectedCell, setSelectedCell] = useState(null);
-  const { allVideos, fetchedVideos, fetchAllVideos } = useContext(MediaContext);
+  const { allVideos, fetchAllVideos } = useContext(MediaContext);
   const { token } = useContext(AuthContext);
   const { isDarkTheme, darkTheme, lightTheme } = useContext(ThemeContext);
   const currentTheme = isDarkTheme ? darkTheme : lightTheme;
@@ -55,20 +55,27 @@ export default function VideoTable() {
     setSelectedCell(params);
   };
 
+  const deleteOperation = async (id) => {
+    await axios
+      .delete(`/videos/${id}`, {
+        headers: {
+          Authorization: `bearer ${token}`,
+        },
+      })
+      .then(() => {
+        console.log(`Deleted Video Object: ${id}`);
+        fetchAllVideos();
+      })
+      .catch((err) => {
+        console.log(err);
+        console.log(`Failed to delete Video Object: ${id}`);
+      });
+  };
+
   const DeleteButton = () => {
     const handleClick = async () => {
       const { id } = selectedCell;
-      await axios
-        .delete(`/videos/${id}`, {
-          headers: {
-            Authorization: `bearer ${token}`,
-          },
-        })
-        .then(() => {
-          console.log(`Deleted Video Object: ${id}`);
-          fetchAllVideos();
-        })
-        .catch(() => {});
+      await deleteOperation(id);
     };
 
     const handleMouseDown = (event) => {
@@ -89,20 +96,7 @@ export default function VideoTable() {
   const handleDoubleClick = async () => {
     const { id } = selectedCell;
     console.log("Double Click");
-    await axios
-      .delete(`/videos/${id}`, {
-        headers: {
-          Authorization: `bearer ${token}`,
-        },
-      })
-      .then(() => {
-        console.log(`Deleted Video Object: ${id}`);
-        fetchAllVideos();
-      })
-      .catch((err) => {
-        console.log(err);
-        console.log(`Failed to delete Video Object: ${id}`);
-      });
+    await deleteOperation(id);
   };
 
   useEffect(() => {
@@ -120,7 +114,6 @@ export default function VideoTable() {
         ref={apiRef}
         rows={allVideos}
         columns={columns}
-        loading={!fetchedVideos}
         pageSize={50}
         onCellClick={handleCellClick}
         onCellDoubleClick={handleDoubleClick}

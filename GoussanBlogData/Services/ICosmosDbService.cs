@@ -84,4 +84,11 @@ public interface ICosmosDbService
     /// <param name="post"></param>
     /// <returns>Response from Cosmos</returns>
     Task<ItemResponse<BlogPost>> CreateBlogPost(BlogPost post);
+
+    /// <summary>
+    /// Request to delete a blog object in Cosmos DB
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns>Response to delete Request or Null upon Failure</returns>
+    Task<ItemResponse<BlogPost>> DeleteBlog(string id);
 }

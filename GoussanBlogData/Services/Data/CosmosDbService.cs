@@ -588,4 +588,23 @@ public class CosmosDbService : ICosmosDbService
             return null;
         }
     }
+
+    /// <summary>
+    /// Attempts to delete a blog object stored in the database
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns>Response to delete Request or Null on failure</returns>
+    public async Task<ItemResponse<BlogPost>> DeleteBlog(string id)
+    {
+        try
+        {
+            var response = await MediaContainer.DeleteItemAsync<BlogPost>(id, new PartitionKey(id));
+            return response;
+        }
+        catch (CosmosException ex)
+        {
+            Console.WriteLine(ex);
+            return null;
+        }
+    }
 }

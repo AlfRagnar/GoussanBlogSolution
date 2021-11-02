@@ -46,7 +46,8 @@ public class VideosController : ControllerBase
     /// <summary>
     /// Response with a JSON object containing a list of videos that has finished Encoding
     /// </summary>
-    /// <returns></returns>
+    /// <response code="200">Returns List of Videos stored in Database</response>
+    /// <response code="400">Returns Exception message</response>
     // GET /videos
     [AllowAnonymous]
     [HttpGet]
@@ -60,16 +61,19 @@ public class VideosController : ControllerBase
             {
                 try
                 {
-                    if (video.StreamingPaths == null)
+                    //if (video.StreamingPaths == null)
+                    //{
+                    video.StreamingPaths = await mediaService.GetStreamingURL(video.Locator);
+                    //}
+                    if (video.StreamingPaths.Any())
                     {
-                        video.StreamingPaths = await mediaService.GetStreamingURL(video.Locator);
+                        await cosmosDb.UpdateVideoAsync(video.Id, video).ConfigureAwait(false);
                     }
-                    if (!video.StreamingPaths.Any())
+                    else
                     {
                         //video.State = "Error";
                         videoList.Remove(video);
                     }
-                    await cosmosDb.UpdateVideoAsync(video.Id, video).ConfigureAwait(false);
 
                 }
                 catch (Exception)
@@ -80,9 +84,9 @@ public class VideosController : ControllerBase
 
             return Ok(videoList);
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            return BadRequest();
+            return BadRequest(ex.Message);
         }
     }
 
@@ -99,7 +103,7 @@ public class VideosController : ControllerBase
         {
             IEnumerable<UploadVideo> videoEnum = await cosmosDb.GetAllVideosAsync();
             var videoList = videoEnum.ToList();
-            if(videoList == null || videoList.Count == 0)
+            if (videoList == null || videoList.Count == 0)
             {
                 return NotFound();
             }
@@ -127,7 +131,7 @@ public class VideosController : ControllerBase
         try
         {
             var res = await cosmosDb.GetVideoAsync(id);
-            if(res == null)
+            if (res == null)
             {
                 return NotFound(id);
             }
@@ -268,7 +272,7 @@ public class VideosController : ControllerBase
             try
             {
                 var res = await mediaService.SubmitJobAsync(orgVideo.Id, orgVideo.OutputAsset);
-                if(res == null)
+                if (res == null)
                 {
                     return BadRequest(videoUpdate.Id);
                 }
@@ -336,7 +340,7 @@ public class VideosController : ControllerBase
         try
         {
             var res = await cosmosDb.DeleteVideoAsync(id);
-            if(res == null)
+            if (res == null)
             {
                 return BadRequest(id);
             }

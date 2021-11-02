@@ -255,7 +255,7 @@ public class CosmosDbService : ICosmosDbService
             return res;
 
         }
-        catch (CosmosException ex)
+        catch (CosmosException)
         {
             return null!;
         }

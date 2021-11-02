@@ -4,6 +4,9 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using SendGrid.Helpers.Mail;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace GoussanFunction
 {

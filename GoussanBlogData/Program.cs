@@ -124,12 +124,12 @@ app.UseSwaggerUI(c =>
 // Need Use Cors for SignalR to function properly
 app.UseCors("ClientPermission");
 app.UseHttpsRedirection();
-app.UseAuthorization();
 // Add Jwt Token Middleware
 app.UseMiddleware<JwtMiddleware>();
 
 
 app.UseRouting();
+app.UseAuthorization();
 // Configure Endpoints
 app.UseEndpoints(endpoints =>
 {

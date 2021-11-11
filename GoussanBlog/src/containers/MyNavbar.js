@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { Nav } from "react-bootstrap";
 import {
   Button,
@@ -42,14 +42,14 @@ export default function MyNavbar() {
   const currentTheme = isDarkTheme ? darkTheme : lightTheme;
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const handleHome = () => {
-    history.push("/");
+    navigate("/");
   };
 
   const handleDisplayTable = () => {
-    history.push("/overview");
+    navigate("/overview");
   };
 
   const handleChange = (event) => {

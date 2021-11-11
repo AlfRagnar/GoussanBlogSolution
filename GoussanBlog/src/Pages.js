@@ -1,16 +1,15 @@
 import React from "react";
-import { Route, Switch } from "react-router-dom";
+import { Route, Routes } from "react-router";
 import Home from "./containers/Home";
 import MyNavbar from "./containers/MyNavbar";
 import ChatHub from "./containers/ChatHub";
 import { Grid } from "@material-ui/core";
 import ConfirmPage from "./components/Utilities/ConfirmPage";
-import NotFound from "./components/Utilities/NotFound";
 import SimpleBar from "simplebar-react";
 import "simplebar/dist/simplebar.min.css";
 import MediaOverview from "./containers/MediaOverview";
 
-export default function Routes() {
+export default function Pages() {
   return (
     <SimpleBar style={{ flexGrow: 1, maxHeight: "100vh" }}>
       <Grid
@@ -25,16 +24,11 @@ export default function Routes() {
           <ChatHub />
         </Grid>
         <Grid item xs={9}>
-          <Switch>
-            <Route exact path="/">
-              <Home />
-            </Route>
-            <Route path="/overview" component={MediaOverview} />
-            <Route path="/confirm/:token" component={ConfirmPage} />
-            <Route>
-              <NotFound />
-            </Route>
-          </Switch>
+          <Routes>
+            <Route exact path="/" element={<Home />} />
+            <Route path="/overview" component={<MediaOverview />} />
+            <Route path="/confirm/:token" component={<ConfirmPage />} />
+          </Routes>
         </Grid>
       </Grid>
     </SimpleBar>

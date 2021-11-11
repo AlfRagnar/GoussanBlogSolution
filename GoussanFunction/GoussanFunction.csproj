@@ -5,12 +5,12 @@
     <UserSecretsId>83203d21-4c4b-41cb-a858-bae359d798a7</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.ApplicationInsights.WorkerService" Version="2.18.0" />
+    <PackageReference Include="Microsoft.ApplicationInsights.WorkerService" Version="2.19.0" />
     <PackageReference Include="Microsoft.Azure.EventGrid" Version="3.2.1" />
     <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.CosmosDB" Version="3.0.10" />
     <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.EventGrid" Version="3.0.0" />
     <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.SendGrid" Version="3.0.2" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.0" />
     <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="4.0.1" />
     <PackageReference Include="SendGrid" Version="9.24.4" />
   </ItemGroup>

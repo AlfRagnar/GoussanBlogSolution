@@ -14,7 +14,7 @@
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
-    "axios": "^0.23.0",
+    "axios": "^0.24.0",
     "bootstrap": "^5.1.3",
     "http-proxy-middleware": "^2.0.1",
     "jest-editor-support": "^30.0.2",

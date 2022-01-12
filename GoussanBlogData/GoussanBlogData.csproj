@@ -24,7 +24,7 @@
     <PackageReference Include="Azure.Storage.Files.Shares" Version="12.8.0" />
     <PackageReference Include="Azure.Storage.Queues" Version="12.8.0" />
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.2" />
-    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.19.0" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.20.0" />
     <PackageReference Include="Microsoft.AspNetCore.Cors" Version="2.2.0" />
     <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.23.0" />
     <PackageReference Include="Microsoft.Azure.Management.Media" Version="5.0.0" />

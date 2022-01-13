@@ -27,7 +27,7 @@
     "react-router-dom": "^6.2.1",
     "react-scripts": "4.0.3",
     "simplebar-react": "^2.3.6",
-    "vimond-replay": "^3.2.1",
+    "vimond-replay": "^3.2.2",
     "web-vitals": "^2.1.2"
   },
   "scripts": {

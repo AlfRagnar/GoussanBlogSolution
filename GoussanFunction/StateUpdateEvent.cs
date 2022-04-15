@@ -1,7 +1,6 @@
+using Azure.Messaging.EventGrid;
 using GoussanFunction.Models;
-using Microsoft.Azure.Documents;
-using Microsoft.Azure.Documents.Client;
-using Microsoft.Azure.EventGrid.Models;
+using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.EventGrid;
 using Microsoft.Extensions.Logging;
@@ -17,7 +16,11 @@ namespace GoussanFunction
         [FunctionName("StateUpdateEvent")]
         public static async Task RunAsync(
             [EventGridTrigger] EventGridEvent gridEvent,
-            [CosmosDB(databaseName: "GoussanServerless", collectionName: "Media", ConnectionStringSetting = "CosmosDBServerless")] DocumentClient client,
+            [CosmosDB(
+                databaseName: "GoussanServerless",
+                containerName:"Media",
+                Connection = "CosmosDBServerless")]
+            CosmosClient cosmosClient,
             ILogger log)
         {
             string database = "GoussanServerless";
@@ -26,6 +29,7 @@ namespace GoussanFunction
             log.LogInformation("Processing Event Trigger from AMS");
             try
             {
+                var containerClient = cosmosClient.GetContainer(database, collection);
                 log.LogInformation($"Event: {gridEvent.EventType}");
                 // Extract data from EVENT
                 JToken gridDataToken = JObject.FromObject(gridEvent.Data);
@@ -35,13 +39,7 @@ namespace GoussanFunction
                 string ID = assetName.ToString().Split("-").First();
                 log.LogInformation($"Updating Document: {ID}");
 
-                // Fetching Document from Cosmos DB
-                Uri DocumentLink = UriFactory.CreateDocumentUri(database, collection, ID);
-                RequestOptions dbVidOptions = new()
-                {
-                    PartitionKey = new PartitionKey(ID)
-                };
-                CosmosVideoModel dbVid = await client.ReadDocumentAsync<CosmosVideoModel>(DocumentLink, dbVidOptions);
+                CosmosVideoModel dbVid = await containerClient.ReadItemAsync<CosmosVideoModel>(ID, new PartitionKey(ID));
                 log.LogInformation(dbVid.ToString());
 
                 dbVid.Outputasset = assetName.ToString();
@@ -49,13 +47,9 @@ namespace GoussanFunction
                 dbVid.Modified = gridEvent.EventTime.ToUniversalTime().ToString();
                 log.LogInformation(dbVid.State);
 
-
-                Uri DocumentCollectionUri = UriFactory.CreateDocumentCollectionUri(database, collection);
-                Uri DatabaseLink = UriFactory.CreateDatabaseUri(database);
-
                 // Sending Document to Cosmos DB
                 log.LogInformation("Sending Document to Cosmos DB");
-                var response = await client.ReplaceDocumentAsync(DocumentLink, dbVid, dbVidOptions);
+                var response = await containerClient.UpsertItemAsync<CosmosVideoModel>(dbVid, new PartitionKey(ID));
                 log.LogInformation($"Cosmos Response: {response.StatusCode}");
             }
             catch (Exception ex)

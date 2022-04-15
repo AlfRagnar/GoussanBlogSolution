@@ -21,7 +21,7 @@ namespace GoussanBlogData.Utils
             // CreateUser => User
             CreateMap<CreateUser, User>();
 
-            
+
         }
     }
 

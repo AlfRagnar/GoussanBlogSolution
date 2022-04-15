@@ -1,6 +1,5 @@
 ﻿
 using Newtonsoft.Json;
-using System.ComponentModel.DataAnnotations;
 
 namespace GoussanBlogData.Models.DatabaseModels;
 /// <summary>

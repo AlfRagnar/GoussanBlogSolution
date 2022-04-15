@@ -1,0 +1,13 @@
+{
+  "folders": [
+    {
+      "path": "../GoussanBlog"
+    }
+  ],
+  "settings": {
+    "files.autoSave": "onFocusChange",
+    "editor.wordWrap": "bounded",
+    "editor.bracketPairColorization.enabled": false,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
+}

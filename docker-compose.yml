@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  goussanblogdata:
+    image: ${DOCKER_REGISTRY-}goussanblogdata
+    build:
+      context: .
+      dockerfile: GoussanBlogData/Dockerfile

@@ -2,9 +2,13 @@
 
   <PropertyGroup>
 	<GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <Nullable>warnings</Nullable>
     <ApplicationInsightsResourceId>/subscriptions/39ef4e8a-8579-402a-bcb0-fa3a4bbb8942/resourceGroups/GoussanMedia/providers/microsoft.insights/components/goussanmedia</ApplicationInsightsResourceId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <UserSecretsId>8425271f-9ece-4306-987a-2224be0af180</UserSecretsId>
+    <OutputType>Exe</OutputType>
+    <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -20,19 +24,18 @@
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
     <PackageReference Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.2.2" />
     <PackageReference Include="Azure.Identity" Version="1.6.0" />
-    <PackageReference Include="Azure.Storage.Blobs" Version="12.11.0" />
-    <PackageReference Include="Azure.Storage.Files.Shares" Version="12.9.0" />
-    <PackageReference Include="Azure.Storage.Queues" Version="12.9.0" />
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.12.0-beta.1" />
+    <PackageReference Include="Azure.Storage.Queues" Version="12.10.0-beta.1" />
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
-    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.20.0" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.21.0-beta1" />
     <PackageReference Include="Microsoft.AspNetCore.Cors" Version="2.2.0" />
     <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.26.1" />
     <PackageReference Include="Microsoft.Azure.Management.Media" Version="6.0.0" />
     <PackageReference Include="Microsoft.Azure.WebJobs" Version="3.0.31" />
     <PackageReference Include="Microsoft.Extensions.Azure" Version="1.1.1" />
-    <PackageReference Include="Swashbuckle" Version="5.6.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.15.1" />
     <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.3.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.3.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.17.0" />
   </ItemGroup>
 

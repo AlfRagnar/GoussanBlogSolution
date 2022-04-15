@@ -83,10 +83,11 @@ public class BlogController : ControllerBase
     public async Task<IActionResult> Delete(string id)
     {
         var res = await cosmosDb.DeleteBlog(id);
-        if(res != null)
+        if (res != null)
         {
             return Ok(res);
-        } else
+        }
+        else
         {
             return NotFound(res);
         }

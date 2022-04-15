@@ -28,7 +28,7 @@ public class ImageCreateModel
     [Required]
     [JsonProperty("uploadfile")]
     public IFormFile File { get; set; }
-    
+
 
     // OPTIONAL
 

@@ -1,6 +1,4 @@
-﻿
-using GoussanBlogData.Models.ChatModels;
-using GoussanBlogData.Models.DatabaseModels;
+﻿using GoussanBlogData.Models.DatabaseModels;
 using GoussanBlogData.Services;
 using GoussanBlogData.Utils;
 using Microsoft.AspNetCore.Mvc;
@@ -23,7 +21,7 @@ public class ChatController : ControllerBase
     /// Constructor function to initialize Cosmos DB Service
     /// </summary>
     /// <param name="cosmosDb"></param>
-    public ChatController( ICosmosDbService cosmosDb)
+    public ChatController(ICosmosDbService cosmosDb)
     {
         this.cosmosDb = cosmosDb;
     }

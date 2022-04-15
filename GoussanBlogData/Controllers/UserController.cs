@@ -55,7 +55,7 @@ public class UserController : ControllerBase
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
@@ -68,7 +68,7 @@ public class UserController : ControllerBase
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="user"></param>
     /// <returns>ID of newly Created User and the User object</returns>
@@ -110,7 +110,7 @@ public class UserController : ControllerBase
     /// </summary>
     /// <remarks>
     /// Sample request:
-    /// 
+    ///
     ///     POST /authenticate
     ///     {
     ///         "username":"something"
@@ -143,7 +143,6 @@ public class UserController : ControllerBase
                 return Unauthorized("Pending Account, Please Verify Your Email");
             }
 
-
             bool checkPassword = BCrypt.Net.BCrypt.Verify(authRequest.Password, User.Password);
             if (checkPassword)
             {
@@ -167,7 +166,7 @@ public class UserController : ControllerBase
     /// </summary>
     /// <remarks>
     /// Sample request:
-    /// 
+    ///
     ///     POST /activate
     ///     {
     ///         "token":"123kasdasdh128fh182hf1h"

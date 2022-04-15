@@ -11,14 +11,13 @@ using System.Threading.Tasks;
 
 namespace GoussanBlogData.Services.Data
 {
-
     /// <summary>
     /// This file contains the functions/jobs/tasks available for BlobStorageService
     /// </summary>
     public class BlobStorageService : IBlobStorageService
     {
         private readonly BlobServiceClient _blobServiceClient;
-        private readonly BlobContainerClient _MediaBlobContainerClient;
+        private readonly BlobContainerClient _mediaBlobContainer;
 
         /// <summary>
         /// Constructor function needed to initialize the Service
@@ -28,9 +27,8 @@ namespace GoussanBlogData.Services.Data
         public BlobStorageService(BlobServiceClient blobServiceClient, string MediaContainer)
         {
             _blobServiceClient = blobServiceClient;
-            _MediaBlobContainerClient = GetContainer(MediaContainer).GetAwaiter().GetResult();
+            _mediaBlobContainer = GetContainer(MediaContainer).GetAwaiter().GetResult();
         }
-
 
         /// <summary>
         /// Used to try to get a blob container with a specific ID or create the container if the container doesn't exist. This is only run on startup to ensure that the containers are present and ready to receive requests.
@@ -102,7 +100,6 @@ namespace GoussanBlogData.Services.Data
             }
         }
 
-
         /// <summary>
         /// Tries to get a blob within the Image Container
         /// </summary>
@@ -112,7 +109,7 @@ namespace GoussanBlogData.Services.Data
         {
             try
             {
-                BlobClient blobClient = _MediaBlobContainerClient.GetBlobClient(id);
+                BlobClient blobClient = _mediaBlobContainer.GetBlobClient(id);
                 return blobClient;
             }
             catch
@@ -120,7 +117,6 @@ namespace GoussanBlogData.Services.Data
                 return null;
             }
         }
-
 
         /// <summary>
         /// Uploads image to Blob Storage
@@ -130,7 +126,7 @@ namespace GoussanBlogData.Services.Data
         /// <returns>URL with public access to file</returns>
         public async Task<string> UploadImage(IFormFile file, string imageName)
         {
-            var blob = _MediaBlobContainerClient.GetBlobClient(imageName);
+            var blob = _mediaBlobContainer.GetBlobClient(imageName);
 
             using (var fs = file.OpenReadStream())
             {
@@ -140,13 +136,17 @@ namespace GoussanBlogData.Services.Data
             return blobUri;
         }
 
+        /// <summary>
+        /// Method to delete a blob from the container
+        /// </summary>
+        /// <param name="videoName"></param>
+        /// <returns>boolean</returns>
         public Response<bool> DeleteVideo(string videoName)
         {
-            var blob = _MediaBlobContainerClient.GetBlobClient(videoName);
+            var blob = _mediaBlobContainer.GetBlobClient(videoName);
             var res = blob.DeleteIfExists(DeleteSnapshotsOption.IncludeSnapshots);
             return res;
         }
-
 
         /// <summary>
         /// Uploads File to Azure Blob Storage
@@ -213,7 +213,7 @@ namespace GoussanBlogData.Services.Data
             }
             else
             {
-                Console.WriteLine(@"BlobContainerClient must be authorized with Shared Key 
+                Console.WriteLine(@"BlobContainerClient must be authorized with Shared Key
                           credentials to create a service SAS.");
                 return null;
             }
@@ -256,7 +256,7 @@ namespace GoussanBlogData.Services.Data
             }
             else
             {
-                Console.WriteLine(@"BlobClient must be authorized with Shared Key 
+                Console.WriteLine(@"BlobClient must be authorized with Shared Key
                           credentials to create a service SAS.");
                 return null;
             }

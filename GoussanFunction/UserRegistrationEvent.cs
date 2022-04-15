@@ -16,11 +16,11 @@ namespace GoussanFunction
         public static async Task Run(
             [CosmosDBTrigger(
             databaseName: "GoussanServerless",
-            collectionName: "User",
-            ConnectionStringSetting = "CosmosDBServerless",
-            LeaseCollectionName = "leases",
-            CreateLeaseCollectionIfNotExists = true,
-            LeaseCollectionPrefix = "registrationEvent")]IReadOnlyList<Document> input,
+            containerName: "User",
+            Connection= "CosmosDBServerless",
+            LeaseContainerName = "leases",
+            CreateLeaseContainerIfNotExists  = true,
+            LeaseContainerPrefix  = "registrationEvent")]IReadOnlyList<Document> input,
             ILogger log,
             [SendGrid(ApiKey = "SendGridAPIKey")] IAsyncCollector<SendGridMessage> messageCollector)
         {

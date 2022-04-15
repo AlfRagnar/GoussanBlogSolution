@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.0.31612.314
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "GoussanBlog", "GoussanBlog\GoussanBlog.esproj", "{2BFC5EA4-5C85-4FE6-B8FD-452CA74E20C2}"
+	ProjectSection(ProjectDependencies) = postProject
+		{43337A64-1CD7-451E-9443-85058DC1B018} = {43337A64-1CD7-451E-9443-85058DC1B018}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GoussanBlogData", "GoussanBlogData\GoussanBlogData.csproj", "{43337A64-1CD7-451E-9443-85058DC1B018}"
 EndProject
@@ -12,7 +15,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoussanFunction", "GoussanFunction\GoussanFunction.csproj", "{D9AF5D85-3CA4-4219-8106-88FA3F30765A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GoussanFunction", "GoussanFunction\GoussanFunction.csproj", "{D9AF5D85-3CA4-4219-8106-88FA3F30765A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Terraform files", "Terraform files", "{9D885C4A-C5D9-40E5-9E49-261EC66B491E}"
+	ProjectSection(SolutionItems) = preProject
+		Main.tf = Main.tf
+	EndProjectSection
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{C79ED085-6137-4A66-B56F-9CCD2369B85D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -34,6 +44,10 @@ Global
 		{D9AF5D85-3CA4-4219-8106-88FA3F30765A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D9AF5D85-3CA4-4219-8106-88FA3F30765A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D9AF5D85-3CA4-4219-8106-88FA3F30765A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C79ED085-6137-4A66-B56F-9CCD2369B85D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C79ED085-6137-4A66-B56F-9CCD2369B85D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C79ED085-6137-4A66-B56F-9CCD2369B85D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C79ED085-6137-4A66-B56F-9CCD2369B85D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -53,7 +53,7 @@ public interface ICosmosDbService
     Task UpdateImageAsync(string id, Image image);
 
     // CHAT API
-    
+
     /// <summary>
     /// Tries to get chat history from Database
     /// </summary>

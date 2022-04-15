@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace GoussanBlogData.Services;
+namespace GoussanBlogData.Services.Data;
 /// <summary>
 /// Class Definition of Cosmos DB Service housing all the functions
 /// </summary>
